@@ -28,11 +28,16 @@ export default {
       msg: 'Hello World!'
     }
   },
+  created () {
+    const self = this
+    self.init()
+  },
   methods: {
-    click () {
-      console.log(123)
-      this.$router.push({
-        name: 'Home'
+    init () {
+      console.log('init')
+      const a = [ 1, 2, 3, 4, 5 ]
+      _.each(a, function (i, j) {
+        console.log(i, j)
       })
     }
   }
