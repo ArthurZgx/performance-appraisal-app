@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { Group, Cell } from 'vux'
 
 export default {

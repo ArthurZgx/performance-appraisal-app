@@ -11,7 +11,7 @@ import Complete from './components/Complete'
  * 全局注册
  */
 // import { Cell, Group } from 'vux'
-import _ from 'lodash'
+// import _ from 'lodash'
 
 Vue.use(VueRouter)
 
@@ -41,7 +41,7 @@ FastClick.attach(document.body)
  */
 // Vue.component('cell', Cell)
 // Vue.component('group', Group)
-Vue.component('_', _)
+// Vue.component('_', _)
 
 Vue.config.productionTip = false
 
