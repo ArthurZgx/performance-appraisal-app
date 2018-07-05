@@ -7,6 +7,10 @@ import App from './App'
 import Home from './components/Home'
 import Serve from './components/Serve'
 import Complete from './components/Complete'
+/**
+ * 全局注册
+ */
+// import { Cell, Group } from 'vux'
 
 Vue.use(VueRouter)
 
@@ -30,6 +34,12 @@ const router = new VueRouter({
 })
 
 FastClick.attach(document.body)
+
+/**
+ * 全局注册
+ */
+// Vue.component('cell', Cell)
+// Vue.component('group', Group)
 
 Vue.config.productionTip = false
 
