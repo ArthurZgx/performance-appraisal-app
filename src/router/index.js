@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/Home.vue'
-// import Serve from '@/components/serve/Serve.vue'
-// import Complete from '@/components/complete/Complete.vue'
+import Serve from '@/components/serve/Serve.vue'
+import Personal from '@/components/personal/Personal.vue'
+import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
+import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue'
+import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
+import Complete from '@/components/complete/Complete.vue'
 
 Vue.use(Router)
 
@@ -10,45 +14,59 @@ export default new Router({
   routes: [
     {
       path: '/home',
-      name: 'Home',
-      component: Home,
-      children: [
-        {
-          path: '/home/serve',
-          name: 'serve',
-          component: function (resolve) {
-            require(['../components/serve/Serve.vue'], resolve)
-          }
-        },
-        {
-          path: '/home/complete',
-          name: 'complete',
-          component: function (resolve) {
-            require(['../components/complete/Complete.vue'], resolve)
-          }
-        }
-      ]
+      name: 'home',
+      component: Home
     },
     {
-      path: '/',
-      redirect: '/home'
-    }
+      path: '/serve',
+      name: 'serve',
+      component: Serve
+    },
+    {
+      path: '/complete',
+      name: 'complete',
+      component: Complete
+    },
+    {
+      path: '/personal',
+      name: 'personal',
+      component: Personal
+    },
+    {
+      path: '/evaluationRecord',
+      name: 'evaluationRecord',
+      component: EvaluationRecord
+    },
+    {
+      path: '/evaluationResult',
+      name: 'evaluationResult',
+      component: EvaluationResult
+    },
+    {
+      path: '/personalInfo',
+      name: 'personalInfo',
+      component: PersonalInfo
+    },
     // {
     //   path: '/home',
     //   name: 'Home',
-    //   component: Home,
+    //   component: Layout,
     //   children: [
     //     {
-    //       path: 'serve',
-    //       name: 'Serve',
+    //       path: '/home/serve',
+    //       name: 'serve',
     //       component: Serve
     //     },
     //     {
-    //       path: 'complete',
-    //       name: 'Complete',
+    //       path: '/home/complete',
+    //       name: 'complete',
     //       component: Complete
     //     }
     //   ]
     // },
+    {
+      path: '/',
+      redirect: '/home'
+    }
   ]
 })

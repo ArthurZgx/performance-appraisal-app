@@ -5,7 +5,7 @@
       <h1>考评记录</h1>
     </div>
     <group title="cell demo">
-      <cell title="返回首页" value="cool" is-link link="/"></cell>
+      <cell title="返回首页" value="cool" is-link link="/personal"></cell>
     </group>
   </div>
 </template>

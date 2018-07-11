@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div class="vux-demo">
-      <img class="logo" src="../../assets/vux_logo.png">
-      <h1>首页</h1>
-    </div>
-    <group title="cell demo">
-      <cell title="服务质量评价" value="cool" is-link link="serve"></cell>
-      <cell title="工作完成度评价" value="cool" is-link link="complete"></cell>
-    </group>
+    <router-view></router-view>
     <tabbar style="position: fixed !important;z-index: 500">
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
@@ -15,13 +8,13 @@
       <!--<tabbar-item>-->
       <!--<span slot="label">技能测试</span>-->
       <!--</tabbar-item>-->
-      <tabbar-item link="home" selected>
-        <!--<img slot="icon">-->
-        <span slot="label">首页</span>
+      <tabbar-item link="/home/serve">
+        < img slot="icon">
+        <span slot="label" >技能测试</span>
       </tabbar-item>
-      <tabbar-item link="personal">
-        <!--<img slot="icon">-->
-        <span slot="label">我的</span>
+      <tabbar-item show-dot link="/home/complete">
+        < img slot="icon">
+        <span slot="label">个人中心</span>
       </tabbar-item>
     </tabbar>
   </div>
@@ -30,15 +23,15 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import { Group, Cell, Tabbar, TabbarItem } from 'vux'
+import { Tabbar, Group, TabbarItem, Cell } from 'vux'
 
 export default {
-  name: 'home',
+  name: 'layout',
   components: {
-    Group,
-    Cell,
     Tabbar,
-    TabbarItem
+    TabbarItem,
+    Group,
+    Cell
   },
   data () {
     return {
