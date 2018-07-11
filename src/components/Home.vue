@@ -13,6 +13,7 @@
 
 <script>
 import _ from 'lodash'
+import moment from 'moment'
 import { Group, Cell } from 'vux'
 
 export default {
@@ -40,6 +41,9 @@ export default {
       _.each(a, function (i, j) {
         console.log(i, j)
       })
+      // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); // 七月 11日 2018, 9:36:25 上午
+      const time = moment().format('YYYY-MM-DD hh:mm:ss'); // 2018-07-11 09:41:50
+      console.log(time)
     }
   }
 }
