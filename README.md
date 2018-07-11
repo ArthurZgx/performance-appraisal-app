@@ -7,6 +7,12 @@
 ``` bash
 # install dependencies
 npm install
+   
+# 可以通过如下操作解决 npm 下载速度慢以及报错的问题
+npm install --registry=https://registry.npm.taobao.org
+
+# 或者
+cnpm install
 
 # serve with hot reload at localhost:8080
 npm run dev
