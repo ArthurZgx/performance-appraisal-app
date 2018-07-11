@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
+      <img class="logo" src="../../assets/vux_logo.png">
       <h1>首页</h1>
     </div>
     <group title="cell demo">
-      <cell title="服务质量评价" value="cool" is-link link="Serve"></cell>
-      <cell title="工作完成度评价" value="cool" is-link link="Complete"></cell>
+      <cell title="服务质量评价" value="cool" is-link link="/home/serve"></cell>
+      <cell title="工作完成度评价" value="cool" is-link link="/home/complete"></cell>
     </group>
   </div>
 </template>
@@ -17,6 +17,7 @@ import moment from 'moment'
 import { Group, Cell } from 'vux'
 
 export default {
+  name: 'home',
   components: {
     Group,
     Cell
@@ -42,7 +43,7 @@ export default {
         console.log(i, j)
       })
       // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); // 七月 11日 2018, 9:36:25 上午
-      const time = moment().format('YYYY-MM-DD hh:mm:ss'); // 2018-07-11 09:41:50
+      const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50
       console.log(time)
     }
   }

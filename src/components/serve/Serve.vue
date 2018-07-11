@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
+      <img class="logo" src="../../assets/vux_logo.png">
       <h1>服务质量评价</h1>
     </div>
     <group title="cell demo">
@@ -14,7 +14,7 @@
 import { Group, Cell } from 'vux'
 
 export default {
-  name: 'Demo',
+  name: 'serve',
   components: {
     Group,
     Cell
