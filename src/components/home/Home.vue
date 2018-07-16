@@ -1,14 +1,22 @@
 <template>
-  <div>
-    <div class="vux-demo">
-      <img class="logo" src="../../assets/vux_logo.png">
-      <h1>首页</h1>
-    </div>
-    <group title="cell demo">
-      <cell title="服务质量评价" value="cool" is-link link="serve"></cell>
-      <cell title="工作完成度评价" value="cool" is-link link="complete"></cell>
+  <div class="home">
+    <x-header :right-options="{showMore: true}"
+              style="background-color: #fff"
+              @on-click-more="showMenus = true">
+      绩效考评
+    </x-header>
+    <group class="home_group">
+      <cell title="服务质量评价通知"
+            is-link link="serve">
+        <icon slot="icon" type="info"></icon>
+      </cell>
+      <cell title="工作完成度评价通知"
+            is-link link="complete">
+        <icon slot="icon" type="info"></icon>
+      </cell>
     </group>
-    <tabbar style="position: fixed !important;z-index: 500">
+    <!-- style="position: fixed !important;z-index: 500"-->
+    <tabbar>
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
       <!--</tabbar-item>-->
@@ -30,7 +38,7 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import { Group, Cell, Tabbar, TabbarItem } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon } from 'vux'
 
 export default {
   name: 'home',
@@ -38,7 +46,9 @@ export default {
     Group,
     Cell,
     Tabbar,
-    TabbarItem
+    XHeader,
+    TabbarItem,
+    Icon
   },
   data () {
     return {
@@ -69,11 +79,13 @@ export default {
 </script>
 
 <style>
-.vux-demo {
-  text-align: center;
-}
-.logo {
-  width: 100px;
-  height: 100px
-}
+  .home_group .vux-no-group-title{
+    margin-top: 0;
+  }
+  .home_group .weui-cell{
+    height: 40px;
+  }
+  .home .vux-header .vux-header-title{
+    /*color: #333;*/
+  }
 </style>

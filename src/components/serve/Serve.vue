@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="vux-demo">
-      <img class="logo" src="../../assets/vux_logo.png">
-      <h1>服务质量评价</h1>
-    </div>
+    <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">绩效考评</x-header>
     <group title="cell demo">
       <cell title="返回首页" value="cool" is-link link="/"></cell>
     </group>
@@ -11,13 +8,14 @@
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { Group, Cell, XHeader } from 'vux'
 
 export default {
   name: 'serve',
   components: {
     Group,
-    Cell
+    Cell,
+    XHeader
   },
   data () {
     return {
