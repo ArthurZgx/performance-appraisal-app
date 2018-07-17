@@ -84,7 +84,7 @@ export default {
       results: [], // 搜索结果列表
       searchValue: '', // 搜索绑定的数据
       checklist1: [], // 选择列表
-      commonList: ['name1', 'name2', 'name3'] // 所有供选择的列表
+      commonList: ['name1', 'name2', 'name3', 'name4'] // 所有供选择的列表
     }
   },
   methods: {
@@ -125,7 +125,7 @@ export default {
       console.log('点击全选')
       // const all = _.without.apply(_, [this.commonList].concat(this.checklist1))
       // this.checklist1 = all
-      if (this.checklist1.length === 3) {
+      if (this.checklist1.length === 4) {
         this.checklist1 = []
       } else {
         this.checklist1 = this.commonList
