@@ -13,26 +13,19 @@
 
     <flexbox>
       <flexbox-item><div class="flex-demo">
-
-
         <cell
           :title="('考评类型')"
           is-link
           :border-intent="false"
           :arrow-direction="kaoping ? 'up' : 'down'"
           @click.native="kaoping = !kaoping" ></cell>
-
         <template v-if="kaoping">
           <cell-box :border-intent="false" class="sub-item">全部类型</cell-box>
           <cell-box :border-intent="false" class="sub-item">服务质量评价</cell-box>
           <cell-box :border-intent="false" class="sub-item">工作完成评价</cell-box>
         </template>
-
       </div></flexbox-item>
-
-
       <flexbox-item><div class="flex-demo">
-
         <cell
           :title="('查看类型')"
           is-link
@@ -45,8 +38,6 @@
           <cell-box :border-intent="false" class="sub-item">已查看类型</cell-box>
           <cell-box :border-intent="false" class="sub-item">未查看类型</cell-box>
         </template>
-
-
       </div></flexbox-item>
       <flexbox-item><div class="flex-demo">
 
@@ -74,7 +65,7 @@
 </template>
 
 <script>
-  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel,XHeader } from 'vux'
+  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader } from 'vux'
 
   export default {
     name: 'personal',
@@ -105,7 +96,17 @@
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
           title: '张三的服务质量',
           desc: '评价日期:2018-01-13',
-          url: '/evaluationRecord/detail' }]
+          url: '/evaluationRecord/detail'
+        }, {
+          // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
+          title: '张三的服务质量',
+          desc: '评价日期:2018-01-13',
+          url: '/unsubmittedEvaluation'
+        }, {
+          // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
+          title: '张三的服务质量',
+          desc: '评价日期:2018-01-13',
+          url: '/unsubmittedEvaluation/detail' }]
       }
     },
     methods: {

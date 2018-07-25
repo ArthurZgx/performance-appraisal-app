@@ -4,7 +4,10 @@ import Home from '@/components/home/Home.vue'
 import Serve from '@/components/serve/Serve.vue'
 import Personal from '@/components/personal/Personal.vue'
 import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
-import evaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
+import EvaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
+import SubmitEvaluation from '@/components/submitEvaluation/SubmitEvaluation.vue'
+import UnsubmittedEvaluation from '@/components/unsubmittedEvaluation/UnsubmittedEvaluation.vue'
+import UnsubmittedEvaluationDetail from '@/components/unsubmittedEvaluation/UnsubmittedEvaluationDetail.vue'
 import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue'
 import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
 import Complete from '@/components/complete/Complete.vue'
@@ -41,8 +44,25 @@ export default new Router({
     {
       path: '/evaluationRecord/detail',
       name: 'evaluationRecordDetail',
-      component: evaluationRecordDetail
+      component: EvaluationRecordDetail
     },
+    {
+      path: '/submitEvaluation',
+      name: 'submitEvaluation',
+      component: SubmitEvaluation
+    },
+
+    {
+      path: '/unsubmittedEvaluation',
+      name: 'unsubmittedEvaluation',
+      component: UnsubmittedEvaluation
+    },
+    {
+      path: '/unsubmittedEvaluation/detail',
+      name: 'unsubmittedEvaluationDetail',
+      component: UnsubmittedEvaluationDetail
+    },
+
     {
       path: '/evaluationResult',
       name: 'evaluationResult',

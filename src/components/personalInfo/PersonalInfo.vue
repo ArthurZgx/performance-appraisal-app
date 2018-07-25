@@ -17,10 +17,10 @@
         <!--<x-input title="上报人" v-model="value1"></x-input>-->
         <!--<x-number title="Quantity" align="left" v-model="numberValue" button-style="round" :min="0" :max="5"></x-number>-->
         <datetime title="时间" v-model="time1" value-text-align="left"></datetime>
-        <selector title="类别" :options="['工艺技术', '其他']" v-model="value2"></selector>
-        <popup-picker title="请选择" :data="list" v-model="value5" value-text-align="left"></popup-picker>
+        <!--<selector title="类别" :options="['工艺技术', '其他']" v-model="value2"></selector>-->
+        <!--<popup-picker title="请选择" :data="list" v-model="value5" value-text-align="left"></popup-picker>-->
         <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
-        <x-switch title="选择"></x-switch>
+        <!--<x-switch title="选择"></x-switch>-->
         <x-textarea title="详细信息" placeholder="请填写详细信息" :show-counter="false" :rows="3"></x-textarea>
       </group>
       <br>
