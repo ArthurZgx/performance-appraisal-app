@@ -7,6 +7,7 @@ import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue
 import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue'
 import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
 import Complete from '@/components/complete/Complete.vue'
+import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/personalInfo',
       name: 'personalInfo',
       component: PersonalInfo
+    },
+    {
+      path: '/serveEvaluate',
+      name: 'serveEvaluate',
+      component: ServeEvaluate
     },
     // {
     //   path: '/home',

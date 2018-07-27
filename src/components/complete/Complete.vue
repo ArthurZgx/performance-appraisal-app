@@ -61,7 +61,7 @@
 
 <script>
   import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, Checklist, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
-  import _ from 'lodash'
+  // import _ from 'lodash'
 
   export default {
     name: 'serve',

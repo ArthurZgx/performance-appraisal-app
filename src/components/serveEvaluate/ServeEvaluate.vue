@@ -1,8 +1,8 @@
 <template>
-  <div class="serve">
+  <div class="serveEvaluate">
     <x-header :right-options="{showMore: true}"
               @on-click-more="showMenus = true">
-      绩效考评
+              绩效考评
     </x-header>
     <search @result-click="resultClick"
             @on-change="searchChange"
@@ -60,79 +60,79 @@
 </template>
 
 <script>
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, Checklist, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
-// import _ from 'lodash'
+  import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, Checklist, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
+  // import _ from 'lodash'
 
-export default {
-  name: 'serve',
-  components: {
-    Group,
-    Cell,
-    Tabbar,
-    XHeader,
-    TabbarItem,
-    Icon,
-    Search,
-    Checklist,
-    XButton,
-    Flexbox,
-    Sticky,
-    FlexboxItem
-  },
-  data() {
-    return {
-      results: [], // 搜索结果列表
-      searchValue: '', // 搜索绑定的数据
-      checklist1: [], // 选择列表
-      commonList: ['name1', 'name2', 'name3', 'name4'] // 所有供选择的列表
-    }
-  },
-  methods: {
-    searchFocus() {
+  export default {
+    name: 'serveEvaluate',
+    components: {
+      Group,
+      Cell,
+      Tabbar,
+      XHeader,
+      TabbarItem,
+      Icon,
+      Search,
+      Checklist,
+      XButton,
+      Flexbox,
+      Sticky,
+      FlexboxItem
+    },
+    data() {
+      return {
+        results: [], // 搜索结果列表
+        searchValue: '', // 搜索绑定的数据
+        checklist1: [], // 选择列表
+        commonList: ['name1', 'name2', 'name3', 'name4'] // 所有供选择的列表
+      }
+    },
+    methods: {
+      searchFocus() {
 
-    },
-    searchCancel() {
+      },
+      searchCancel() {
 
-    },
-    resultClick() {
+      },
+      resultClick() {
 
-    },
-    searchSubmit() {
+      },
+      searchSubmit() {
 
-    },
-    searchChange() {
+      },
+      searchChange() {
 
-    },
-    // checklist 选中状态改变
-    checkChange1(value, label) {
-      console.log('选中状态改变1', value, label)
-      console.log('选择列表', this.checklist1)
-    },
-    // checklist 选中状态改变
-    checkChange2(value, label) {
-      console.log('选中状态改变2', value, label)
-    },
-    // checklist 选中状态改变
-    checkChange3(value, label) {
-      console.log('选中状态改变3', value, label)
-    },
-    // 全选
-    checkAll() {
-      // this.checklist1 = []
-    },
-    // 点击全选
-    clickAll() {
-      console.log('点击全选')
-      // const all = _.without.apply(_, [this.commonList].concat(this.checklist1))
-      // this.checklist1 = all
-      if (this.checklist1.length === 4) {
-        this.checklist1 = []
-      } else {
-        this.checklist1 = this.commonList
+      },
+      // checklist 选中状态改变
+      checkChange1(value, label) {
+        console.log('选中状态改变1', value, label)
+        console.log('选择列表', this.checklist1)
+      },
+      // checklist 选中状态改变
+      checkChange2(value, label) {
+        console.log('选中状态改变2', value, label)
+      },
+      // checklist 选中状态改变
+      checkChange3(value, label) {
+        console.log('选中状态改变3', value, label)
+      },
+      // 全选
+      checkAll() {
+        // this.checklist1 = []
+      },
+      // 点击全选
+      clickAll() {
+        console.log('点击全选')
+        // const all = _.without.apply(_, [this.commonList].concat(this.checklist1))
+        // this.checklist1 = all
+        if (this.checklist1.length === 4) {
+          this.checklist1 = []
+        } else {
+          this.checklist1 = this.commonList
+        }
       }
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
