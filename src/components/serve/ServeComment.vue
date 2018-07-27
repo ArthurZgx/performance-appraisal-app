@@ -25,67 +25,62 @@
   </div>
 </template>
 <script>
-import {
-  XHeader,
-  Toast,
-  Icon
-} from "vux";
+import { XHeader, Toast, Icon } from 'vux'
 export default {
-  name: "serveComment",
+  name: 'serveComment',
   components: {
     XHeader,
     Icon,
-    Toast,
+    Toast
   },
   data() {
     return {
       goodCommentNum: 5,
       badCommentNum: 0,
-      showToast:false,
-      editTitle:'',
-      badCommentText:''
-    };
+      showToast: false,
+      editTitle: '',
+      badCommentText: ''
+    }
   },
   methods: {
-    saveEvent(){
-      console.log("输出")
-      this.showToast = true;
+    saveEvent() {
+      console.log('输出')
+      this.showToast = true
     },
-    submitEvent(){
+    submitEvent() {
       var json = {
-        goodCommentNum:this.goodCommentNum,
-        badCommentNum:this.badCommentNum,
-        badCommentText:this.badCommentText
+        goodCommentNum: this.goodCommentNum,
+        badCommentNum: this.badCommentNum,
+        badCommentText: this.badCommentText
       }
-      localStorage.setItem('jsonTemp',JSON.stringify(json))
-      this.$router.push({name:'serveCommentSuccess'})
+      localStorage.setItem('jsonTemp', JSON.stringify(json))
+      this.$router.push({ name: 'serveCommentSuccess' })
     },
-    goodOption(type){
-      if(type=='minus'){
-        if(this.goodCommentNum>0){
+    goodOption(type) {
+      if (type === 'minus') {
+        if (this.goodCommentNum > 0) {
           this.goodCommentNum--
         }
-      }else if(type == 'plus'){
+      } else if (type === 'plus') {
         this.goodCommentNum++
       }
     },
-        badOption(type){
-      if(type=='minus'){
-        if(this.badCommentNum>0){
+    badOption(type) {
+      if (type === 'minus') {
+        if (this.badCommentNum > 0) {
           this.badCommentNum--
         }
-      }else if(type == 'plus'){
+      } else if (type === 'plus') {
         this.badCommentNum++
       }
     }
   },
-  mounted(){
+  mounted() {
     this.editTitle = localStorage.getItem('serveList')
-    this.editTitle = JSON.parse(this.editTitle);
-    this.editTitle = this.editTitle.name;
-    // console.log(JSON.stringify(this.editTitle))
+    this.editTitle = JSON.parse(this.editTitle)
+    this.editTitle = this.editTitle.name
   }
-};
+}
 </script>
 
 <style>
@@ -127,26 +122,25 @@ export default {
   font-weight: normal;
   padding: 15px 30px;
 }
-.commentTableComment{
+.commentTableComment {
   width: 100%;
 
   text-align: center;
 }
-.commentInput{
+.commentInput {
   width: 90%;
   height: 200px;
   margin: 10px auto;
   padding: 10px;
   background: #fbf9fe;
   border: 1px solid #eee;
-
 }
-.commentTableFooterBtns{
+.commentTableFooterBtns {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-.commentTableFooterBtn{
+.commentTableFooterBtn {
   width: 100px;
   height: 30px;
   text-align: center;
@@ -154,8 +148,8 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-.primaryBtn{
-  background: #3891F0;
+.primaryBtn {
+  background: #3891f0;
   color: white;
   margin-left: 30px;
 }

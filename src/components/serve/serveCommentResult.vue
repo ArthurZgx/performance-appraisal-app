@@ -17,59 +17,51 @@
   </div>
 </template>
 <script>
-import {
-  XHeader,
-  Toast,
-  Icon
-} from "vux";
+import { XHeader, Toast, Icon } from 'vux'
 export default {
-  name: "serveComment",
+  name: 'serveComment',
   components: {
     XHeader,
     Icon,
-    Toast,
+    Toast
   },
   data() {
     return {
       goodCommentNum: 0,
       badCommentNum: 0,
-      editTitle:'',
-      badCommentText:''
-    };
+      editTitle: '',
+      badCommentText: ''
+    }
   },
-  methods: {
-   
-  },
-  mounted(){
+  methods: {},
+  mounted() {
     this.editTitle = localStorage.getItem('serveList')
-    this.editTitle = JSON.parse(this.editTitle);
-    this.editTitle = this.editTitle.name;
+    this.editTitle = JSON.parse(this.editTitle)
+    this.editTitle = this.editTitle.name
     var json = localStorage.getItem('jsonTemp')
-    var json = JSON.parse(json)
+    json = JSON.parse(json)
     console.log(json)
     this.goodCommentNum = json.goodCommentNum
     this.badCommentNum = json.badCommentNum
     this.badCommentText = json.badCommentText
-
-
   }
-};
+}
 </script>
 
 <style>
-.table-title{
+.table-title {
   text-align: center;
   padding: 10px 0;
   border: 1px solid #eee;
 }
-  .table-row{
-    display: flex;
-    flex-direction: row;
-  }
-  .table-row div{
-    width: 50%;
-    padding: 5px 0;
-    text-align: center;
-    border: 1px solid #eee;
-  }
+.table-row {
+  display: flex;
+  flex-direction: row;
+}
+.table-row div {
+  width: 50%;
+  padding: 5px 0;
+  text-align: center;
+  border: 1px solid #eee;
+}
 </style>

@@ -9,40 +9,34 @@
   </div>
 </template>
 <script>
-import {
-  XHeader,
-  XButton 
-} from "vux";
+import { XHeader, XButton } from 'vux'
 export default {
-  name: "serveCommentSuccess",
+  name: 'serveCommentSuccess',
   components: {
     XHeader,
-    XButton 
+    XButton
   },
   data() {
-    return {
-
-    };
+    return {}
   },
   methods: {
-    goToResult(){
-        this.$router.push({name:'serveCommentResult'})
+    goToResult() {
+      this.$router.push({ name: 'serveCommentResult' })
     }
   }
-};
+}
 </script>
-
 <style scope>
-    .showToast{
-        width: 40%;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        text-align: center;
-        margin-top: 10px;
-    }
-    .showToast img{
-        width: 100%;
-    }
+.showToast {
+  width: 40%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  margin-top: 10px;
+}
+.showToast img {
+  width: 100%;
+}
 </style>

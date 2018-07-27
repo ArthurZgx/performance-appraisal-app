@@ -15,10 +15,7 @@ import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue
 import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
 import Complete from '@/components/complete/Complete.vue'
 import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
-
-
 Vue.use(Router)
-
 export default new Router({
   routes: [
     {
@@ -32,19 +29,19 @@ export default new Router({
       component: Serve
     },
     {
-      path:'/serveComment',
-      name:'serveComment',
-      component:serveComment
+      path: '/serveComment',
+      name: 'serveComment',
+      component: serveComment
     },
     {
-      path:'/serveCommentSuccess',
-      name:'serveCommentSuccess',
-      component:serveCommentSuccess
+      path: '/serveCommentSuccess',
+      name: 'serveCommentSuccess',
+      component: serveCommentSuccess
     },
     {
-      path:'/serveCommentResult',
-      name:'serveCommentResult',
-      component:serveCommentResult
+      path: '/serveCommentResult',
+      name: 'serveCommentResult',
+      component: serveCommentResult
     },
     {
       path: '/complete',
