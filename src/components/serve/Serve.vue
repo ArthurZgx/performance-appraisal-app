@@ -17,38 +17,31 @@
             @on-submit="searchSubmit"
             ref="search">
     </search>
-    <group class="home_group">
-      <checklist title="技术部"
-                 :label-position="'right'"
-                 :options="[{key:'name1',value:'张三的服务质量评价',inlineDesc:'2018-02-13'}]"
-                 v-model="checklist1"
-                 @on-change="checkChange1">
-      </checklist>
-      <checklist title="法务部"
-                 :label-position="'right'"
-                 :options="[{key:'name2',value:'李四的服务质量评价',inlineDesc:'2018-02-13'}]"
-                 v-model="checklist1"
-                 @on-change="checkChange2">
-      </checklist>
-      <checklist title="市场部"
-                 :label-position="'right'"
-                 :options="[{key:'name3',value:'王五的服务质量评价',inlineDesc:'2018-02-13'}]"
-                 v-model="checklist1"
-                 @on-change="checkChange3">
-      </checklist>
+    <group class="home_group groupList">
+      <div v-for="(item,index) in serveList" :key="index">
+        <div class="serveClassifyTitle">{{item.title}}</div>
+        <div>
+           <div v-for="(list,index) in item.list" :key="index" class="aListData">
+            <div class="listCheck"  @click="aListCheckClick(list)">
+              <check-icon :value.sync="list.checked"></check-icon>
+            </div>
+            <div class="listInfo" @click="goToServeComment(list)">
+                <div>{{list.name}}</div>
+                <div>{{list.time}}</div>
+</div>
+           </div>
+        </div>
+      </div>
     </group>
     <!-- 一键提交 -->
     <sticky ref="sticky"
             :offset="100"
             :check-sticky-support="false"
             disabled="disabled">
-      <flexbox>
+      <flexbox style="background:white;">
         <flexbox-item :span="3.5">
           <div @click="clickAll" class="home_div">
-            <checklist :options="[{key:'name4',value:'全选',inlineDesc:''}]"
-                       v-model="checklist1"
-                       @on-change="checkAll">
-            </checklist>
+            <check-icon :value.sync="checkedAll"></check-icon>全选
           </div>
         </flexbox-item>
         <flexbox-item>
@@ -60,7 +53,7 @@
 </template>
 
 <script>
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, Checklist, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
 // import _ from 'lodash'
 
 export default {
@@ -73,7 +66,7 @@ export default {
     TabbarItem,
     Icon,
     Search,
-    Checklist,
+    CheckIcon,
     XButton,
     Flexbox,
     Sticky,
@@ -84,7 +77,24 @@ export default {
       results: [], // 搜索结果列表
       searchValue: '', // 搜索绑定的数据
       checklist1: [], // 选择列表
-      commonList: ['name1', 'name2', 'name3', 'name4'] // 所有供选择的列表
+      commonList: ['name1', 'name2', 'name3', 'name4'], // 所有供选择的列表
+      checkedAll:false,
+      childNodeNum:0,
+      serveList:[
+        {
+          title:'技术部',
+          list:[{name:'张三的绩效考核',time:'2018-08-08',checked:false},{name:'刘备的绩效考核',time:'2018-08-08',checked:false}]
+        },        {
+          title:'法务部',
+          list:[{name:'李四的绩效考核',time:'2018-08-08',checked:false}]
+        },        {
+          title:'宣传部',
+          list:[{name:'王五的绩效考核',time:'2018-08-08',checked:false}]
+        },        {
+          title:'外交部',
+          list:[{name:'赵六的绩效考核',time:'2018-08-08',checked:false}]
+        },
+      ]
     }
   },
   methods: {
@@ -103,18 +113,29 @@ export default {
     searchChange() {
 
     },
-    // checklist 选中状态改变
-    checkChange1(value, label) {
-      console.log('选中状态改变1', value, label)
-      console.log('选择列表', this.checklist1)
+    clickList(){
     },
-    // checklist 选中状态改变
-    checkChange2(value, label) {
-      console.log('选中状态改变2', value, label)
+    goToServeComment(list){
+      localStorage.setItem('serveList',JSON.stringify(list))
+      console.log(list)
+      this.$router.push({path:'ServeComment'})
     },
-    // checklist 选中状态改变
-    checkChange3(value, label) {
-      console.log('选中状态改变3', value, label)
+    aListCheckClick(list){      
+      this.checkedAll = false
+      if(list.checked == true){
+      this.checklist1.push(list)
+      if(this.checklist1.length == this.childNodeNum){
+        this.checkedAll = true
+      }
+      return false        
+      }
+      if(list.checked == false){
+      for(var i = 0,len=this.checklist1.length;i<len;i++){
+        if(this.checklist1[i].name == list.name){
+          this.checklist1.splice(i,1)
+        }
+      }
+      }
     },
     // 全选
     checkAll() {
@@ -125,12 +146,36 @@ export default {
       console.log('点击全选')
       // const all = _.without.apply(_, [this.commonList].concat(this.checklist1))
       // this.checklist1 = all
-      if (this.checklist1.length === 4) {
-        this.checklist1 = []
-      } else {
-        this.checklist1 = this.commonList
+      // if (this.checklist1.length === 4) {
+      //   this.checklist1 = []
+      // } else {
+      //   this.checklist1 = this.commonList
+      // }
+      if(this.checkedAll == false){
+        this.checkAll = true
+        for(var j = 0;j<this.serveList.length;j++){
+        for(var i = 0,len=this.serveList[j].list.length;i<len;i++){
+          this.serveList[j].list[i].checked = false
+        }
+        }
+      }else if(this.checkedAll == true){
+          this.checkAll = false
+          for(var j = 0;j<this.serveList.length;j++){
+        for(var i = 0,len=this.serveList[j].list.length;i<len;i++){
+          this.serveList[j].list[i].checked = true
+        }
+          }
       }
+
     }
+  },
+  mounted(){
+    //统计子集数目
+      for(var i= 0;i<this.serveList.length;i++){
+        for(var j = 0,len=this.serveList[i].list.length;j<len;j++){
+          this.childNodeNum ++
+        }
+      }
   }
 }
 </script>
@@ -144,5 +189,26 @@ export default {
     position: fixed;
     width: 100%;
     bottom: 0;
+  }
+  .groupList{
+    padding-bottom: 50px;
+  }
+  .aListData{
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0;
+
+  }
+  .serveClassifyTitle{
+    padding: 10px 5px;
+    border-bottom: 1px solid #eee;
+  }
+  .listCheck{
+    height: 50px;
+    line-height: 50px;
+  }
+  .listInfo{
+    height: 50px;
+    margin-left: 30px;
   }
 </style>

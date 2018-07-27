@@ -9,11 +9,11 @@
       <!--<span slot="label">技能测试</span>-->
       <!--</tabbar-item>-->
       <tabbar-item link="/home/serve">
-        < img slot="icon">
+        <img slot="icon">
         <span slot="label" >技能测试</span>
       </tabbar-item>
       <tabbar-item show-dot link="/home/complete">
-        < img slot="icon">
+        <img slot="icon">
         <span slot="label">个人中心</span>
       </tabbar-item>
     </tabbar>
