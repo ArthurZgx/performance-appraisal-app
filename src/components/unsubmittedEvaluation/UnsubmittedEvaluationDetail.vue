@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-  import { GroupTitle, Group, Cell,FormPreview, XNumber, XTextarea, XInput, XHeader, Icon, XButton, Flexbox, FlexboxItem } from 'vux'
+  import { Cell, FormPreview, XNumber, XTextarea, XInput, XHeader, Icon, XButton, Flexbox, FlexboxItem } from 'vux'
   export default {
     name: 'personal',
     components: {
@@ -50,13 +50,13 @@
       Flexbox,
       FlexboxItem
     },
-    name: 'Demo2',
-    data() { return {
-    msg: 'Welcome to Your Vue.js App',
-    value:'10',
-    numberValue: 0
-  }
-  }
+    data() {
+      return {
+        msg: 'Welcome to Your Vue.js App',
+        value: '10',
+        numberValue: 0
+      }
+    }
   }
 </script>
 

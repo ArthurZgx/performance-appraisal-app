@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { Group, Cell, XHeader,GroupTitle,XInput,Selector,PopupPicker,XAddress,Datetime,XNumber,XTextarea,XSwitch } from 'vux'
+  import { Group, Cell, XHeader, GroupTitle, XInput, Selector, PopupPicker, XAddress, Datetime, XNumber, XTextarea, XSwitch } from 'vux'
 
   export default {
     name: 'Demo',
@@ -50,7 +50,7 @@
     },
     data() {
       return {
-        addressData: ChinaAddressData,
+        addressData: 'ChinaAddressData',
         addressValue: ['广东省', '深圳市', '南山区'],
         value1: '张三',
         value2: '工艺技术',

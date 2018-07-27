@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import { Group, Cell,XHeader,XTable,LoadMore } from 'vux'
+  import { Group, Cell, XHeader, XTable, LoadMore } from 'vux'
 
   export default {
     name: 'Demo',

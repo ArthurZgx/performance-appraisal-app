@@ -17,7 +17,7 @@
    </div>
 </template>
 <script>
-  import { FormPreview,XHeader, Icon } from 'vux'
+  import { FormPreview, XHeader, Icon } from 'vux'
   export default {
     name: 'personal',
     components: {
@@ -25,22 +25,22 @@
       XHeader,
       Icon
     },
-    name: 'Demo2',
-    data() { return {
-      msg: 'Welcome to Your Vue.js App',
-      list: [{
-        label: '我的票数',
-        value: '10'
-      }, {
-        label: '好评论数',
-        value: '3'
-      }, {
-        label: '差评数',
-        value: '3'
-      }, {
-        label: '差评说明',
-        value: '很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字'
-      }]
+    data() {
+      return {
+        msg: 'Welcome to Your Vue.js App',
+        list: [{
+          label: '我的票数',
+          value: '10'
+        }, {
+          label: '好评论数',
+          value: '3'
+        }, {
+          label: '差评数',
+          value: '3'
+        }, {
+          label: '差评说明',
+          value: '很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字'
+        }]
       }
     }
   }
