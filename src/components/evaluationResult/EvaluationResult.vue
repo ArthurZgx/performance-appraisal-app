@@ -10,7 +10,7 @@
     <!--<group title="cell demo">-->
       <!--<cell title="返回首页" value="cool" is-link link="/personal"></cell>-->
     <!--</group>-->
-    <load-more tip="" :show-loading="false" background-color="#fbf9fe"></load-more>
+    <!-- <load-more tip="" :show-loading="false" background-color="#fbf9fe"></load-more> -->
     <x-table :cell-bordered="false" style="background-color:#fff;">
       <thead>
       <tr>
@@ -95,18 +95,19 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
 </style>

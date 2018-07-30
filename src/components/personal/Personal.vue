@@ -14,11 +14,37 @@
 
 
     </div>
-    <group>
+    <!-- <group>
       <cell title="考评记录" is-link link="evaluationRecord"></cell>
       <cell title="我的考评结果" is-link link="evaluationResult"></cell>
       <cell title="身份绑定" is-link link="personalInfo"></cell>
-    </group>
+    </group> -->
+    <flexbox class="personal-nav-list">
+      <flexbox-item>
+        <router-link to="/evaluationType">
+        <div class="a-nav-href">
+          <img src="../../assets/AssessmentRecords.png" alt="">
+          <div>考评记录</div>
+        </div>
+        </router-link>
+      </flexbox-item>
+      <flexbox-item>
+        <router-link to="/evaluationResult">        
+        <div class="a-nav-href">
+          <img src="../../assets/MyAssessmentResults.png" alt="">
+          <div>我的考评结果</div>
+        </div>
+        </router-link>
+      </flexbox-item>
+      <flexbox-item>
+        <router-link to="/personalInfo">        
+        <div class="a-nav-href">
+          <img src="../../assets/TheBindingOfIdentity.png" alt="">
+          <div>身份绑定</div>
+        </div>
+        </router-link>
+      </flexbox-item>
+    </flexbox>
     <tabbar style="position: fixed !important;z-index: 500">
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
@@ -41,7 +67,7 @@
 <script>
   import _ from 'lodash'
   import moment from 'moment'
-  import { Group, Cell, TabbarItem, Tabbar, XHeader, Icon } from 'vux'
+  import { Group, Cell, TabbarItem, Tabbar, XHeader, Icon, Flexbox, FlexboxItem } from 'vux'
   export default {
     name: 'personal',
     components: {
@@ -50,7 +76,9 @@
       TabbarItem,
       Tabbar,
       XHeader,
-      Icon
+      Icon,
+      Flexbox,
+      FlexboxItem
     },
     data() {
       return {
@@ -81,11 +109,33 @@
 </script>
 
 <style>
-  .vux-demo {
-    text-align: center;
-  }
-  .logo {
-    width: 100px;
-    height: 100px
-  }
+.vux-demo {
+  text-align: center;
+  background: white;
+  padding-bottom: 20px;
+}
+.logo {
+  width: 100px;
+  height: 100px;
+}
+.personal-nav-list {
+  padding: 20px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  background: white;
+  margin-top: 20px;
+}
+.personal-nav-list a {
+  color: black;
+}
+.a-nav-href {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+}
+.a-nav-href img {
+  width: 25%;
+  max-width: 60px;
+  margin: 0 auto;
+}
 </style>

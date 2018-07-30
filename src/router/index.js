@@ -6,6 +6,7 @@ import serveComment from '@/components/serve/ServeComment.vue'
 import serveCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
 import serveCommentResult from '@/components/serve/ServeCommentResult.vue'
 import Personal from '@/components/personal/Personal.vue'
+import EvaluationType from '@/components/evaluationType/EvaluationType.vue'
 import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
 import EvaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
 import SubmitEvaluation from '@/components/submitEvaluation/SubmitEvaluation.vue'
@@ -52,6 +53,11 @@ export default new Router({
       path: '/personal',
       name: 'personal',
       component: Personal
+    },
+    {
+      path: '/evaluationType',
+      name: 'evaluationType',
+      component: EvaluationType
     },
     {
       path: '/evaluationRecord',
