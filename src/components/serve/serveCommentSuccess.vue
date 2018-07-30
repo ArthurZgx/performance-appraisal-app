@@ -1,32 +1,58 @@
 <template>
   <div class="serveCommentSuccess">
-      <div class="showToast">
-      <img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/%E6%8F%90%E4%BA%A4%E6%88%90%E5%8A%9F.png" alt="">
-        <div>提交成功</div>
-        <span  @click="goToResult"><x-button>我知道了</x-button></span>
-        
+      <!--<div class="showToast">-->
+        <!--<img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/%E6%8F%90%E4%BA%A4%E6%88%90%E5%8A%9F.png" alt="">-->
+        <!--<div>提交成功</div>-->
+        <!--<span  @click="goToResult"><x-button>我知道了</x-button></span>-->
+        <!---->
+      <!--</div>-->
+    <x-header style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
+              @on-click-more="showMenus = true">绩效考评
+    </x-header>
+    <div class="serveCommentSuccess_div">
+      <x-img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/%E6%8F%90%E4%BA%A4%E6%88%90%E5%8A%9F.png"
+             style="width:80px;height:90px"
+             @on-success="imgSuccess" @on-error="imgError">
+      </x-img>
     </div>
+    <p style="margin-bottom: 36px;text-align: center;">提交成功</p>
+    <x-button style="border: 1px solid rgba(53,53,53,0.80);border-radius: 6px;width:119px;"
+              @click.native="goToResult">我知道了
+    </x-button>
+
   </div>
 </template>
 <script>
-import { XHeader, XButton } from 'vux'
+import { XHeader, XButton, XImg } from 'vux'
 export default {
   name: 'serveCommentSuccess',
   components: {
     XHeader,
+    XImg,
     XButton
   },
   data() {
     return {}
   },
   methods: {
+    // 图片加载成功函数
+    imgSuccess() {
+    },
+    // 图片加载失败函数
+    imgError() {
+    },
     goToResult() {
       this.$router.push({ name: 'serveCommentResult' })
     }
   }
 }
 </script>
-<style scope>
+<style>
+  .serveCommentSuccess_div{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 26px;
+  }
 .showToast {
   width: 40%;
   position: fixed;

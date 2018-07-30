@@ -1,50 +1,116 @@
 <template>
-  <div class="serve">
+  <div class="serveComment">
     <x-header :right-options="{showMore: true}"
-              @on-click-more="showMenus = true">
-      绩效考评
+              style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
+              @on-click-more="showMenus = true">绩效考评
     </x-header>
 
-    <div class="commentTable">
-      <div class="commentTableTitle">{{editTitle}}</div>
-      <div class="commentTableContent">
-        <div class="commentTableContentTitle">我的票数</div>
-        <div class="commentTableContentGood">好评数<span class="minus" @click="goodOption('minus')">-</span>{{goodCommentNum}}<span @click="goodOption('plus')" class="plus">+</span></div>
-        <div class="commentTableContentBad">差评数<span class="minus" @click="badOption('minus')">-</span>{{badCommentNum}}<span @click="badOption('plus')" class="plus">+</span></div>
-      </div>
-      <div class="commentTableComment">
-          <textarea class="commentInput" v-model="badCommentText" placeholder="差评说明"></textarea>
-      </div>
-      <div class="commentTableFooterBtns">
-          <div class="commentTableFooterBtn" @click="saveEvent">保存</div>
-          <div class="commentTableFooterBtn primaryBtn" type="primary" @click="submitEvent">提交</div>              
-      </div>     
+    <!--<div class="commentTable">-->
+      <!--<div class="commentTableTitle">{{editTitle}}</div>-->
+      <!--<div class="commentTableContent">-->
+        <!--<div class="commentTableContentTitle">我的票数</div>-->
+        <!--<div class="commentTableContentGood">好评数-->
+          <!--<span class="minus" @click="goodOption('minus')">-</span>-->
+            <!--{{goodCommentNum}}-->
+          <!--<span @click="goodOption('plus')" class="plus">+</span>-->
+        <!--</div>-->
+        <!--<div class="commentTableContentBad">-->
+          <!--差评数<span class="minus" @click="badOption('minus')">-</span>{{badCommentNum}}-->
+          <!--<span @click="badOption('plus')" class="plus">+</span>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="commentTableComment">-->
+          <!--<textarea class="commentInput" v-model="badCommentText" placeholder="差评说明"></textarea>-->
+      <!--</div>-->
+      <!--<div class="commentTableFooterBtns">-->
+          <!--<div class="commentTableFooterBtn" @click="saveEvent">保存</div>-->
+          <!--<div class="commentTableFooterBtn primaryBtn"-->
+               <!--type="primary" @click="submitEvent">提交</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <div class="serveComment_div">
+      <flexbox>
+        <flexbox-item>
+          <div class="serveTitle">{{editTitle}}</div>
+        </flexbox-item>
+      </flexbox>
+      <!--<group>-->
+      <!--<cell-box value-align="right">{{editTitle}}</cell-box>-->
+      <!--</group>-->
+      <group title="我的票数: 5票" title-color="#666">
+        <x-number title="好评数：" align="left" v-model="goodCommentNum" button-style="round" :min="0" :max="5"></x-number>
+        <x-number title="差评数：" align="left" v-model="badCommentNum" button-style="round" :min="0" :max="5"></x-number>
+      </group>
+      <!-- 差评说明 -->
+      <group>
+        <x-textarea placeholder="差评说明"
+                    @on-focus="onFocus()"
+                    class="serveComment_textarea"
+                    style="height: 180px;border: 1px solid rgba(56,145,240,0.5);margin-bottom: 40px;"
+                    @on-blur="onBlur()">
+        </x-textarea>
+      </group>
+      <!-- 保存提交按钮 -->
+      <flexbox style="margin-bottom: 25px;">
+        <flexbox-item>
+          <x-button style="background: #f8f8f8;color: #333"
+                    @click.native="saveEvent">保存
+          </x-button>
+        </flexbox-item>
+        <flexbox-item>
+          <x-button style="background: #3891F0;color: #fff"
+                    @click.native="submitEvent">提交
+          </x-button>
+        </flexbox-item>
+      </flexbox>
     </div>
 
-     <toast v-model="showToast" type="text" :time="800" is-show-mask text="成功添加到待办事项中" position="bottom"></toast>
+
+    <toast v-model="showToast" type="text"
+           :time="1000" is-show-mask text="已保存至待办事项"
+           width="9em"
+           position="bottom" style="">
+    </toast>
   </div>
 </template>
 <script>
-import { XHeader, Toast, Icon } from 'vux'
+import { XHeader, Toast, Icon, XNumber, Group, CellBox, Cell, Flexbox, FlexboxItem, XTextarea, XButton } from 'vux'
+
 export default {
   name: 'serveComment',
   components: {
     XHeader,
     Icon,
+    Flexbox,
+    FlexboxItem,
+    Cell,
+    Group,
+    XButton,
+    XTextarea,
+    CellBox,
+    XNumber,
     Toast
   },
   data() {
     return {
-      goodCommentNum: 5,
-      badCommentNum: 0,
+      goodCommentNum: 5, // 好评数
+      badCommentNum: 0, // 差评数
       showToast: false,
       editTitle: '',
-      badCommentText: ''
+      badCommentText: '' // 差评说明
     }
   },
   methods: {
+    // 差评说明得焦函数
+    onFocus() {
+      console.log('得焦')
+    },
+    // 差评说明失焦函数
+    onBlur() {
+      console.log('失焦')
+    },
     saveEvent() {
-      console.log('输出')
+      console.log('保存')
       this.showToast = true
     },
     submitEvent() {
@@ -75,7 +141,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.editTitle = localStorage.getItem('serveList')
     this.editTitle = JSON.parse(this.editTitle)
     this.editTitle = this.editTitle.name
@@ -84,6 +150,29 @@ export default {
 </script>
 
 <style>
+  .serveComment{
+    background: #fff;
+  }
+  .serveTitle{
+    padding: 20px 0 22px;
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 1px solid rgba(56,145,240,0.5);
+  }
+  .serveComment_div{
+    background: #FFF;
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.20);
+    border-radius: 4px;
+    margin: 0 15px;
+    padding: 10px;
+  }
+  .vux-number-selector svg{
+    /*fill: #3891F0 !important;*/
+  }
+  .weui-cells__title{
+    font-size: 16px;
+  }
 .commentTable {
   width: 90%;
   height: 700px;

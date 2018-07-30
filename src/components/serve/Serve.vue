@@ -1,51 +1,51 @@
 <template>
-  <div class='serve'>
-    <x-header :right-options='{showMore: true}'
-              @on-click-more='showMenus = true'>
+  <div class="serve">
+    <x-header :right-options="{showMore: true}"
+              @on-click-more="showMenus = true">
       绩效考评
     </x-header>
-    <search @result-click='resultClick'
-            @on-change='searchChange'
-            :results='results'
-            v-model='searchValue'
-            position='absolute'
+    <search @result-click="resultClick"
+            @on-change="searchChange"
+            :results="results"
+            v-model="searchValue"
+            position="absolute"
             auto-scroll-to-top
-            cancel-text='取消'
-            top='46px'
-            @on-focus='searchFocus'
-            @on-cancel='searchCancel'
-            @on-submit='searchSubmit'
-            ref='search'>
+            cancel-text="取消"
+            top="46px"
+            @on-focus="searchFocus"
+            @on-cancel="searchCancel"
+            @on-submit="searchSubmit"
+            ref="search">
     </search>
-    <group class='home_group groupList'>
-      <div v-for='(item,index) in serveList' :key='index'>
-        <div class='serveClassifyTitle'>{{item.title}}</div>
+    <group class="home_group groupList">
+      <div v-for="(item,index) in serveList" :key="index">
+        <div class="serveClassifyTitle">{{item.title}}</div>
         <div>
-           <div v-for='(list,index) in item.list' :key='index' class='aListData'>
-            <div class='listCheck'  @click='aListCheckClick(list)'>
-              <check-icon :value.sync='list.checked'></check-icon>
+           <div v-for="(list,index) in item.list" :key="index" class="aListData">
+            <div class="listCheck"  @click="listCheckClick(list)">
+              <check-icon :value.sync="list.checked"></check-icon>
             </div>
-            <div class='listInfo' @click='goToServeComment(list)'>
+            <div class="listInfo" @click="goToServeComment(list)">
                 <div>{{list.name}}</div>
                 <div>{{list.time}}</div>
-</div>
+            </div>
            </div>
         </div>
       </div>
     </group>
     <!-- 一键提交 -->
-    <sticky ref='sticky'
-            :offset='100'
-            :check-sticky-support='false'
-            disabled='disabled'>
-      <flexbox style='background:white;'>
-        <flexbox-item :span='3.5'>
-          <div @click='clickAll' class='home_div'>
-            <check-icon :value.sync='checkedAll'></check-icon>全选
+    <sticky ref="sticky"
+            :offset="100"
+            :check-sticky-support="false"
+            disabled="disabled">
+      <flexbox style="background:white;">
+        <flexbox-item :span="3.5">
+          <div @click="clickAll" class="home_div">
+            <check-icon :value.sync="checkedAll"></check-icon>全选
           </div>
         </flexbox-item>
         <flexbox-item>
-          <x-button type='primary'>一键提交</x-button>
+          <x-button type="primary">一键提交</x-button>
         </flexbox-item>
       </flexbox>
     </sticky>
@@ -53,21 +53,9 @@
 </template>
 
 <script>
-import {
-  Group,
-  Cell,
-  Tabbar,
-  TabbarItem,
-  XHeader,
-  Icon,
-  Search,
-  CheckIcon,
-  XButton,
-  Flexbox,
-  FlexboxItem,
-  Sticky
-} from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky } from 'vux'
 // import _ from 'lodash'
+
 var i = 0
 var j = 0
 var len = 0
@@ -93,29 +81,35 @@ export default {
       searchValue: '', // 搜索绑定的数据
       checklist1: [], // 选择列表
       commonList: ['name1', 'name2', 'name3', 'name4'], // 所有供选择的列表
-      checkedAll: false,
+      checkedAll: false, // 是否全选
       childNodeNum: 0,
       serveList: [
         {
           title: '技术部',
           list: [
-            { name: '张三的绩效考核', time: '2018-08-08', checked: false },
-            { name: '刘备的绩效考核', time: '2018-08-08', checked: false }
+            { name: '张三服务质量评价', time: '2018-08-08', checked: false },
+            { name: '刘备服务质量评价', time: '2018-08-08', checked: false }
           ]
         },
         {
           title: '法务部',
-          list: [{ name: '李四的绩效考核', time: '2018-08-08', checked: false }]
+          list: [{ name: '李四服务质量评价', time: '2018-08-08', checked: false }]
         },
         {
           title: '宣传部',
-          list: [{ name: '王五的绩效考核', time: '2018-08-08', checked: false }]
+          list: [{ name: '王五服务质量评价', time: '2018-08-08', checked: false }]
         },
         {
           title: '外交部',
-          list: [{ name: '赵六的绩效考核', time: '2018-08-08', checked: false }]
+          list: [{ name: '赵六服务质量评价', time: '2018-08-08', checked: false }]
         }
       ]
+    }
+  },
+  watch: {
+    checkedAll(newValue, oldValue) {
+      console.log('改变了', '旧', oldValue)
+      console.log('改变了', '新', newValue)
     }
   },
   methods: {
@@ -125,12 +119,14 @@ export default {
     searchSubmit() {},
     searchChange() {},
     clickList() {},
+    // 跳转评价详情
     goToServeComment(list) {
       localStorage.setItem('serveList', JSON.stringify(list))
       console.log(list)
       this.$router.push({ path: 'ServeComment' })
     },
-    aListCheckClick(list) {
+    // 选中当前数据
+    listCheckClick(list) {
       this.checkedAll = false
       if (list.checked === true) {
         this.checklist1.push(list)
@@ -188,7 +184,7 @@ export default {
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .weui-search-bar__cancel-btn {
   display: block;
