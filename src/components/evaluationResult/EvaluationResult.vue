@@ -11,11 +11,9 @@
       <!--<cell title="返回首页" value="cool" is-link link="/personal"></cell>-->
     <!--</group>-->
     <!-- <load-more tip="" :show-loading="false" background-color="#fbf9fe"></load-more> -->
-    <x-table :cell-bordered="false" style="background-color:#fff;">
+    <div class="table-title">本人的考评结果</div>
+    <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
-      <tr>
-        <td colspan="5">本人的考评结果</td>
-      </tr>
       <tr>
         <th>考评周期</th>
         <th>服务质量评价系数</th>
@@ -109,5 +107,30 @@ li {
 }
 a {
   color: #42b983;
+}
+.table-title {
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+}
+td {
+  padding: 0 5px;
+}
+/* 表格下边框 */
+.vux-table td:before,
+.vux-table th:before {
+  border-color: #3891f0;
+}
+/* 表格右边框 */
+.vux-table td:after,
+.vux-table th:after {
+  border-color: #3891f0;
+}
+/* 表格左边框 */
+.vux-table.vux-table-bordered:before {
+  border-color: #3891f0;
+}
+.vux-table:after {
+  border-color: #3891f0;
 }
 </style>

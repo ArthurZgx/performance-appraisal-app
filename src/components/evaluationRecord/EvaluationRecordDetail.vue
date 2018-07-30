@@ -9,7 +9,7 @@
       <h3>考评记录</h3>
 
     </div>
-    <group title="cell demo">
+    <group>
       <cell title="返回首页" value="cool" is-link link="/personal"></cell>
     </group>
     <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview>
