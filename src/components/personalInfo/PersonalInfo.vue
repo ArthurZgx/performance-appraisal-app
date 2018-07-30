@@ -3,6 +3,7 @@
     <div class="vux-demo">
       <x-header :right-options="{showMore: true}"
                 @on-click-more="showMenus = true">
+                个人信息
       </x-header>
       <img class="logo" src="../../assets/vux_logo.png">
       <h3>个人信息页</h3>

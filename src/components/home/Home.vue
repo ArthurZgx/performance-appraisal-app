@@ -7,11 +7,14 @@
     <group class="home_group">
       <cell title="服务质量评价通知"
             is-link link="serve">
-        <icon slot="icon" type="info"></icon>
+        <!-- <icon slot="icon" type="info"></icon> -->
+        <img src="../../assets/shop.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
       </cell>
       <cell title="工作完成度评价通知"
             is-link link="complete">
-        <icon slot="icon" type="info"></icon>
+        <!-- <icon slot="icon" type="info"></icon> -->
+        <img src="../../assets/computer.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
+        
       </cell>
     </group>
     <!-- style="position: fixed !important;z-index: 500"-->
@@ -22,12 +25,12 @@
       <!--<tabbar-item>-->
       <!--<span slot="label">技能测试</span>-->
       <!--</tabbar-item>-->
-      <tabbar-item link="home" selected>
-        <!--<img slot="icon">-->
-        <span slot="label">首页</span>
+      <tabbar-item link="home">
+        <img slot="icon" src="../../assets/index.png">
+        <span slot="label" style="color:#3891F0;">首页</span>
       </tabbar-item>
       <tabbar-item link="personal">
-        <!--<img slot="icon">-->
+        <img slot="icon" src="../../assets/user.png">
         <span slot="label">我的</span>
       </tabbar-item>
     </tabbar>
@@ -78,13 +81,13 @@ export default {
 </script>
 
 <style>
-  .home_group .vux-no-group-title{
-    margin-top: 0;
-  }
-  .home_group .weui-cell{
-    height: 40px;
-  }
-  .home .vux-header .vux-header-title{
-    /*color: #333;*/
-  }
+.home_group .vux-no-group-title {
+  margin-top: 0;
+}
+.home_group .weui-cell {
+  height: 40px;
+}
+.home .vux-header .vux-header-title {
+  /*color: #333;*/
+}
 </style>

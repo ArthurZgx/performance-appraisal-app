@@ -45,7 +45,7 @@
         </router-link>
       </flexbox-item>
     </flexbox>
-    <tabbar style="position: fixed !important;z-index: 500">
+    <tabbar>
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
       <!--</tabbar-item>-->
@@ -53,12 +53,12 @@
       <!--<span slot="label">技能测试</span>-->
       <!--</tabbar-item>-->
       <tabbar-item link="home">
-        <!--<img slot="icon">-->
+        <img slot="icon" src="../../assets/index_onclick.png">
         <span slot="label">首页</span>
       </tabbar-item>
-      <tabbar-item link="personal" selected>
-        <!--<img slot="icon">-->
-        <span slot="label">我的</span>
+      <tabbar-item link="personal">
+        <img slot="icon" src="../../assets/user_clicked.png">
+        <span slot="label" style="color:#3891F0;">我的</span>
       </tabbar-item>
     </tabbar>
   </div>

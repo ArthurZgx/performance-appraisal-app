@@ -6,6 +6,7 @@
       <!--<h3>考评记录</h3>-->
       <x-header :right-options="{showMore: true}"
                 @on-click-more="showMenus = true">
+                考评记录
       </x-header>
     </div>
     <!--<group>-->
@@ -77,7 +78,7 @@
         <!-- 显示月份 -->
           <flexbox orient="vertical" :style="'height:'+years.length*44+'px;overflow:scroll;background:#eee;'" :gutter="0">
           <flexbox-item  v-for="(item,index) in month" :key="index">
-            <cell :title="item+'月'" :style="selectedMouthIndex==index?'color:#3891F0;':''" @click.native="selectedMouthIndex=index"></cell>
+            <cell :title="item+'月'" :style="selectedMouthIndex==index?'color:#3891F0;':''" @click.native="selectedMouthIndex=index,kaoping = false,chakan = false,riqi = falsekaoping = false,chakan = false,riqi = false"></cell>
           </flexbox-item>         
         </flexbox>
       </flexbox>
@@ -149,6 +150,19 @@
     methods: {
       onImgError(item, $event) {
         console.log(item, $event)
+      },
+      closeRadioWindow() {
+        this.chakan = false
+        this.riqi = false
+        this.kaoping = false
+      }
+    },
+    watch: {
+      r1: function() {
+        this.closeRadioWindow()
+      },
+      r2: function() {
+        this.closeRadioWindow()
       }
     }
   }
@@ -156,10 +170,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.vux-demo {
-  text-align: center;
-  z-index: 1000;
-}
 h1,
 h2 {
   font-weight: normal;

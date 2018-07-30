@@ -3,6 +3,7 @@
   <div>
       <x-header :right-options="{showMore: true}"
                 @on-click-more="showMenus = true">
+                考评记录
       </x-header>
       <group>
       <cell title="已提交评价" is-link link="evaluationRecord"></cell>

@@ -16,4 +16,8 @@ export default {
 body {
   background-color: #fbf9fe;
 }
+.vux-demo {
+  text-align: center;
+  z-index: 1000;
+}
 </style>

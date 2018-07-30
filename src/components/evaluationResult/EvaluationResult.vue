@@ -3,6 +3,7 @@
     <div class="vux-demo">
       <x-header :right-options="{showMore: true}"
                 @on-click-more="showMenus = true">
+                考评结果
       </x-header>
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>考评结果</h3>-->

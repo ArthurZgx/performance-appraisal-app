@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-  import { XTable, Cell, FormPreview, XNumber, XTextarea, XInput, XHeader, Icon, XButton, Flexbox, FlexboxItem } from 'vux'
+  import { XTable, Cell, FormPreview, XNumber, XTextarea, XInput, XHeader, Icon, XButton, Flexbox, FlexboxItem, Group } from 'vux'
   export default {
     name: 'personal',
     components: {
@@ -63,7 +63,8 @@
       XButton,
       Flexbox,
       FlexboxItem,
-      XTable
+      XTable,
+      Group
     },
     data() {
       return {
@@ -77,29 +78,29 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-    border-bottom:1px dashed #f11
-  }
-  a {
-    color: #42b983;
-  }
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+  border-bottom: 1px dashed #f11;
+}
+a {
+  color: #42b983;
+}
 
-  @import '~vux/src/styles/1px.less';
-  .flex-demo {
-    text-align: center;
-    color: #333;
-    background-color: rgba(242, 242, 242, 1);
-    border-radius: 4px;
-    background-clip: padding-box;
-
-  }
+@import '~vux/src/styles/1px.less';
+.flex-demo {
+  text-align: center;
+  color: #333;
+  background-color: rgba(242, 242, 242, 1);
+  border-radius: 4px;
+  background-clip: padding-box;
+}
 </style>
