@@ -17,13 +17,15 @@
    </div>
 </template>
 <script>
-  import { FormPreview, XHeader, Icon } from 'vux'
+  import { FormPreview, XHeader, Icon, Group, Cell } from 'vux'
   export default {
     name: 'personal',
     components: {
       FormPreview,
       XHeader,
-      Icon
+      Icon,
+      Group,
+      Cell
     },
     data() {
       return {
@@ -48,21 +50,20 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-    border-bottom:1px dashed #f11
-  }
-  a {
-    color: #42b983;
-  }
-
-
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+  border-bottom: 1px dashed #f11;
+}
+a {
+  color: #42b983;
+}
 </style>

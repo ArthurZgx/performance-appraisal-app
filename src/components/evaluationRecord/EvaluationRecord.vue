@@ -60,11 +60,11 @@
     <!-- 判断点击菜单类型,显示选择栏 -->
     <!-- 显示考评类型 -->
     <group v-if="kaoping">
-      <radio v-model="r1" :options="radio001" selected-label-style="color:#3891F0;"></radio>
+      <radio v-model="r1" :options="radio001" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
     <!-- 显示查看类型 -->
     <group v-if="chakan">
-      <radio v-model="r2" :options="radio002" selected-label-style="color:#3891F0;"></radio>
+      <radio v-model="r2" :options="radio002" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
     <group v-if="riqi">
       <flexbox>
