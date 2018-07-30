@@ -59,18 +59,18 @@
         </span>
         <div class="box-title">
            确认使用一键提交说所有人的评价吗</div>
-        <div class="bottomBtn" @click="showSubmitDialog=false">
-          <span class="vux-cancel">取消</span>
-          <span class="vux-sure">确认</span>
+        <div class="bottomBtn">
+          <span class="vux-cancel" @click="showSubmitDialog=false">取消</span>
+          <span class="vux-sure" @click="affirmSubmit">确认</span>
         </div>
       </x-dialog>
     </div>
-
+    <toast v-model="showSubmitToast" type="text" :time="800" is-show-mask text="提交成功" position="bottom">提交成功</toast>
   </div>
 </template>
 
 <script>
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
 // import _ from 'lodash'
 
 var i = 0
@@ -91,7 +91,8 @@ export default {
     Flexbox,
     Sticky,
     FlexboxItem,
-    XDialog
+    XDialog,
+    Toast
   },
   data() {
     return {
@@ -102,6 +103,7 @@ export default {
       checkedAll: false, // 是否全选
       childNodeNum: 0,
       showSubmitDialog: false,
+      showSubmitToast: false,
       serveList: [
         {
           title: '技术部',
@@ -161,6 +163,10 @@ export default {
           }
         }
       }
+    },
+    affirmSubmit() {
+      this.showSubmitDialog = false
+      this.showSubmitToast = true
     },
     // 全选
     checkAll() {
