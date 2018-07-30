@@ -43,8 +43,8 @@
         <flexbox-item :span="3.5">
           <div @click="clickAll" class="home_div">
             <!-- <check-icon :value.sync="checkedAll"></check-icon>全选 -->
-              <span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选          
-          </div> 
+              <span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选
+          </div>
         </flexbox-item>
         <flexbox-item>
           <x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>
@@ -65,7 +65,7 @@
         </div>
       </x-dialog>
     </div>
-    <toast v-model="showSubmitErrorToast" type="text" :time="800" is-show-mask text="没有选中数据" position="bottom">没有选中数据</toast>    
+    <toast v-model="showSubmitErrorToast" type="text" :time="800" is-show-mask text="没有选中数据" position="bottom">没有选中数据</toast>
     <toast v-model="showSubmitToast" type="text" :time="800" is-show-mask text="提交成功" position="bottom">提交成功</toast>
   </div>
 </template>
@@ -129,13 +129,24 @@ export default {
       ]
     }
   },
+  created() {
+    this.getTotalLength()
+  },
   watch: {
-    checkedAll(newValue, oldValue) {
-      console.log('改变了', '旧', oldValue)
-      console.log('改变了', '新', newValue)
-    }
+    // checkedAll(newValue, oldValue) {
+    //   console.log('改变了', '旧', oldValue)
+    //   console.log('改变了', '新', newValue)
+    // }
   },
   methods: {
+    // 获取总评价数量
+    getTotalLength() {
+      for (i = 0; i < this.serveList.length; i++) {
+        for (j = 0, len = this.serveList[i].list.length; j < len; j++) {
+          this.childNodeNum++
+        }
+      }
+    },
     searchFocus() {},
     searchCancel() {},
     resultClick() {},
@@ -198,13 +209,6 @@ export default {
             this.serveList[j].list[i].checked = true
           }
         }
-      }
-    }
-  },
-  mounted() {
-    for (i = 0; i < this.serveList.length; i++) {
-      for (j = 0, len = this.serveList[i].list.length; j < len; j++) {
-        this.childNodeNum++
       }
     }
   }
