@@ -47,7 +47,7 @@
           </div> 
         </flexbox-item>
         <flexbox-item>
-          <x-button style="background:#3891f0;color:white;" @click.native="showSubmitDialog = true">一键提交</x-button>
+          <x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>
         </flexbox-item>
       </flexbox>
     </sticky>
@@ -65,6 +65,7 @@
         </div>
       </x-dialog>
     </div>
+    <toast v-model="showSubmitErrorToast" type="text" :time="800" is-show-mask text="没有选中数据" position="bottom">没有选中数据</toast>    
     <toast v-model="showSubmitToast" type="text" :time="800" is-show-mask text="提交成功" position="bottom">提交成功</toast>
   </div>
 </template>
@@ -104,6 +105,7 @@ export default {
       childNodeNum: 0,
       showSubmitDialog: false,
       showSubmitToast: false,
+      showSubmitErrorToast: false,
       serveList: [
         {
           title: '技术部',
