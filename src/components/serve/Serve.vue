@@ -157,7 +157,7 @@ export default {
     goToServeComment(list) {
       localStorage.setItem('serveList', JSON.stringify(list))
       console.log(list)
-      this.$router.push({ path: 'ServeComment' })
+      this.$router.push({ name: 'serveComment' })
     },
     // 选中当前数据
     listCheckClick(list) {
