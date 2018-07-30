@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/Home.vue'
 import Serve from '@/components/serve/Serve.vue'
-import serveComment from '@/components/serve/ServeComment.vue'
-import serveCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
-import serveCommentResult from '@/components/serve/ServeCommentResult.vue'
+import ServeComment from '@/components/serve/ServeComment.vue'
+import ServeCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
+import ServeCommentResult from '@/components/serve/ServeCommentResult.vue'
 import Personal from '@/components/personal/Personal.vue'
 import EvaluationType from '@/components/evaluationType/EvaluationType.vue'
 import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
@@ -16,7 +16,10 @@ import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue
 import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
 import Complete from '@/components/complete/Complete.vue'
 import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
+import CompleteComment from '@/components/complete/CompleteComment.vue'
+
 Vue.use(Router)
+
 export default new Router({
   routes: [
     {
@@ -32,22 +35,27 @@ export default new Router({
     {
       path: '/serveComment',
       name: 'serveComment',
-      component: serveComment
+      component: ServeComment
     },
     {
       path: '/serveCommentSuccess',
       name: 'serveCommentSuccess',
-      component: serveCommentSuccess
+      component: ServeCommentSuccess
     },
     {
       path: '/serveCommentResult',
       name: 'serveCommentResult',
-      component: serveCommentResult
+      component: ServeCommentResult
     },
     {
       path: '/complete',
       name: 'complete',
       component: Complete
+    },
+    {
+      path: '/completeComment',
+      name: 'completeComment',
+      component: CompleteComment
     },
     {
       path: '/personal',
