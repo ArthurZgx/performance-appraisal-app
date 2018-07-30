@@ -44,6 +44,7 @@
       <!-- 差评说明 -->
       <group>
         <x-textarea placeholder="差评说明"
+                    v-model="badCommentText"
                     @on-focus="onFocus()"
                     class="serveComment_textarea"
                     style="height: 180px;border: 1px solid rgba(56,145,240,0.5);margin-bottom: 40px;"

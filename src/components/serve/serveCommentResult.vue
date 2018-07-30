@@ -1,41 +1,64 @@
 <template>
-  <div class="serve">
+  <div class="serveCommentResult">
     <x-header :right-options="{showMore: true}"
+              style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
-    <div>
-        <div class="table-title">{{editTitle}}</div>
-        <div>
-            <div class="table-row">
-              <div>我的票数:</div>
-              <div>{{goodCommentNum+badCommentNum}}</div>
-            </div>
-            <div class="table-row">
-              <div>好评数:</div>
-              <div>{{goodCommentNum}}</div>
-            </div>
-            <div class="table-row">
-              <div>差评数:</div>
-              <div>{{badCommentNum}}</div>
-            </div>
-            <div class="table-row">
-              <div>差评说明:</div>
-              <div>{{badCommentText}}</div>
-            </div>
+    <div class="serveCommentResult_div" style="text-align: center;">{{editTitle}}</div>
+    <x-table full-bordered style="margin:0 auto;width:90%;">
+      <tbody>
+      <tr>
+        <td>我的票数</td>
+        <td>{{goodCommentNum+badCommentNum}}</td>
+      </tr>
+      <tr>
+        <td>好评数</td>
+        <td>{{goodCommentNum}}</td>
+      </tr>
+      <tr>
+        <td>差评数</td>
+        <td>{{badCommentNum}}</td>
+      </tr>
+      <tr>
+        <td>差评说明</td>
+        <td>{{badCommentText}}</td>
+      </tr>
+      </tbody>
+    </x-table>
+    <!--<div>-->
+        <!--<div class="table-title">{{editTitle}}</div>-->
+        <!--<div>-->
+            <!--<div class="table-row">-->
+              <!--<div>我的票数:</div>-->
+              <!--<div>{{goodCommentNum+badCommentNum}}</div>-->
+            <!--</div>-->
+            <!--<div class="table-row">-->
+              <!--<div>好评数:</div>-->
+              <!--<div>{{goodCommentNum}}</div>-->
+            <!--</div>-->
+            <!--<div class="table-row">-->
+              <!--<div>差评数:</div>-->
+              <!--<div>{{badCommentNum}}</div>-->
+            <!--</div>-->
+            <!--<div class="table-row">-->
+              <!--<div>差评说明:</div>-->
+              <!--<div>{{badCommentText}}</div>-->
+            <!--</div>-->
 
-        </div>
-    </div>
+        <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 <script>
-import { XHeader, Toast, Icon } from 'vux'
+import { XHeader, Toast, Icon, XTable } from 'vux'
 
 export default {
-  name: 'serveComment',
+  name: 'serveCommentResult',
   components: {
     XHeader,
     Icon,
+    XTable,
     Toast
   },
   data() {
@@ -61,20 +84,43 @@ export default {
 }
 </script>
 
-<style>
-.table-title {
-  text-align: center;
-  padding: 10px 0;
-  border: 1px solid #eee;
-}
-.table-row {
-  display: flex;
-  flex-direction: row;
-}
-.table-row div {
-  width: 50%;
-  padding: 5px 0;
-  text-align: center;
-  border: 1px solid #eee;
-}
+<style scoped>
+  .serveCommentResult_div {
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid #eee;
+    margin-top: 19px;
+    margin-bottom: 21px;
+  }
+  .table-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .table-row div {
+    width: 50%;
+    padding: 5px 0;
+    text-align: center;
+    border: 1px solid #eee;
+  }
+
+  .vux-table td{
+    width: 90px;
+  }
+  /* 表格下边框 */
+  .vux-table td:before,
+  .vux-table th:before {
+    border-color: #3891f0;
+  }
+  /* 表格右边框 */
+  .vux-table td:after,
+  .vux-table th:after {
+    border-color: #3891f0;
+  }
+  /* 表格左边框 */
+  .vux-table.vux-table-bordered:before {
+    border-color: #3891f0;
+  }
+  .vux-table:after {
+    border-color: #3891f0;
+  }
 </style>
