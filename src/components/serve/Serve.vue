@@ -22,9 +22,9 @@
         <div class="serveClassifyTitle">{{item.title}}</div>
         <div>
            <div v-for="(list,index) in item.list" :key="index" class="aListData">
-            <div class="listCheck"  @click="listCheckClick(list)">
+            <div>
               <!-- <check-icon :value.sync="list.checked"></check-icon> -->
-              <span @click="list.checked=!list.checked" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
+              <span @click="listCheckClick(list)" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
             </div>
             <div class="listInfo" @click="goToServeComment(list)">
                 <div class="listInfoName">{{list.name}}</div>
@@ -150,6 +150,7 @@ export default {
     },
     // 选中当前数据
     listCheckClick(list) {
+      list.checked = !list.checked
       this.checkedAll = false
       if (list.checked === true) {
         this.checklist1.push(list)
@@ -161,7 +162,9 @@ export default {
       if (list.checked === false) {
         for (i = 0, len = this.checklist1.length; i < len; i++) {
           if (this.checklist1[i].name === list.name) {
+            console.log(this.checklist1[i])
             this.checklist1.splice(i, 1)
+            console.log(i)
           }
         }
       }
@@ -191,11 +194,14 @@ export default {
             this.serveList[j].list[i].checked = false
           }
         }
+        this.checklist1.splice(0, this.checklist1.length)
       } else if (this.checkedAll === true) {
+        this.checklist1.splice(0, this.checklist1.length)
         this.checkAll = false
         for (j = 0; j < this.serveList.length; j++) {
           for (i = 0, len = this.serveList[j].list.length; i < len; i++) {
             this.serveList[j].list[i].checked = true
+            this.checklist1.push(this.serveList[j].list[i])
           }
         }
       }
@@ -311,11 +317,13 @@ export default {
   margin-left: 20px;
   border: 1px solid #c7c7c7;
   margin-right: 10px;
+  margin-top: 15px;
 }
 .my-check-icon-clicked {
   display: inline-block;
   width: 15px;
   height: 15px;
+  margin-top: 15px;
   background: #3891f0;
   border: 1px solid #3891f0;
   position: relative;
