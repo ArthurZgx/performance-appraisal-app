@@ -5,45 +5,34 @@
                 @on-click-more="showMenus = true">
         绩效考评
       </x-header>
-      <img class="logo" src="../../assets/vux_logo.png">
-      <h3>考评记录</h3>
+      <!-- <img class="logo" src="../../assets/vux_logo.png">
+      <h3>考评记录</h3> -->
 
     </div>
 
-    <x-table :cell-bordered="false" style="background-color:#fff;">
-      <thead>
-      <tr>
-        <th>Product</th>
-        <th>Price</th>
-        <th>Quantity</th>
-      </tr>
-      </thead>
+        
+  <div style="text-align:center;margin-bottom:10px;font-weight:bold;">张三03月服务质量评价</div>
+    <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;">
       <tbody>
-      <tr>
-        <td>Apple</td>
-        <td>$1.25</td>
-        <td> x 1</td>
-      </tr>
-      <tr>
-        <td>Banana</td>
-        <td>$1.20</td>
-        <td> x 2</td>
+      <tr v-for="(item,index) in list" :key="index">
+        <td style="width:30%;">{{item.label}}</td>
+        <td>{{item.value}}</td>
       </tr>
       </tbody>
     </x-table>
 
-    <flexbox>
+    <!-- <flexbox style="margin-top:20px;">
       <flexbox-item><div class="flex-demo">
-        <x-button  type="primary"> 保存 </x-button>
+        <x-button> 保存 </x-button>
         </div>
         </flexbox-item>
 
       <flexbox-item><div class="flex-demo">
-        <x-button  type="primary"> 提交 </x-button>
+        <x-button style="background:#3891f0;color:white;"> 提交 </x-button>
       </div>
       </flexbox-item>
 
-    </flexbox>
+    </flexbox> -->
 
     <br>
   </div>
@@ -70,7 +59,20 @@
       return {
         msg: 'Welcome to Your Vue.js App',
         value: '10',
-        numberValue: 0
+        numberValue: 0,
+        list: [{
+          label: '我的票数',
+          value: '10'
+        }, {
+          label: '好评论数',
+          value: '3'
+        }, {
+          label: '差评数',
+          value: '3'
+        }, {
+          label: '差评说明',
+          value: ''
+        }]
       }
     }
   }
@@ -102,5 +104,25 @@ a {
   background-color: rgba(242, 242, 242, 1);
   border-radius: 4px;
   background-clip: padding-box;
+}
+td {
+  padding: 0 5px;
+}
+/* 表格下边框 */
+.vux-table td:before,
+.vux-table th:before {
+  border-color: #3891f0;
+}
+/* 表格右边框 */
+.vux-table td:after,
+.vux-table th:after {
+  border-color: #3891f0;
+}
+/* 表格左边框 */
+.vux-table.vux-table-bordered:before {
+  border-color: #3891f0;
+}
+.vux-table:after {
+  border-color: #3891f0;
 }
 </style>

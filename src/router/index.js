@@ -20,8 +20,6 @@ import CompleteComment from '@/components/complete/CompleteComment.vue'
 import CompleteCommentSuccess from '@/components/complete/CompleteCommentSuccess.vue'
 import CompleteCommentResult from '@/components/complete/CompleteCommentResult.vue'
 
-
-
 Vue.use(Router)
 
 export default new Router({

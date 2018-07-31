@@ -2,16 +2,17 @@
   <div>
     <div class="vux-demo">
       <x-header :right-options="{showMore: true}"
+                style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
                 @on-click-more="showMenus = true">
         绩效考评
       </x-header>
 
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>用户名</h3>-->
-
+        <div class="personal-top-content">
         <img class="logo" src="../../assets/vux_logo.png">
         <h3 text-align="center">用户名</h3>
-
+        </div>
 
     </div>
     <!-- <group>
@@ -19,6 +20,7 @@
       <cell title="我的考评结果" is-link link="evaluationResult"></cell>
       <cell title="身份绑定" is-link link="personalInfo"></cell>
     </group> -->
+    <div class="personal-center-content">
     <flexbox class="personal-nav-list">
       <flexbox-item>
         <router-link to="/evaluationType">
@@ -45,6 +47,8 @@
         </router-link>
       </flexbox-item>
     </flexbox>
+    </div>
+
     <tabbar>
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
@@ -61,6 +65,7 @@
         <span slot="label" style="color:#3891F0;">我的</span>
       </tabbar-item>
     </tabbar>
+    <div class="bg"></div>
   </div>
 </template>
 
@@ -108,22 +113,33 @@
   }
 </script>
 
-<style>
+<style scoped>
+.bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #fafafa;
+}
 .vux-demo {
   text-align: center;
-  background: white;
-  padding-bottom: 20px;
+  padding-bottom: 12px;
+  background: #fafafa;
 }
 .logo {
   width: 100px;
   height: 100px;
 }
+.personal-center-content {
+  width: 94%;
+  margin: 10px auto;
+  margin-top: 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 25px #fafafa;
+}
 .personal-nav-list {
-  padding: 20px 20px;
+  padding: 20px 0px;
   box-sizing: border-box;
   text-align: center;
-  background: white;
-  margin-top: 20px;
 }
 .personal-nav-list a {
   color: black;
@@ -137,5 +153,12 @@
   width: 25%;
   max-width: 60px;
   margin: 0 auto;
+}
+.personal-top-content {
+  width: 94%;
+  margin: 10px auto;
+  border-radius: 12px;
+  background: white;
+  padding: 20px 0;
 }
 </style>

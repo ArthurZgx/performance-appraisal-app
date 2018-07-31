@@ -132,9 +132,9 @@
           url: '/evaluationRecord/detail'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量',
+          title: '张三的工作质量',
           desc: '评价日期:2018-01-13',
-          url: '/evaluationRecord/detail'
+          url: '/completeComment'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
           title: '张三的服务质量',

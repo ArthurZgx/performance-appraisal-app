@@ -8,7 +8,7 @@
     <div class="content">
       <div class="completeComment_div" style="text-align: center;">{{currentName}}工作完成度评价</div>
       <!-- 任务列表 -->
-      <group v-for="(task,index) in taskList" label-width="100%" :title="'任务' + (index+1)">
+      <group v-for="(task,index) in taskList" label-width="100%" :title="'任务' + (index+1)" :key="index">
         <!--<cell primary="content" title="default" value="long "></cell>-->
         <cell :title="task.taskDesc" value-align="right">
           <div slot="inline-desc" style="margin-top: 6px;">
@@ -154,7 +154,6 @@
       cancelConfirm() {
         console.log('取消')
         this.currentTask.clickNoCompleted = false
-
       },
       // 弹出框显示时
       confirmShow() {
@@ -182,28 +181,28 @@
 </script>
 
 <style>
-  .completeComment_div {
-    text-align: center;
-    padding: 10px 0;
-    /*border: 1px solid #eee;*/
-    margin-top: 19px;
-    margin-bottom: 21px;
-  }
-  .content{
-    padding: 0 10px;
-  }
-  .completeComment .btn_hasCompleted{
-    background-color: #3891F0;
-    color: #fff;
-  }
-  .completeComment .btn_default{
-    color: #333;
-  }
-  .completeComment .weui-cells:before{
-    border-top: none;
-  }
-  /*56,145,240, 0.5*/
-  .completeComment .weui-cells:after{
-    border-bottom: 1px solid rgba(56,145,240, 0.5);
-  }
+.completeComment_div {
+  text-align: center;
+  padding: 10px 0;
+  /*border: 1px solid #eee;*/
+  margin-top: 19px;
+  margin-bottom: 21px;
+}
+.content {
+  padding: 0 10px;
+}
+.completeComment .btn_hasCompleted {
+  background-color: #3891f0;
+  color: #fff;
+}
+.completeComment .btn_default {
+  color: #333;
+}
+.completeComment .weui-cells:before {
+  border-top: none;
+}
+/*56,145,240, 0.5*/
+.completeComment .weui-cells:after {
+  border-bottom: 1px solid rgba(56, 145, 240, 0.5);
+}
 </style>

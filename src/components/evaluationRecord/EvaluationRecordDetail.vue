@@ -5,19 +5,27 @@
                 @on-click-more="showMenus = true">
         绩效考评
       </x-header>
-      <img class="logo" src="../../assets/vux_logo.png">
-      <h3>考评记录</h3>
+      <!-- <img class="logo" src="../../assets/vux_logo.png">
+      <h3>考评记录</h3> -->
 
     </div>
-    <group>
+    <!-- <group>
       <cell title="返回首页" value="cool" is-link link="/personal"></cell>
-    </group>
-    <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview>
-    <br>
+    </group> -->
+    <!-- <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview> -->
+      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;">张三03月服务质量评价</div>
+    <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
+      <tbody>
+      <tr v-for="(item,index) in list" :key="index">
+        <td style="width:30%;">{{item.label}}</td>
+        <td>{{item.value}}</td>
+      </tr>
+      </tbody>
+    </x-table>
    </div>
 </template>
 <script>
-  import { FormPreview, XHeader, Icon, Group, Cell } from 'vux'
+  import { FormPreview, XHeader, Icon, Group, Cell, XTable } from 'vux'
   export default {
     name: 'personal',
     components: {
@@ -25,7 +33,8 @@
       XHeader,
       Icon,
       Group,
-      Cell
+      Cell,
+      XTable
     },
     data() {
       return {
@@ -65,5 +74,25 @@ li {
 }
 a {
   color: #42b983;
+}
+td {
+  padding: 0 5px;
+}
+/* 表格下边框 */
+.vux-table td:before,
+.vux-table th:before {
+  border-color: #3891f0;
+}
+/* 表格右边框 */
+.vux-table td:after,
+.vux-table th:after {
+  border-color: #3891f0;
+}
+/* 表格左边框 */
+.vux-table.vux-table-bordered:before {
+  border-color: #3891f0;
+}
+.vux-table:after {
+  border-color: #3891f0;
 }
 </style>
