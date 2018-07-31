@@ -17,6 +17,10 @@ import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
 import Complete from '@/components/complete/Complete.vue'
 import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
 import CompleteComment from '@/components/complete/CompleteComment.vue'
+import CompleteCommentSuccess from '@/components/complete/CompleteCommentSuccess.vue'
+import CompleteCommentResult from '@/components/complete/CompleteCommentResult.vue'
+
+
 
 Vue.use(Router)
 
@@ -56,6 +60,16 @@ export default new Router({
       path: '/completeComment',
       name: 'completeComment',
       component: CompleteComment
+    },
+    {
+      path: '/completeCommentSuccess',
+      name: 'completeCommentSuccess',
+      component: CompleteCommentSuccess
+    },
+    {
+      path: '/completeCommentResult',
+      name: 'completeCommentResult',
+      component: CompleteCommentResult
     },
     {
       path: '/personal',

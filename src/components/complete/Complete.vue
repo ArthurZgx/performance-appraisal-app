@@ -1,6 +1,8 @@
 <template>
   <div class="complete">
     <x-header :right-options="{showMore: true}"
+              :left-options="{preventGoBack: true}"
+              @on-click-back="gotToTaskList"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
@@ -22,12 +24,8 @@
         <div class="completeClassifyTitle">{{item.title}}</div>
         <div>
           <div v-for="(list,index) in item.list" :key="index" class="aListData">
-            <div class="listCheck"  @click="listCheckClick(list)">
-              <!-- <check-icon :value.sync="list.checked"></check-icon> -->
-              <span @click="list.checked=!list.checked" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
-            </div>
-            <div class="listInfo" @click="goToCompleteComment(list)">
-              <div class="listInfoName">{{list.name}}</div>
+            <div class="listInfo" @click="goTocompleteComment(list)">
+              <div class="listInfoName">{{list.name}}工作完成度评价</div>
               <div class="listInfoTime">{{list.time}}</div>
             </div>
           </div>
@@ -35,22 +33,21 @@
       </div>
     </group>
     <!-- 一键提交 -->
-    <sticky ref="sticky"
-            :offset="100"
-            :check-sticky-support="false"
-            disabled="disabled">
-      <flexbox style="background:white;">
-        <flexbox-item :span="3.5">
-          <div @click="clickAll" class="home_div">
-            <!-- <check-icon :value.sync="checkedAll"></check-icon>全选 -->
-            <span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选
-          </div>
-        </flexbox-item>
-        <flexbox-item>
-          <x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>
-        </flexbox-item>
-      </flexbox>
-    </sticky>
+    <!--<sticky ref="sticky"-->
+            <!--:offset="100"-->
+            <!--:check-sticky-support="false"-->
+            <!--disabled="disabled">-->
+      <!--<flexbox style="background:white;">-->
+        <!--<flexbox-item :span="3.5">-->
+          <!--<div @click="clickAll" class="home_div">-->
+            <!--<span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选-->
+          <!--</div>-->
+        <!--</flexbox-item>-->
+        <!--<flexbox-item>-->
+          <!--<x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>-->
+        <!--</flexbox-item>-->
+      <!--</flexbox>-->
+    <!--</sticky>-->
     <!-- 弹出框 -->
     <div>
       <x-dialog v-model="showSubmitDialog" class="dialog-demo">
@@ -110,21 +107,21 @@
           {
             title: '技术部',
             list: [
-              { name: '张三服务质量评价', time: '2018-08-08', checked: false },
-              { name: '刘备服务质量评价', time: '2018-08-08', checked: false }
+              { name: '张三', time: '2018-08-08', checked: false },
+              { name: '刘备', time: '2018-08-08', checked: false }
             ]
           },
           {
             title: '法务部',
-            list: [{ name: '李四服务质量评价', time: '2018-08-08', checked: false }]
+            list: [{ name: '李四', time: '2018-08-08', checked: false }]
           },
           {
             title: '宣传部',
-            list: [{ name: '王五服务质量评价', time: '2018-08-08', checked: false }]
+            list: [{ name: '王五', time: '2018-08-08', checked: false }]
           },
           {
             title: '外交部',
-            list: [{ name: '赵六服务质量评价', time: '2018-08-08', checked: false }]
+            list: [{ name: '赵六', time: '2018-08-08', checked: false }]
           }
         ]
       }
@@ -147,6 +144,10 @@
           }
         }
       },
+      // 跳转至home
+      gotToTaskList() {
+        this.$router.push({ name: 'home' })
+      },
       searchFocus() {},
       searchCancel() {},
       resultClick() {},
@@ -154,13 +155,14 @@
       searchChange() {},
       clickList() {},
       // 跳转评价详情
-      goToCompleteComment(list) {
-        localStorage.setItem('completeList', JSON.stringify(list))
+      goTocompleteComment(list) {
+        localStorage.setItem('currentName', list.name)
         console.log(list)
         this.$router.push({ name: 'completeComment' })
       },
       // 选中当前数据
       listCheckClick(list) {
+        list.checked = !list.checked
         this.checkedAll = false
         if (list.checked === true) {
           this.checklist1.push(list)
@@ -172,7 +174,9 @@
         if (list.checked === false) {
           for (i = 0, len = this.checklist1.length; i < len; i++) {
             if (this.checklist1[i].name === list.name) {
+              console.log(this.checklist1[i])
               this.checklist1.splice(i, 1)
+              console.log(i)
             }
           }
         }
@@ -202,11 +206,14 @@
               this.completeList[j].list[i].checked = false
             }
           }
+          this.checklist1.splice(0, this.checklist1.length)
         } else if (this.checkedAll === true) {
+          this.checklist1.splice(0, this.checklist1.length)
           this.checkAll = false
           for (j = 0; j < this.completeList.length; j++) {
             for (i = 0, len = this.completeList[j].list.length; i < len; i++) {
               this.completeList[j].list[i].checked = true
+              this.checklist1.push(this.completeList[j].list[i])
             }
           }
         }
@@ -226,7 +233,8 @@
     bottom: 0;
   }
   .groupList {
-    padding-bottom: 50px;
+    /*padding-bottom: 50px;*/
+    padding: 0 10px;
   }
   .aListData {
     display: flex;
@@ -315,11 +323,13 @@
     margin-left: 20px;
     border: 1px solid #c7c7c7;
     margin-right: 10px;
+    margin-top: 15px;
   }
   .my-check-icon-clicked {
     display: inline-block;
     width: 15px;
     height: 15px;
+    margin-top: 15px;
     background: #3891f0;
     border: 1px solid #3891f0;
     position: relative;
