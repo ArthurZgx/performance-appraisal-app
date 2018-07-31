@@ -13,7 +13,7 @@
       <cell title="返回首页" value="cool" is-link link="/personal"></cell>
     </group> -->
     <!-- <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview> -->
-      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;">张三03月服务质量评价</div>
+      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;margin-top:20px;">张三03月服务质量评价</div>
     <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
       <tbody>
       <tr v-for="(item,index) in list" :key="index">

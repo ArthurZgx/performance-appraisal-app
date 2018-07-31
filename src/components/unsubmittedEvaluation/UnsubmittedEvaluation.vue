@@ -11,7 +11,7 @@
     </div>
 
         
-  <div style="text-align:center;margin-bottom:10px;font-weight:bold;">张三03月服务质量评价</div>
+  <div style="text-align:center;margin-bottom:10px;font-weight:bold;margin-top:20px;">张三03月服务质量评价</div>
     <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;">
       <tbody>
       <tr v-for="(item,index) in list" :key="index">
