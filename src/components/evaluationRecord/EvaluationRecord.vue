@@ -83,7 +83,6 @@
           </flexbox-item>         
         </flexbox>
       </flexbox> -->
-
   <inline-calendar
   ref="calendar"
   @on-change="onDateChange"
@@ -98,7 +97,7 @@
     <div class="mask" v-if="riqi||chakan||kaoping" @click="riqi=false,chakan = false, kaoping = false"></div>
 
     <!-- 显示考评信息 -->
-    <panel :header="('')" :list="list1" :type="type" @on-img-error="onImgError">
+    <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError">
     </panel>
 
   </div>
