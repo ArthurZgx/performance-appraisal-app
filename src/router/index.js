@@ -6,8 +6,8 @@ import ServeComment from '@/components/serve/ServeComment.vue'
 import ServeCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
 import ServeCommentResult from '@/components/serve/ServeCommentResult.vue'
 import Personal from '@/components/personal/Personal.vue'
-import EvaluationType from '@/components/evaluationType/EvaluationType.vue'
 import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
+import EvaluationType from '@/components/evaluationType/evaluationType.vue'
 import EvaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
 import SubmitEvaluation from '@/components/submitEvaluation/SubmitEvaluation.vue'
 import UnsubmittedEvaluation from '@/components/unsubmittedEvaluation/UnsubmittedEvaluation.vue'
@@ -19,6 +19,8 @@ import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
 import CompleteComment from '@/components/complete/CompleteComment.vue'
 import CompleteCommentSuccess from '@/components/complete/CompleteCommentSuccess.vue'
 import CompleteCommentResult from '@/components/complete/CompleteCommentResult.vue'
+import BindingPhone from '@/components/bindingPhone/bindingPhone.vue'
+import AlreadyBound from '@/components/bindingPhone/alreadyBound.vue'
 
 Vue.use(Router)
 
@@ -120,6 +122,16 @@ export default new Router({
       path: '/serveEvaluate',
       name: 'serveEvaluate',
       component: ServeEvaluate
+    },
+    {
+      path: '/bindingPhone',
+      name: 'bindingPhone',
+      component: BindingPhone
+    },
+    {
+      path: '/alreadyBound',
+      name: 'alreadyBound',
+      component: AlreadyBound
     },
     // {
     //   path: '/home',

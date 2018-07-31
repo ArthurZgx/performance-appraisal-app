@@ -14,8 +14,8 @@
     <!--</group>-->
     <div>
       <group title="" label-width="5.5em" label-margin-right="2em">
-        <cell title="名字"  value="value" is-link value-align="left"></cell>
-        <cell title="账号"  value="value" is-link value-align="left"></cell>
+        <cell title="名字"  :value="value1" is-link value-align="left" @click.native="showEditNameConfirm = true"></cell>
+        <cell title="账号"  value="value" is-link value-align="left" ></cell>
         <!--<x-input title="上报人" v-model="value1"></x-input>-->
         <!--<x-number title="Quantity" align="left" v-model="numberValue" button-style="round" :min="0" :max="5"></x-number>-->
         <datetime title="时间" v-model="time1" value-text-align="left"></datetime>
@@ -27,12 +27,20 @@
       </group>
       <br>
     </div>
+  <!-- 修改姓名 -->
+    <confirm v-model="showEditNameConfirm"
+      show-input
+      ref="confirm5"
+      title="修改姓名"
+      @on-confirm="onCancelEditNameConfirm"
+      @on-show="onShowEditNameConfirm">
+    </confirm>
   </div>
 
 </template>
 
 <script>
-  import { Group, Cell, XHeader, GroupTitle, XInput, Selector, PopupPicker, XAddress, Datetime, XNumber, XTextarea, XSwitch } from 'vux'
+  import { Group, Cell, XHeader, GroupTitle, XInput, Selector, PopupPicker, XAddress, Datetime, XNumber, XTextarea, XSwitch, Confirm } from 'vux'
 
   export default {
     name: 'Demo',
@@ -48,7 +56,8 @@
       Datetime,
       XNumber,
       XTextarea,
-      XSwitch
+      XSwitch,
+      Confirm
     },
     data() {
       return {
@@ -64,7 +73,16 @@
         value5: ['A'],
         value6: [],
         list: [['A', 'B', 'C']],
-        numberValue: 0
+        numberValue: 0,
+        showEditNameConfirm: false
+      }
+    },
+    methods: {
+      onCancelEditNameConfirm(msg) {
+        this.value1 = msg
+      },
+      onShowEditNameConfirm() {
+        this.$refs.confirm5.setInputValue(this.value1)
       }
     }
   }

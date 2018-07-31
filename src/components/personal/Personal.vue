@@ -9,11 +9,12 @@
 
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>用户名</h3>-->
+      <router-link to="/personalInfo">
         <div class="personal-top-content">
         <img class="logo" src="../../assets/vux_logo.png">
         <h3 text-align="center">用户名</h3>
         </div>
-
+      </router-link>
     </div>
     <!-- <group>
       <cell title="考评记录" is-link link="evaluationRecord"></cell>
@@ -39,7 +40,7 @@
         </router-link>
       </flexbox-item>
       <flexbox-item>
-        <router-link to="/personalInfo">        
+        <router-link to="/alreadyBound">        
         <div class="a-nav-href">
           <img src="../../assets/TheBindingOfIdentity.png" alt="">
           <div>身份绑定</div>
@@ -141,7 +142,7 @@
   box-sizing: border-box;
   text-align: center;
 }
-.personal-nav-list a {
+a {
   color: black;
 }
 .a-nav-href {
