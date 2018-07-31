@@ -68,7 +68,7 @@
 
 
     <toast v-model="showToast" type="text"
-           :time="1000" is-show-mask text="已保存至待办事项"
+           :time="1000" is-show-mask text="已保存"
            width="9em"
            position="bottom" style="">
     </toast>

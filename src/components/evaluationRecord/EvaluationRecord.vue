@@ -139,12 +139,12 @@
           url: '/completeComment'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '李四的服务质量评价',
+          title: '张三的服务质量评价',
           desc: '评价日期:2018-02',
           url: '/unsubmittedEvaluation'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '李四的工作完成度评价',
+          title: '张三的服务质量评价',
           desc: '评价日期:2018-02',
           url: '/unsubmittedEvaluation/detail' }]
       }
