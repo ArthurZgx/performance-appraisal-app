@@ -68,7 +68,7 @@
 
 
     <toast v-model="showToast" type="text"
-           :time="1000" is-show-mask text="已保存至待办事项"
+           :time="1000" is-show-mask text="已保存"
            width="9em"
            position="bottom" style="">
     </toast>
@@ -98,8 +98,13 @@ export default {
       badCommentNum: 0, // 差评数
       showToast: false,
       editTitle: '',
-      badCommentText: '' // 差评说明
+      badCommentText: '', // 差评说明
+      serveList: []
     }
+  },
+  created() {
+    this.serveList = JSON.parse(localStorage.getItem('serveList'))
+    this.editTitle = JSON.parse(localStorage.getItem('serveList')).name
   },
   methods: {
     // 差评说明得焦函数
@@ -114,66 +119,65 @@ export default {
       console.log('保存')
       this.showToast = true
     },
+    // 提交评价
     submitEvent() {
       var json = {
         goodCommentNum: this.goodCommentNum,
         badCommentNum: this.badCommentNum,
         badCommentText: this.badCommentText
       }
+      this.serveList.status = '1'
       localStorage.setItem('jsonTemp', JSON.stringify(json))
+      localStorage.setItem('serveList', JSON.stringify(this.serveList))
       this.$router.push({ name: 'serveCommentSuccess' })
-    },
-    goodOption(type) {
-      if (type === 'minus') {
-        if (this.goodCommentNum > 0) {
-          this.goodCommentNum--
-        }
-      } else if (type === 'plus') {
-        this.goodCommentNum++
-      }
-    },
-    badOption(type) {
-      if (type === 'minus') {
-        if (this.badCommentNum > 0) {
-          this.badCommentNum--
-        }
-      } else if (type === 'plus') {
-        this.badCommentNum++
-      }
+      console.log(localStorage.getItem('serveList'))
     }
-  },
-  created() {
-    this.editTitle = localStorage.getItem('serveList')
-    this.editTitle = JSON.parse(this.editTitle)
-    this.editTitle = this.editTitle.name
+    // goodOption(type) {
+    //   if (type === 'minus') {
+    //     if (this.goodCommentNum > 0) {
+    //       this.goodCommentNum--
+    //     }
+    //   } else if (type === 'plus') {
+    //     this.goodCommentNum++
+    //   }
+    // },
+    // badOption(type) {
+    //   if (type === 'minus') {
+    //     if (this.badCommentNum > 0) {
+    //       this.badCommentNum--
+    //     }
+    //   } else if (type === 'plus') {
+    //     this.badCommentNum++
+    //   }
+    // }
   }
 }
 </script>
 
 <style>
-  .serveComment{
-    background: #fff;
-  }
-  .serveTitle{
-    padding: 20px 0 22px;
-    text-align: center;
-    font-size: 18px;
-    color: #333;
-    border-bottom: 1px solid rgba(56,145,240,0.5);
-  }
-  .serveComment_div{
-    background: #FFF;
-    box-shadow: 0 0 8px 0 rgba(0,0,0,0.20);
-    border-radius: 4px;
-    margin: 0 15px;
-    padding: 10px;
-  }
-  .vux-number-selector svg{
-    /*fill: #3891F0 !important;*/
-  }
-  .weui-cells__title{
-    font-size: 16px;
-  }
+.serveComment {
+  background: #fff;
+}
+.serveTitle {
+  padding: 20px 0 22px;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid rgba(56, 145, 240, 0.5);
+}
+.serveComment_div {
+  background: #fff;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin: 0 15px;
+  padding: 10px;
+}
+.vux-number-selector svg {
+  /*fill: #3891F0 !important;*/
+}
+.weui-cells__title {
+  font-size: 16px;
+}
 .commentTable {
   width: 90%;
   height: 700px;
