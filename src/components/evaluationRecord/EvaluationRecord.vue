@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <div class="vux-demo">
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>考评记录</h3>-->
@@ -73,23 +73,23 @@
         <flexbox orient="vertical" :gutter="0">
           <flexbox-item  v-for="(item,index) in years" :key="index">
             <cell :title="item+'年'" is-link :style="selectedYearIndex==index?'color:#3891F0;':''"  @click.native="selectedYearIndex=index"></cell>
-          </flexbox-item>         
+          </flexbox-item>
         </flexbox>
         <!-- 显示月份 -->
           <flexbox orient="vertical" :style="'height:'+years.length*44+'px;overflow:scroll;background:#eee;'" :gutter="0">
           <flexbox-item  v-for="(item,index) in month" :key="index">
             <cell :title="item+'月'" :style="selectedMouthIndex==index?'color:#3891F0;':''" @click.native="selectedMouthIndex=index,kaoping = false,chakan = false,riqi = falsekaoping = false,chakan = false,riqi = false"></cell>
-          </flexbox-item>         
+          </flexbox-item>
         </flexbox>
       </flexbox>
     </group>
     <!-- 选中菜单栏设置半透明蒙版 -->
     <div class="mask" v-if="riqi||chakan||kaoping" @click="riqi=false,chakan = false, kaoping = false"></div>
-    
+
     <!-- 显示考评信息 -->
-    <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError">
+    <panel :header="('')" :list="list1" :type="type" @on-img-error="onImgError">
     </panel>
-    
+
   </div>
 </template>
 
@@ -124,28 +124,38 @@
         selectedYearIndex: 0,
         selectedMouthIndex: 0,
         type: '1',
-        list: [{
+        list: [],
+        list2: [],
+        list1: [{
           // src: 'http://somedomain.somdomain/x.jpg',
           // fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量',
-          desc: '评价日期:2018-01-13',
+          title: '张三的服务质量评价',
+          desc: '评价日期:2018-01',
           url: '/evaluationRecord/detail'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的工作质量',
-          desc: '评价日期:2018-01-13',
+          title: '张三的工作完成度评价',
+          desc: '评价日期:2018-01',
           url: '/completeComment'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量',
-          desc: '评价日期:2018-01-13',
+          title: '李四的服务质量评价',
+          desc: '评价日期:2018-02',
           url: '/unsubmittedEvaluation'
         }, {
           // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量',
-          desc: '评价日期:2018-01-13',
+          title: '李四的工作完成度评价',
+          desc: '评价日期:2018-02',
           url: '/unsubmittedEvaluation/detail' }]
       }
+    },
+    created() {
+      // this.list.push(JSON.parse(localStorage.getItem('serveList')))
+      // _.each(this.list, function(item, key) {
+      //   item.title = item.name
+      //   item.desc = item.time
+      // })
+      console.log(this.list)
     },
     methods: {
       onImgError(item, $event) {

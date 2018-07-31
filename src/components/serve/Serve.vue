@@ -17,6 +17,7 @@
             @on-submit="searchSubmit"
             ref="search">
     </search>
+    <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
         <div class="serveClassifyTitle">{{item.title}}</div>
@@ -26,7 +27,7 @@
               <!-- <check-icon :value.sync="list.checked"></check-icon> -->
               <span @click="listCheckClick(list)" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
             </div>
-            <div class="listInfo" @click="goToServeComment(list)">
+            <div class="listInfo" @click="goToServeComment(list)" v>
                 <div class="listInfoName">{{list.name}}</div>
                 <div class="listInfoTime">{{list.time}}</div>
             </div>
@@ -109,22 +110,22 @@ export default {
       serveList: [
         {
           title: '技术部',
-          list: [
-            { name: '张三服务质量评价', time: '2018-08-08', checked: false },
-            { name: '刘备服务质量评价', time: '2018-08-08', checked: false }
+          list: [ // status 0 未评价 1 已评价 2 已过期
+            { name: '张三服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' },
+            { name: '刘备服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }
           ]
         },
         {
           title: '法务部',
-          list: [{ name: '李四服务质量评价', time: '2018-08-08', checked: false }]
+          list: [{ name: '李四服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
         },
         {
           title: '宣传部',
-          list: [{ name: '王五服务质量评价', time: '2018-08-08', checked: false }]
+          list: [{ name: '王五服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
         },
         {
           title: '外交部',
-          list: [{ name: '赵六服务质量评价', time: '2018-08-08', checked: false }]
+          list: [{ name: '赵六服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
         }
       ]
     }
@@ -155,6 +156,9 @@ export default {
     clickList() {},
     // 跳转评价详情
     goToServeComment(list) {
+      // if (localStorage.getItem('serveList')) {
+      //   const temp = JSON.parse(localStorage.getItem('serveList'))
+      // }
       localStorage.setItem('serveList', JSON.stringify(list))
       console.log(list)
       this.$router.push({ name: 'serveComment' })

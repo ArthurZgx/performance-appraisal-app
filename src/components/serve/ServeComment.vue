@@ -98,8 +98,13 @@ export default {
       badCommentNum: 0, // 差评数
       showToast: false,
       editTitle: '',
-      badCommentText: '' // 差评说明
+      badCommentText: '', // 差评说明
+      serveList: []
     }
+  },
+  created() {
+    this.serveList = JSON.parse(localStorage.getItem('serveList'))
+    this.editTitle = JSON.parse(localStorage.getItem('serveList')).name
   },
   methods: {
     // 差评说明得焦函数
@@ -114,38 +119,37 @@ export default {
       console.log('保存')
       this.showToast = true
     },
+    // 提交评价
     submitEvent() {
       var json = {
         goodCommentNum: this.goodCommentNum,
         badCommentNum: this.badCommentNum,
         badCommentText: this.badCommentText
       }
+      this.serveList.status = '1'
       localStorage.setItem('jsonTemp', JSON.stringify(json))
+      localStorage.setItem('serveList', JSON.stringify(this.serveList))
       this.$router.push({ name: 'serveCommentSuccess' })
+      console.log(localStorage.getItem('serveList'))
     },
-    goodOption(type) {
-      if (type === 'minus') {
-        if (this.goodCommentNum > 0) {
-          this.goodCommentNum--
-        }
-      } else if (type === 'plus') {
-        this.goodCommentNum++
-      }
-    },
-    badOption(type) {
-      if (type === 'minus') {
-        if (this.badCommentNum > 0) {
-          this.badCommentNum--
-        }
-      } else if (type === 'plus') {
-        this.badCommentNum++
-      }
-    }
-  },
-  created() {
-    this.editTitle = localStorage.getItem('serveList')
-    this.editTitle = JSON.parse(this.editTitle)
-    this.editTitle = this.editTitle.name
+    // goodOption(type) {
+    //   if (type === 'minus') {
+    //     if (this.goodCommentNum > 0) {
+    //       this.goodCommentNum--
+    //     }
+    //   } else if (type === 'plus') {
+    //     this.goodCommentNum++
+    //   }
+    // },
+    // badOption(type) {
+    //   if (type === 'minus') {
+    //     if (this.badCommentNum > 0) {
+    //       this.badCommentNum--
+    //     }
+    //   } else if (type === 'plus') {
+    //     this.badCommentNum++
+    //   }
+    // }
   }
 }
 </script>
