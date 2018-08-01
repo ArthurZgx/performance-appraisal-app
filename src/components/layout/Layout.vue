@@ -33,7 +33,7 @@ export default {
     Group,
     Cell
   },
-  data () {
+  data() {
     return {
       // note: changing this line won't causes changes
       // with hot-reload because the reloaded component
@@ -42,15 +42,15 @@ export default {
       msg: 'Hello World!'
     }
   },
-  created () {
+  created() {
     const self = this
     self.init()
   },
   methods: {
-    init () {
+    init() {
       console.log('init')
-      const a = [ 1, 2, 3, 4, 5 ]
-      _.each(a, function (i, j) {
+      const a = [1, 2, 3, 4, 5]
+      _.each(a, function(i, j) {
         console.log(i, j)
       })
       // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); // 七月 11日 2018, 9:36:25 上午
