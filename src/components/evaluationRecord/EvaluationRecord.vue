@@ -97,14 +97,18 @@
     <div class="mask" v-if="riqi||chakan||kaoping" @click="riqi=false,chakan = false, kaoping = false"></div>
 
     <!-- 显示考评信息 -->
-    <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError">
-    </panel>
+    <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
+    <group>
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.year+'-'+item.month" 
+      :link="{name:'evaluationRecordDetail',params:{id:item.planAssessmentPlanId}}"></cell>
+    </group>
 
   </div>
 </template>
 
 <script>
   import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar } from 'vux'
+  import request from '../../../src/utils/request.js'
 
   export default {
     name: 'personal',
@@ -128,34 +132,15 @@
         chakan: false,
         riqi: false,
         radio001: ['全部类型', '服务质量评价', '工作完成评价'],
-        radio002: ['全部', '已查看类型', '未查询类型'],
+        radio002: ['全部', '已查看类型', '未查看类型'],
         years: ['2018', '2017', '2016', '2015'],
         month: ['8', '7', '6', '5', '4', '3'],
         selectedYearIndex: 0,
         selectedMouthIndex: 0,
-        type: '1',
+        type: '2',
         selectedData: '2016-04-01',
-        list: [{
-          // src: 'http://somedomain.somdomain/x.jpg',
-          // fallbackSrc: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量评价',
-          desc: '评价日期:2018-01',
-          url: '/evaluationRecord/detail'
-        }, {
-          // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的工作完成度评价',
-          desc: '评价日期:2018-01',
-          url: '/completeComment'
-        }, {
-          // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量评价',
-          desc: '评价日期:2018-02',
-          url: '/unsubmittedEvaluation'
-        }, {
-          // src: 'http://placeholder.qiniudn.com/60x60/3cc51f/ffffff',
-          title: '张三的服务质量评价',
-          desc: '评价日期:2018-02',
-          url: '/unsubmittedEvaluation/detail' }]
+        list: [],
+        allDataList: []
       }
     },
     created() {
@@ -164,7 +149,11 @@
       //   item.title = item.name
       //   item.desc = item.time
       // })
-      console.log(this.list)
+      // console.log(this.list)
+      request('main_job_service_evaluations').then(res => {
+        this.allDataList = res.data
+        this.list = res.data
+      })
     },
     methods: {
       onImgError(item, $event) {
@@ -187,11 +176,36 @@
       },
       onDateChange() {
         this.riqi = false
+      },
+      evaluationType() {
+        console.log(this.r1)
+        switch (this.r1) {
+          case '全部类型':
+            this.list = this.allDataList
+            break
+          case '服务质量评价':
+            this.list = []
+            for (let i = 0, len = this.allDataList.length; i < len; i++) {
+              if (this.allDataList[i].type === 1) {
+                this.list.push(this.allDataList[i])
+              }
+            }
+            break
+          case '工作完成评价':
+            this.list = []
+            for (let i = 0, len = this.allDataList.length; i < len; i++) {
+              if (this.allDataList[i].type === 0) {
+                this.list.push(this.allDataList[i])
+              }
+            }
+            break
+        }
       }
     },
     watch: {
       r1: function() {
         this.closeRadioWindow()
+        this.evaluationType()
       },
       r2: function() {
         this.closeRadioWindow()
@@ -200,7 +214,8 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this component o
+nly -->
 <style scoped>
 h1,
 h2 {

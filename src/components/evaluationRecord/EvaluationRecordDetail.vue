@@ -13,7 +13,7 @@
       <cell title="返回首页" value="cool" is-link link="/personal"></cell>
     </group> -->
     <!-- <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview> -->
-      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;margin-top:20px;">张三03月服务质量评价</div>
+      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;margin-top:20px;">{{name}}的服务质量评价</div>
     <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
       <tbody>
       <tr v-for="(item,index) in list" :key="index">
@@ -26,6 +26,7 @@
 </template>
 <script>
   import { FormPreview, XHeader, Icon, Group, Cell, XTable } from 'vux'
+  import request from '../../../src/utils/request.js'
   export default {
     name: 'personal',
     components: {
@@ -38,20 +39,42 @@
     },
     data() {
       return {
+        name: '',
         msg: 'Welcome to Your Vue.js App',
         list: [{
           label: '我的票数',
-          value: '10'
+          value: '0'
         }, {
           label: '好评论数',
-          value: '3'
+          value: '0'
         }, {
           label: '差评数',
-          value: '3'
+          value: '0'
         }, {
           label: '差评说明',
-          value: '很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字'
+          value: ''
         }]
+      }
+    },
+    mounted() {
+      if (this.$route.params.id !== undefined) {
+        console.log(this.$route.params.id)
+        var filter = "{'main_service_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
+        request('main_service_details', {
+          params: { filters: filter }
+        }).then(res => {
+          this.list[0].value = res.data[0].numberVotes
+          this.list[1].value = res.data[0].praiseNumber
+          this.list[2].value = res.data[0].badNumber
+          this.list[3].value = res.data[0].badReview
+          filter = "{'hm_personnel': {'id': {equalTo:'" + res.data[0].userId + "' }}}"
+          request('hm_personnels', {
+            params: { filters: filter }
+          }).then(res => {
+            console.log(res)
+            this.name = res.data[0].name
+          })
+        })
       }
     }
   }

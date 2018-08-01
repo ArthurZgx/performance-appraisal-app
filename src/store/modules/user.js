@@ -64,7 +64,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-            reject('error')
+            // reject('error')
           }
           const data = response.data
           commit('SET_ROLES', data.roles)
