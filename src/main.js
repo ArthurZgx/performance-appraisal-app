@@ -4,6 +4,8 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import App from './App'
 import router from './router/index'
+import { AjaxPlugin } from 'vux'
+Vue.use(AjaxPlugin)
 /**
  * 全局注册
  */

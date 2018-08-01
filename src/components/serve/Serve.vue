@@ -141,6 +141,9 @@ export default {
     //   console.log('改变了', '旧', oldValue)
     //   console.log('改变了', '新', newValue)
     // }
+    searchValue() {
+      console.log('搜索')
+    }
   },
   methods: {
     // 获取总评价数量
@@ -224,6 +227,11 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    // this.$http.get('http://yinxin.tentop.com.cn/api/main_service_details').then(res => {
+    //   console.log(res)
+    // })
   }
 }
 </script>

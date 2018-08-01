@@ -1,26 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const _import = require('./_import_' + process.env.NODE_ENV)
-
-// import Home from '@/components/home/Home.vue'
-// import Serve from '@/components/serve/Serve.vue'
-// import ServeComment from '@/components/serve/ServeComment.vue'
-// import ServeCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
-// import ServeCommentResult from '@/components/serve/ServeCommentResult.vue'
-// import Personal from '@/components/personal/Personal.vue'
-// import EvaluationType from '@/components/evaluationType/EvaluationType.vue'
-// import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
-// import EvaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
-// import SubmitEvaluation from '@/components/submitEvaluation/SubmitEvaluation.vue'
-// import UnsubmittedEvaluation from '@/components/unsubmittedEvaluation/UnsubmittedEvaluation.vue'
-// import UnsubmittedEvaluationDetail from '@/components/unsubmittedEvaluation/UnsubmittedEvaluationDetail.vue'
-// import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue'
-// import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
-// import Complete from '@/components/complete/Complete.vue'
-// import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
-// import CompleteComment from '@/components/complete/CompleteComment.vue'
-// import CompleteCommentSuccess from '@/components/complete/CompleteCommentSuccess.vue'
-// import CompleteCommentResult from '@/components/complete/CompleteCommentResult.vue'
+import Home from '@/components/home/Home.vue'
+import Serve from '@/components/serve/Serve.vue'
+import ServeComment from '@/components/serve/ServeComment.vue'
+import ServeCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
+import ServeCommentResult from '@/components/serve/ServeCommentResult.vue'
+import Personal from '@/components/personal/Personal.vue'
+import EvaluationRecord from '@/components/evaluationRecord/EvaluationRecord.vue'
+import EvaluationType from '@/components/evaluationType/EvaluationType.vue'
+import EvaluationRecordDetail from '@/components/evaluationRecord/EvaluationRecordDetail.vue'
+import SubmitEvaluation from '@/components/submitEvaluation/SubmitEvaluation.vue'
+import UnsubmittedEvaluation from '@/components/unsubmittedEvaluation/UnsubmittedEvaluation.vue'
+import UnsubmittedEvaluationDetail from '@/components/unsubmittedEvaluation/UnsubmittedEvaluationDetail.vue'
+import EvaluationResult from '@/components/evaluationResult/EvaluationResult.vue'
+import PersonalInfo from '@/components/personalInfo/PersonalInfo.vue'
+import Complete from '@/components/complete/Complete.vue'
+import ServeEvaluate from '@/components/serveEvaluate/ServeEvaluate.vue'
+import CompleteComment from '@/components/complete/CompleteComment.vue'
+import CompleteCommentSuccess from '@/components/complete/CompleteCommentSuccess.vue'
+import CompleteCommentResult from '@/components/complete/CompleteCommentResult.vue'
+import BindingPhone from '@/components/bindingPhone/bindingPhone.vue'
+import AlreadyBound from '@/components/bindingPhone/alreadyBound.vue'
 
 Vue.use(Router)
 
@@ -29,101 +29,110 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: _import('home/Home')
+      component: Home
     },
     {
       path: '/serve',
       name: 'serve',
-      component: _import('serve/Serve')
+      component: Serve
     },
     {
       path: '/serveComment',
       name: 'serveComment',
-      component: _import('serve/ServeComment')
+      component: ServeComment
     },
     {
       path: '/serveCommentSuccess',
       name: 'serveCommentSuccess',
-      component: _import('serve/ServeCommentSuccess')
+      component: ServeCommentSuccess
     },
     {
       path: '/serveCommentResult',
       name: 'serveCommentResult',
-      component: _import('serve/ServeCommentResult')
+      component: ServeCommentResult
     },
     {
       path: '/complete',
       name: 'complete',
-      component: _import('complete/Complete')
+      component: Complete
     },
     {
       path: '/completeComment',
       name: 'completeComment',
-      component: _import('complete/CompleteComment')
+      component: CompleteComment
     },
     {
       path: '/completeCommentSuccess',
       name: 'completeCommentSuccess',
-      component: _import('complete/CompleteCommentSuccess')
+      component: CompleteCommentSuccess
     },
     {
       path: '/completeCommentResult',
       name: 'completeCommentResult',
-      component: _import('complete/CompleteCommentResult')
+      component: CompleteCommentResult
     },
     {
       path: '/personal',
       name: 'personal',
-      component: _import('personal/Personal')
+      component: Personal
     },
     {
       path: '/evaluationType',
       name: 'evaluationType',
-      component: _import('evaluationType/EvaluationType')
+      component: EvaluationType
     },
     {
       path: '/evaluationRecord',
       name: 'evaluationRecord',
-      component: _import('evaluationRecord/EvaluationRecord')
+      component: EvaluationRecord
     },
     {
       path: '/evaluationRecord/detail',
       name: 'evaluationRecordDetail',
-      component: _import('evaluationRecord/EvaluationRecordDetail')
+      component: EvaluationRecordDetail
     },
     {
       path: '/submitEvaluation',
       name: 'submitEvaluation',
-      component: _import('submitEvaluation/SubmitEvaluation')
+      component: SubmitEvaluation
     },
 
     {
       path: '/unsubmittedEvaluation',
       name: 'unsubmittedEvaluation',
-      component: _import('unsubmittedEvaluation/UnsubmittedEvaluation')
+      component: UnsubmittedEvaluation
     },
     {
       path: '/unsubmittedEvaluation/detail',
       name: 'unsubmittedEvaluationDetail',
-      component: _import('unsubmittedEvaluation/UnsubmittedEvaluationDetail')
+      component: UnsubmittedEvaluationDetail
     },
 
     {
       path: '/evaluationResult',
       name: 'evaluationResult',
-      component: _import('evaluationResult/EvaluationResult')
+      component: EvaluationResult
     },
     {
       path: '/personalInfo',
       name: 'personalInfo',
-      component: _import('personalInfo/PersonalInfo')
+      component: PersonalInfo
     },
     {
       path: '/serveEvaluate',
       name: 'serveEvaluate',
-      component: _import('serveEvaluate/ServeEvaluate')
+      component: ServeEvaluate
     },
-
+    {
+      path: '/bindingPhone',
+      name: 'bindingPhone',
+      component: BindingPhone
+    },
+    {
+      path: '/alreadyBound',
+      name: 'alreadyBound',
+      component: AlreadyBound
+    },
     // {
     //   path: '/home',
     //   name: 'Home',
