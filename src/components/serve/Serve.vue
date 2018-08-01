@@ -226,9 +226,9 @@ export default {
     }
   },
   mounted() {
-    // this.$http.get('http://yinxin.tentop.com.cn/api/main_service_details').then(res => {
-    //   console.log(res)
-    // })
+    this.$http.get('http://yinxin.tentop.com.cn/api/main_service_details').then(res => {
+      console.log(res)
+    })
   }
 }
 </script>
