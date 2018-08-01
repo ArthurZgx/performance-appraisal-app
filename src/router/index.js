@@ -29,99 +29,99 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: _import('home/Home')
+      component: Home
     },
     {
       path: '/serve',
       name: 'serve',
-      component: _import('serve/Serve')
+      component: Serve
     },
     {
       path: '/serveComment',
       name: 'serveComment',
-      component: _import('serve/ServeComment')
+      component: ServeComment
     },
     {
       path: '/serveCommentSuccess',
       name: 'serveCommentSuccess',
-      component: _import('serve/ServeCommentSuccess')
+      component: ServeCommentSuccess
     },
     {
       path: '/serveCommentResult',
       name: 'serveCommentResult',
-      component: _import('serve/ServeCommentResult')
+      component: ServeCommentResult
     },
     {
       path: '/complete',
       name: 'complete',
-      component: _import('complete/Complete')
+      component: Complete
     },
     {
       path: '/completeComment',
       name: 'completeComment',
-      component: _import('complete/CompleteComment')
+      component: CompleteComment
     },
     {
       path: '/completeCommentSuccess',
       name: 'completeCommentSuccess',
-      component: _import('complete/CompleteCommentSuccess')
+      component: CompleteCommentSuccess
     },
     {
       path: '/completeCommentResult',
       name: 'completeCommentResult',
-      component: _import('complete/CompleteCommentResult')
+      component: CompleteCommentResult
     },
     {
       path: '/personal',
       name: 'personal',
-      component: _import('personal/Personal')
+      component: Personal
     },
     {
       path: '/evaluationType',
       name: 'evaluationType',
-      component: _import('evaluationType/EvaluationType')
+      component: EvaluationType
     },
     {
       path: '/evaluationRecord',
       name: 'evaluationRecord',
-      component: _import('evaluationRecord/EvaluationRecord')
+      component: EvaluationRecord
     },
     {
       path: '/evaluationRecord/detail',
       name: 'evaluationRecordDetail',
-      component: _import('evaluationRecord/EvaluationRecordDetail')
+      component: EvaluationRecordDetail
     },
     {
       path: '/submitEvaluation',
       name: 'submitEvaluation',
-      component: _import('submitEvaluation/SubmitEvaluation')
+      component: SubmitEvaluation
     },
 
     {
       path: '/unsubmittedEvaluation',
       name: 'unsubmittedEvaluation',
-      component: _import('unsubmittedEvaluation/UnsubmittedEvaluation')
+      component: UnsubmittedEvaluation
     },
     {
       path: '/unsubmittedEvaluation/detail',
       name: 'unsubmittedEvaluationDetail',
-      component: _import('unsubmittedEvaluation/UnsubmittedEvaluationDetail')
+      component: UnsubmittedEvaluationDetail
     },
 
     {
       path: '/evaluationResult',
       name: 'evaluationResult',
-      component: _import('evaluationResult/EvaluationResult')
+      component: EvaluationResult
     },
     {
       path: '/personalInfo',
       name: 'personalInfo',
-      component: _import('personalInfo/PersonalInfo')
+      component: PersonalInfo
     },
     {
       path: '/serveEvaluate',
       name: 'serveEvaluate',
-      component: _import('serveEvaluate/ServeEvaluate')
+      component: ServeEvaluate
     },
     {
       path: '/bindingPhone',
