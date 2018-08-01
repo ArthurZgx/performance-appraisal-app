@@ -74,7 +74,7 @@
 <script>
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
 // import _ from 'lodash'
-// import request from '@/utils/request'
+import request from '@/utils/request'
 // import request from '@/utils/request'
 
 var i = 0
@@ -134,7 +134,9 @@ export default {
   },
   created() {
     this.getTotalLength()
-
+    request('main_job_service_evaluations').then(res => {
+      console.log(138, res)
+    })
   },
   watch: {
     // checkedAll(newValue, oldValue) {
