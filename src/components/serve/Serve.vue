@@ -74,6 +74,8 @@
 <script>
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
 // import _ from 'lodash'
+// import request from '@/utils/request'
+// import request from '@/utils/request'
 
 var i = 0
 var j = 0
@@ -132,6 +134,7 @@ export default {
   },
   created() {
     this.getTotalLength()
+
   },
   watch: {
     // checkedAll(newValue, oldValue) {
