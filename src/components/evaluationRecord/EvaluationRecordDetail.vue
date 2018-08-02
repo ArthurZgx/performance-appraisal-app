@@ -13,7 +13,10 @@
       <cell title="返回首页" value="cool" is-link link="/personal"></cell>
     </group> -->
     <!-- <form-preview :header-label="('张三03月服务质量评价')"  :body-items="list" ></form-preview> -->
-      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;margin-top:20px;">{{name}}的服务质量评价</div>
+      <div style="text-align:center;margin-bottom:10px;font-weight:bold;color:#333;margin-top:20px;">{{name}}</div>
+
+      <span v-if="$route.params.type === 1">
+      <!-- 服务质量显示表格 -->
     <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
       <tbody>
       <tr v-for="(item,index) in list" :key="index">
@@ -22,6 +25,35 @@
       </tr>
       </tbody>
     </x-table>
+
+      </span>
+
+      <span v-else-if="$route.params.type === 0">
+
+      <!-- 工作完成度显示表格 -->
+    <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
+      <thead>
+        <tr>
+          <td>任务</td>
+          <td>权重</td>
+          <td>实际完成度</td>
+        </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item,index) in jobCompleteList" :key="index">
+        <td style="width:30%;">{{item.superior.taskName}}</td>
+        <td>{{item.superior.weights}}%</td>
+        <td>{{item.superior.completionRatio}}%</td>
+      </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">最终系数</td>
+          <td>{{jobCompleteList[0].superior.scoreScore}}</td>
+        </tr>
+      </tfoot>
+    </x-table>
+      </span>
    </div>
 </template>
 <script>
@@ -53,28 +85,50 @@
         }, {
           label: '差评说明',
           value: ''
-        }]
+        }],
+        jobCompleteList: [{
+          superior: {
+            scopedSlots: 0
+          }}]
       }
     },
     mounted() {
-      if (this.$route.params.id !== undefined) {
-        console.log(this.$route.params.id)
-        var filter = "{'main_service_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
-        request('main_service_details', {
-          params: { filters: filter }
-        }).then(res => {
-          this.list[0].value = res.data[0].numberVotes
-          this.list[1].value = res.data[0].praiseNumber
-          this.list[2].value = res.data[0].badNumber
-          this.list[3].value = res.data[0].badReview
-          filter = "{'hm_personnel': {'id': {equalTo:'" + res.data[0].userId + "' }}}"
-          request('hm_personnels', {
-            params: { filters: filter }
+      if (this.$route.params.type === 0) { // 如果是工作完成度
+        this.getCompleteData()
+      } else if (this.$route.params.type === 1) { // 如果是服务质量
+        this.getServiceData()
+      }
+    },
+    methods: {
+      // 获取服务质量信息
+      getServiceData() {
+        if (this.$route.params.id !== undefined) {
+          // console.log(this.$route.params.id)
+          var filter = "{'main_service_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
+          var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+          request('main_service_details', {
+            params: { filters: filter, includes }
           }).then(res => {
-            console.log(res)
-            this.name = res.data[0].name
+            this.list[0].value = res.data[0].superior.numberVotes
+            this.list[1].value = res.data[0].superior.praiseNumber
+            this.list[2].value = res.data[0].superior.badNumber
+            this.list[3].value = res.data[0].superior.badReview
+            this.name = res.data[0].includes.main_job_service_evaluation.title
           })
-        })
+        }
+      },
+      // 获取工作完成度信息
+      getCompleteData() {
+        if (this.$route.params.id !== undefined) {
+          // console.log(this.$route.params.id)
+          var filter = "{'main_job_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
+          var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+          request('main_job_details', {
+            params: { filters: filter, includes }
+          }).then(res => {
+            this.jobCompleteList = res.data
+          })
+        }
       }
     }
   }

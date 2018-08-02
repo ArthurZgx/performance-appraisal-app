@@ -99,8 +99,8 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
-      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.year+'-'+item.month" 
-      :link="{name:'evaluationRecordDetail',params:{id:item.planAssessmentPlanId}}"></cell>
+      <cell v-for="(item,index) in list" :key="index" :title="item.includes.main_job_service_evaluation.title" :inline-desc="'评价日期:'+item.superior.year+'-'+item.superior.month" 
+      @click.native="goTo(item.superior.id,item.includes.main_job_service_evaluation.type,item.superior.status)"></cell>
     </group>
 
   </div>
@@ -140,20 +140,40 @@
         type: '2',
         selectedData: '2016-04-01',
         list: [],
-        allDataList: []
+        serviceDataList: [],
+        jobDataList: [],
+        selectedOptionType: ''
       }
     },
-    created() {
+    mounted() {
       // this.list.push(JSON.parse(localStorage.getItem('serveList')))
       // _.each(this.list, function(item, key) {
       //   item.title = item.name
       //   item.desc = item.time
       // })
       // console.log(this.list)
-      request('main_job_service_evaluations').then(res => {
-        this.allDataList = res.data
-        this.list = res.data
-      })
+      if (this.$route.params.type) {
+        localStorage.setItem('selectedOptionType', this.$route.params.type)
+      }
+      var type = this.$route.params.type || localStorage.getItem('selectedOptionType')
+      switch (type) {
+        // 如果是已提交
+        case 'alreadySubmit':
+          this.getDatas(2, 2)
+          break
+          // 如果是已过期
+        case 'pastSubmit':
+          this.getDatas(3, 3)
+          break
+          // 如果是未提交
+        case 'inSubmit':
+          this.getDatas(2, 2, 'lessThan')
+          break
+      }
+      // request('main_job_service_evaluations').then(res => {
+      //   this.allDataList = res.data
+      //   this.list = res.data
+      // })
     },
     methods: {
       onImgError(item, $event) {
@@ -181,25 +201,69 @@
         console.log(this.r1)
         switch (this.r1) {
           case '全部类型':
-            this.list = this.allDataList
+            this.list = this.serviceDataList.concat(this.jobDataList)
             break
           case '服务质量评价':
-            this.list = []
-            for (let i = 0, len = this.allDataList.length; i < len; i++) {
-              if (this.allDataList[i].type === 1) {
-                this.list.push(this.allDataList[i])
-              }
-            }
+            this.list = this.serviceDataList
             break
           case '工作完成评价':
-            this.list = []
-            for (let i = 0, len = this.allDataList.length; i < len; i++) {
-              if (this.allDataList[i].type === 0) {
-                this.list.push(this.allDataList[i])
-              }
-            }
+            this.list = this.jobDataList
             break
         }
+      },
+      getDatas(param1, param2, type) {
+        var userId = localStorage.getItem('userId')
+        if (type === undefined) {
+          type = 'equalTo'
+        }
+        // 设置过滤器
+        var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+        var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+        // 请求数据
+        request('main_service_details', {
+          params: { filters: filter, includes: includes }
+        }).then(res => {
+          this.serviceDataList = res.data
+          this.list = res.data
+          filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+          // 再次请求数据
+          request('main_job_details', {
+            params: { filters: filter, includes: includes }
+          }).then(res => {
+            this.jobDataList = res.data
+            this.list = this.serviceDataList.concat(this.jobDataList)
+          })
+        })
+      },
+      // 跳转页面方法
+      goTo(id, type, status) {
+        // 判断类型是服务质量还是工作完成度
+        if (type === 1 && status === 0) {
+          // 如果是服务质量且状态是未读就跳转到服务质量评价页
+          this.$router.push({
+            name: 'serveComment',
+            params: {
+              id: id
+            }})
+          return false
+        }
+        if (type === 0 && status === 0) {
+          // 如果是工作完成度且状态是未读就跳转到工作完成度评价页
+          this.$router.push({
+            name: 'completeComment',
+            params: {
+              id: id
+            }})
+          return false
+        }
+        // 如果是已提交或者过期的就跳转到评价结果页
+        this.$router.push({
+          name: 'evaluationRecordDetail',
+          params: {
+            id: id,
+            type: type
+          }
+        })
       }
     },
     watch: {
