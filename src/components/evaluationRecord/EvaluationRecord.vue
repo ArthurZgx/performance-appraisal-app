@@ -28,7 +28,8 @@
           <cell-box :border-intent="false" class="sub-item">工作完成评价</cell-box>
         </template> -->
       </div></flexbox-item>
-      <flexbox-item><div class="flex-demo">
+      <flexbox-item v-if="!(pageType === 'alreadySubmit')">
+      <div class="flex-demo">
         <cell
           :title="('查看类型')"
           is-link
@@ -88,8 +89,6 @@
   @on-change="onDateChange"
   class="inline-calendar-demo"
   v-model="selectedData"
-  start-date="2016-04-01"
-  end-date="2018-05-30"
   >
   </inline-calendar>
     </group>
@@ -99,10 +98,9 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
-      <cell v-for="(item,index) in list" :key="index" :title="item.includes.main_job_service_evaluation.title" :inline-desc="'评价日期:'+item.superior.year+'-'+item.superior.month" 
-      @click.native="goTo(item.superior.id,item.includes.main_job_service_evaluation.type,item.superior.status)"></cell>
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
+      @click.native="goTo(item.id,item.type,item.status)"></cell>
     </group>
-
   </div>
 </template>
 
@@ -132,17 +130,19 @@
         chakan: false,
         riqi: false,
         radio001: ['全部类型', '服务质量评价', '工作完成评价'],
-        radio002: ['全部', '已查看类型', '未查看类型'],
+        radio002: ['全部', '已查看通知', '未查看通知'],
         years: ['2018', '2017', '2016', '2015'],
         month: ['8', '7', '6', '5', '4', '3'],
         selectedYearIndex: 0,
         selectedMouthIndex: 0,
         type: '2',
-        selectedData: '2016-04-01',
+        selectedData: '2018-08-01',
         list: [],
         serviceDataList: [],
         jobDataList: [],
-        selectedOptionType: ''
+        selectedOptionType: '',
+        pageType: '',
+        tempDataList: []
       }
     },
     mounted() {
@@ -152,6 +152,7 @@
       //   item.desc = item.time
       // })
       // console.log(this.list)
+      this.pageType = this.$route.params.type || localStorage.getItem('selectedOptionType')
       if (this.$route.params.type) {
         localStorage.setItem('selectedOptionType', this.$route.params.type)
       }
@@ -211,6 +212,47 @@
             break
         }
       },
+      watchEvaluationType() {
+        this.list = this.serviceDataList.concat(this.jobDataList)
+        var tempDataList = []
+        switch (this.r2) {
+          case '全部':
+            break
+          case '已查看通知':
+            tempDataList = []
+            console.log(this.list)
+            for (var i = 0, len = this.list.length; i < len; i++) {
+              if (this.list[i].status !== 0) {
+                tempDataList.push(this.list[i])
+              }
+              console.log(tempDataList)
+            }
+            this.list = tempDataList
+            break
+          case '未查看通知':
+            tempDataList = []
+            for (i = 0, len = this.list.length; i < len; i++) {
+              if (this.list[i].status === 0) {
+                tempDataList.push(this.list[i])
+              }
+            }
+            this.list = tempDataList
+            break
+        }
+      },
+      selectedDateChange() {
+        this.list = this.serviceDataList.concat(this.jobDataList)
+        var tempDataList = []
+        for (var i = 0, len = this.list.length; i < len; i++) {
+          console.log(this.list[i].date)
+          console.log(this.selectedData)
+          console.log(this.list[i].date === this.selectedData)
+          if (this.list[i].date === this.selectedData) {
+            tempDataList.push(this.list[i])
+          }
+        }
+        this.list = tempDataList
+      },
       getDatas(param1, param2, type) {
         var userId = localStorage.getItem('userId')
         if (type === undefined) {
@@ -223,14 +265,41 @@
         request('main_service_details', {
           params: { filters: filter, includes: includes }
         }).then(res => {
-          this.serviceDataList = res.data
-          this.list = res.data
+          var tempArray = []
+          for (var i = 0, len = res.data.length; i < len; i++) {
+            tempArray.push({
+              title: res.data[i].includes.main_job_service_evaluation.title,
+              date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+              type: res.data[i].includes.main_job_service_evaluation.type,
+              status: res.data[i].superior.status,
+              id: res.data[i].includes.main_job_service_evaluation.id
+            })
+          }
+          this.serviceDataList = tempArray
+          // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
           // 再次请求数据
           request('main_job_details', {
             params: { filters: filter, includes: includes }
           }).then(res => {
-            this.jobDataList = res.data
+            tempArray = []
+            for (var i = 0, len = res.data.length; i < len; i++) {
+              tempArray.push({
+                title: res.data[i].includes.main_job_service_evaluation.title,
+                date: res.data[i].superior.year + '-' + res.data[i].superior.month,
+                type: res.data[i].includes.main_job_service_evaluation.type,
+                status: res.data[i].superior.status,
+                id: res.data[i].includes.main_job_service_evaluation.id
+              })
+            }
+            for (var a = 0, b = tempArray.length - 1; a < b; a++) {
+              for (var c = 1, d = tempArray.length; c < d; c++) {
+                if (tempArray[a].title === tempArray[c].title && tempArray[a].id === tempArray[c].id) {
+                  tempArray.splice(c, 1)
+                }
+              }
+            }
+            this.jobDataList = tempArray
             this.list = this.serviceDataList.concat(this.jobDataList)
           })
         })
@@ -273,6 +342,11 @@
       },
       r2: function() {
         this.closeRadioWindow()
+        this.watchEvaluationType()
+      },
+      selectedData: function() {
+        this.closeRadioWindow()
+        this.selectedDateChange()
       }
     }
   }

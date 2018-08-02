@@ -49,7 +49,7 @@
       <tfoot>
         <tr>
           <td colspan="2">最终系数</td>
-          <td>{{jobCompleteList[0].superior.scoreScore}}</td>
+          <td>{{result}}%</td>
         </tr>
       </tfoot>
     </x-table>
@@ -89,10 +89,13 @@
         jobCompleteList: [{
           superior: {
             scopedSlots: 0
-          }}]
+          }}],
+        userId: 0,
+        result: 0
       }
     },
     mounted() {
+      this.userId = localStorage.getItem('userId')
       if (this.$route.params.type === 0) { // 如果是工作完成度
         this.getCompleteData()
       } else if (this.$route.params.type === 1) { // 如果是服务质量
@@ -104,7 +107,7 @@
       getServiceData() {
         if (this.$route.params.id !== undefined) {
           // console.log(this.$route.params.id)
-          var filter = "{'main_service_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
+          var filter = "{'main_service_detail':{'main_job_service_evaluation_id':{equalTo:'" + this.$route.params.id + "'},'user_id':{equalTo:'" + this.userId + "'}}}"
           var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
           request('main_service_details', {
             params: { filters: filter, includes }
@@ -121,12 +124,17 @@
       getCompleteData() {
         if (this.$route.params.id !== undefined) {
           // console.log(this.$route.params.id)
-          var filter = "{'main_job_detail':{'id':{equalTo:'" + this.$route.params.id + "'}}}"
+          var filter = "{'main_job_detail':{'main_job_service_evaluation_id':{equalTo:'" + this.$route.params.id + "'},'user_id':{equalTo:'" + this.userId + "'}}}"
           var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
           request('main_job_details', {
             params: { filters: filter, includes }
           }).then(res => {
             this.jobCompleteList = res.data
+            var result = 0
+            for (var i = 0, len = res.data.length; i < len; i++) {
+              result = result + (this.jobCompleteList[i].superior.weights * this.jobCompleteList[i].superior.completionRatio) / 100
+            }
+            this.result = result
           })
         }
       }
