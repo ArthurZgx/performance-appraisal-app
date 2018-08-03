@@ -121,7 +121,7 @@ export default {
           title: '技术部',
           list: [ // status 0 未评价 1 已评价 2 已过期
             { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
-            { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1' }
+            { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }
           ]
         },
         {

@@ -12,9 +12,9 @@
           <div class="serveTitle">{{list.name}}</div>
         </flexbox-item>
       </flexbox>
-      <group title-color="#666">
-        <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="5"></x-number>
-        <x-number title="差评数：" align="left" v-model="10-list.goodCommentNumber" button-style="round" :min="0" :max="10"></x-number>
+      <group title-color="#666" class="commentNumber">
+        <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'good')"></x-number>
+        <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'bad')"></x-number>
       </group>
       <!-- 差评说明 -->
       <group>
@@ -22,25 +22,11 @@
                     v-model="badCommentText"
                     @on-focus="onFocus()"
                     class="serveComment_textarea"
-                    style="height: 60px;border: 1px solid rgba(56,145,240,0.5);margin-bottom: 40px;"
+                    style="height: 60px;border: 1px solid rgba(56,145,240,0.5);"
                     @on-blur="onBlur()">
         </x-textarea>
       </group>
       </div>
-
-      <!-- 保存提交按钮 -->
-      <flexbox style="margin-bottom: 25px;">
-        <flexbox-item>
-          <x-button style="background: #f8f8f8;color: #333"
-                    @click.native="saveEvent">保存
-          </x-button>
-        </flexbox-item>
-        <flexbox-item>
-          <x-button style="background: #3891F0;color: #fff"
-                    @click.native="submitEvent">提交
-          </x-button>
-        </flexbox-item>
-      </flexbox>
     </div>
 
 
@@ -54,6 +40,19 @@
            width="9em"
            position="bottom" style="">
     </toast>
+          <!-- 保存提交按钮 -->
+      <flexbox style="margin-bottom: 0px;position:fixed;bottom:0;left;0;background:white;width:100%;padding:10px 0;border-top:1px solid #eee;">
+        <flexbox-item>
+          <x-button style="background: #f8f8f8;color: #333;width:80%;"
+                    @click.native="saveEvent">保存
+          </x-button>
+        </flexbox-item>
+        <flexbox-item>
+          <x-button style="background: #3891F0;color: #fff;width:80%;"
+                    @click.native="submitEvent">提交
+          </x-button>
+        </flexbox-item>
+      </flexbox>
   </div>
 </template>
 <script>
@@ -86,6 +85,9 @@ export default {
   },
   created() {
     this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
+    for (var i = 0, len = this.serveList.length; i < len; i++) {
+      this.serveList[i].badCommentNumber = 10 - this.serveList[i].goodCommentNumber
+    }
   },
   methods: {
     // 差评说明得焦函数
@@ -99,6 +101,18 @@ export default {
     saveEvent() {
       console.log('保存')
       this.showToast = true
+    },
+    numberChange(index, type) {
+      var that = this
+      var list = this.serveList[index]
+      setTimeout(function() {
+        if (type === 'good') {
+          list.badCommentNumber = 10 - list.goodCommentNumber
+        } else if (type === 'bad') {
+          list.goodCommentNumber = 10 - list.badCommentNumber
+        }
+        that.serveList.splice(index, list)
+      }, 1)
     },
     // 提交评价
     submitEvent() {
@@ -145,7 +159,7 @@ export default {
   background: #fff;
 }
 .serveTitle {
-  padding: 20px 0 22px;
+  padding: 5px 0 5px;
   text-align: center;
   font-size: 18px;
   color: #333;
@@ -157,6 +171,21 @@ export default {
   border-radius: 4px;
   margin: 0 15px;
   padding: 10px;
+}
+.serveComment_div .weui-cells{
+  margin-top: 0px;
+}
+.serveComment .weui-cell::before{
+  border-top: none;
+}
+.serveComment .weui-cells::before{
+  border: none;
+}
+.serveComment .weui-cells::after{
+  border: none;
+}
+.serveComment .commentNumber .vux-no-group-title .weui-cell{
+  padding: 5px 5px;
 }
 .vux-number-selector svg {
   /*fill: #3891F0 !important;*/
