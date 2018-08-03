@@ -32,7 +32,7 @@
             <div class="listInfo">
                 <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
                 <div class="good-comment-number">好评数
-                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="5" width="50px" button-style="round"></inline-x-number>
+                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="10" width="50px" button-style="round"></inline-x-number>
                 </div>
                 
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
@@ -123,27 +123,13 @@ export default {
             { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
             { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }
           ]
-        },
-        {
-          title: '法务部',
-          list: [{ name: '李四', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 3 }]
-        },
-        {
-          title: '宣传部',
-          list: [{ name: '王五', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }]
-        },
-        {
-          title: '外交部',
-          list: [{ name: '赵六', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }]
         }
       ]
     }
   },
   created() {
     this.getTotalLength()
-    request('main_job_service_evaluations').then(res => {
-      console.log(138, res)
-    })
+    this.getDatas()
   },
   watch: {
     // checkedAll(newValue, oldValue) {
@@ -169,13 +155,67 @@ export default {
     searchSubmit() {},
     searchChange() {},
     clickList() {},
+    // 获取服务质量明细表数据
+    getDatas() {
+      var userId = '-1062673909925590171'
+      // 设置过滤器
+      var filter = "{'main_service_detail':{'status':{equalTo:'0'},'user_id':{equalTo:'" + userId + "'}}}"
+      var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+      // 请求数据
+      request('main_service_details', {
+        params: { filters: filter, includes: includes }
+      }).then(res => {
+        var tempArray = []
+        var userIdTempArray = []
+        var tempArray2 = []
+        for (var i = 0, len = res.data.length; i < len; i++) {
+          tempArray.push({
+            name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
+            time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+            type: res.data[i].includes.main_job_service_evaluation.type,
+            status: res.data[i].superior.status,
+            id: res.data[i].includes.main_job_service_evaluation.id,
+            userId: res.data[i].includes.main_job_service_evaluation.userId,
+            goodCommentNumber: 0,
+            checked: false
+          })
+          userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
+        }
+        filter = "{'hm_personnel':{'id':{in:[" + userIdTempArray + "]}}}"
+        request('hm_personnels', {
+          params: { filters: filter }
+        }).then(res => {
+          for (var i = 0; i < res.data.length; i++) {
+            tempArray2[i] = {}
+            tempArray2[i].title = res.data[i].departmentName
+            if (tempArray2[i].userId === undefined) {
+              tempArray2[i].userId = []
+            }
+            tempArray2[i].userId.push(res.data[i].id)
+          }
+                  // 分配部门
+          for (i = 0; i < tempArray.length; i++) {
+            for (var j = 0; j < tempArray2.length; j++) {
+              for (var k = 0; k < tempArray2[j].userId.length; k++) {
+                if (tempArray[i].userId === tempArray2[j].userId[k]) {
+                  if (tempArray2[j].list === undefined) {
+                    tempArray2[j].list = []
+                  }
+                  tempArray2[j].list.push(tempArray[i])
+                }
+              }
+            }
+          }
+          this.serveList = tempArray2
+        })
+      })
+    },
     // 跳转评价详情
     goToServeComment(list) {
       // if (localStorage.getItem('serveList')) {
       //   const temp = JSON.parse(localStorage.getItem('serveList'))
       // }
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
-      console.log(list)
       this.$router.push({ name: 'serveComment' })
     },
     // 选中当前数据
@@ -192,9 +232,7 @@ export default {
       if (list.checked === false) {
         for (i = 0, len = this.checklist1.length; i < len; i++) {
           if (this.checklist1[i].name === list.name) {
-            console.log(this.checklist1[i])
             this.checklist1.splice(i, 1)
-            console.log(i)
           }
         }
       }
@@ -204,10 +242,33 @@ export default {
       this.showSubmitDialog = false
       this.showSubmitToast = true
       var tempArray = []
+      var tempArray2 = []
       for (var i = 0, len = this.checklist1.length; i < len; i++) {
-        if (this.checklist1[i].goodCommentNumber !== 5) {
+        if (this.checklist1[i].goodCommentNumber !== 10) {
           tempArray.push(this.checklist1[i])
         }
+        if(this.checklist1[i].goodCommentNumber === 10){
+          tempArray2.push(this.checklist1[i])
+        }
+      }
+      console.log(tempArray2)
+      for (var i = 0; i < tempArray2.length; i++) {
+        request('main_service_details/'+tempArray2[i].id+'/edit', {
+          params: {
+            numberVotes: 10,
+            praiseNumber: 10,
+            badNumber: 0,
+            badReview: '没有差评',
+            status: 2
+          },
+          method: 'POST',
+          headers:{
+            'Content-Type':'application/json;charset=UTF-8',
+            'X-Auth-Token':'7235ba9e71f7493d9d56b29401d9f47c',
+            'LoginType':'web'
+            }
+          // transformRequest: paramEncode
+        })
       }
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
       this.$router.push({ name: 'serveComment' })
@@ -352,6 +413,8 @@ export default {
   text-align: left;
   margin-left: 90px;
   margin-right: 20px;
+  width: 200px;
+  height: 100px;
 }
 .vux-sure {
   color: #e11c1c;
