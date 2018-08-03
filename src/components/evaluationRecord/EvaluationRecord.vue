@@ -180,6 +180,7 @@
       onImgError(item, $event) {
         console.log(item, $event)
       },
+      // 关闭筛选框
       closeRadioWindow() {
         this.chakan = false
         this.riqi = false
@@ -198,6 +199,7 @@
       onDateChange() {
         this.riqi = false
       },
+      // 类型筛选
       evaluationType() {
         console.log(this.r1)
         switch (this.r1) {
@@ -212,6 +214,7 @@
             break
         }
       },
+      // 是否查看筛选
       watchEvaluationType() {
         this.list = this.serviceDataList.concat(this.jobDataList)
         var tempDataList = []
@@ -240,6 +243,7 @@
             break
         }
       },
+      // 根据日期筛选
       selectedDateChange() {
         this.list = this.serviceDataList.concat(this.jobDataList)
         var tempDataList = []
@@ -253,6 +257,7 @@
         }
         this.list = tempDataList
       },
+      // 获取数据
       getDatas(param1, param2, type) {
         var userId = localStorage.getItem('userId')
         if (type === undefined) {

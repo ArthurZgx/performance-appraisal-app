@@ -154,7 +154,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .serveComment {
   background: #fff;
 }
