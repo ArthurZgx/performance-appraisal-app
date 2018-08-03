@@ -14,16 +14,16 @@
     <!--</group>-->
     <div>
       <group title="" label-width="5.5em" label-margin-right="2em">
-        <cell title="名字"  :value="value1" is-link value-align="left" @click.native="showEditNameConfirm = true"></cell>
+        <cell title="昵称"  :value="value1" is-link value-align="left" @click.native="showEditNameConfirm = true"></cell>
         <cell title="账号"  value="value" is-link value-align="left" ></cell>
         <!--<x-input title="上报人" v-model="value1"></x-input>-->
         <!--<x-number title="Quantity" align="left" v-model="numberValue" button-style="round" :min="0" :max="5"></x-number>-->
-        <datetime title="时间" v-model="time1" value-text-align="left"></datetime>
+        <datetime title="生日" v-model="time1" value-text-align="left"></datetime>
         <!--<selector title="类别" :options="['工艺技术', '其他']" v-model="value2"></selector>-->
         <!--<popup-picker title="请选择" :data="list" v-model="value5" value-text-align="left"></popup-picker>-->
-        <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>
+        <!--<x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="left" label-align="justify"></x-address>-->
         <!--<x-switch title="选择"></x-switch>-->
-        <x-textarea title="详细信息" placeholder="请填写详细信息" :show-counter="false" :rows="3"></x-textarea>
+        <x-textarea title="备注" placeholder="" :show-counter="false" :rows="3"></x-textarea>
       </group>
       <br>
     </div>
@@ -31,7 +31,7 @@
     <confirm v-model="showEditNameConfirm"
       show-input
       ref="confirm5"
-      title="修改姓名"
+      title="修改昵称"
       @on-confirm="onCancelEditNameConfirm"
       @on-show="onShowEditNameConfirm">
     </confirm>

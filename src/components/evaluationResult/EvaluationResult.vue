@@ -25,48 +25,48 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
+      <tr v-for="result in resultList">
+        <td>{{result.period}}</td>
+        <td>{{result.serviceCoefficient}}%</td>
+        <td>{{result.workCoefficient}}%</td>
+        <td>{{result.cardCoefficient}}%</td>
+        <td>{{result.endCoefficient}}%</td>
       </tr>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
-      </tr>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
-      </tr>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
-      </tr>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
-      </tr>
-      <tr>
-        <td>2018.06</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>90%</td>
-        <td>72.9%</td>
-      </tr>
+      <!--<tr>-->
+        <!--<td>2018.06</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>72.9%</td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+        <!--<td>2018.06</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>72.9%</td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+        <!--<td>2018.06</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>72.9%</td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+        <!--<td>2018.06</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>72.9%</td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+        <!--<td>2018.06</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>90%</td>-->
+        <!--<td>72.9%</td>-->
+      <!--</tr>-->
       </tbody>
     </x-table>
 
@@ -75,6 +75,8 @@
 
 <script>
   import { Group, Cell, XHeader, XTable, LoadMore } from 'vux'
+  import _ from 'lodash'
+  import request from '@/utils/request'
 
   export default {
     name: 'Demo',
@@ -87,7 +89,39 @@
     },
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        msg: 'Welcome to Your Vue.js App',
+        resultList: [] // 结果列表
+      }
+    },
+    created() {
+      this.getEvaluations()
+    },
+    methods: {
+      getEvaluations() {
+        const self = this
+        // 获取当前用户考评结果
+        const params = {
+          filters: {
+            main_job_service_evaluation_result: {
+              user_id: { equalTo: '-2645543387805825621' }
+            }
+          }
+        }
+        request('main_job_service_evaluation_results', {
+          params: params
+        }).then(res => {
+          console.log(106, res)
+          if (res.data.length) {
+            self.resultList = res.data
+            // 增加考评周期字段
+            _.each(self.resultList, function(item, key) {
+              // 处理月份位数 1--> 01
+              item.month = item.month + ''
+              item.month = item.month.length > 1 ? item.month : '0' + item.month
+              item.period = item.year + '.' + item.month
+            })
+          }
+        })
       }
     }
   }
