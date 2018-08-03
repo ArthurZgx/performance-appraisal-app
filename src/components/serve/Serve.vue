@@ -25,11 +25,17 @@
            <div v-for="(list,index) in item.list" :key="index" class="aListData">
             <div>
               <!-- <check-icon :value.sync="list.checked"></check-icon> -->
+              <!-- 勾选按钮 -->
               <span @click="listCheckClick(list)" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
             </div>
-            <div class="listInfo" @click="goToServeComment(list)" v>
-                <div class="listInfoName">{{list.name}}</div>
-                <div class="listInfoTime">{{list.time}}</div>
+            <!-- 列表信息 -->
+            <div class="listInfo">
+                <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
+                <div class="good-comment-number">好评数
+                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="5" width="50px" button-style="round"></inline-x-number>
+                </div>
+                
+                <!-- <div class="listInfoTime">{{list.time}}</div> -->
             </div>
            </div>
         </div>
@@ -72,7 +78,7 @@
 </template>
 
 <script>
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber } from 'vux'
 // import _ from 'lodash'
 import request from '@/utils/request'
 // import request from '@/utils/request'
@@ -96,7 +102,8 @@ export default {
     Sticky,
     FlexboxItem,
     XDialog,
-    Toast
+    Toast,
+    InlineXNumber
   },
   data() {
     return {
@@ -113,21 +120,21 @@ export default {
         {
           title: '技术部',
           list: [ // status 0 未评价 1 已评价 2 已过期
-            { name: '张三服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' },
-            { name: '刘备服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }
+            { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
+            { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1' }
           ]
         },
         {
           title: '法务部',
-          list: [{ name: '李四服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
+          list: [{ name: '李四', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 3 }]
         },
         {
           title: '宣传部',
-          list: [{ name: '王五服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
+          list: [{ name: '王五', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }]
         },
         {
           title: '外交部',
-          list: [{ name: '赵六服务质量评价', time: '2018-08-08', checked: false, status: '0', type: '1' }]
+          list: [{ name: '赵六', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }]
         }
       ]
     }
@@ -167,7 +174,7 @@ export default {
       // if (localStorage.getItem('serveList')) {
       //   const temp = JSON.parse(localStorage.getItem('serveList'))
       // }
-      localStorage.setItem('serveList', JSON.stringify(list))
+      localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
       console.log(list)
       this.$router.push({ name: 'serveComment' })
     },
@@ -192,9 +199,18 @@ export default {
         }
       }
     },
+    // 确认一键提交按钮被点击
     affirmSubmit() {
       this.showSubmitDialog = false
       this.showSubmitToast = true
+      var tempArray = []
+      for (var i = 0, len = this.checklist1.length; i < len; i++) {
+        if (this.checklist1[i].goodCommentNumber !== 5) {
+          tempArray.push(this.checklist1[i])
+        }
+      }
+      localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
+      this.$router.push({ name: 'serveComment' })
     },
     // 全选
     checkAll() {
@@ -231,9 +247,7 @@ export default {
     }
   },
   mounted() {
-    this.$http.get('http://yinxin.tentop.com.cn/api/main_service_details').then(res => {
-      console.log(res)
-    })
+
   }
 }
 </script>
@@ -263,17 +277,36 @@ export default {
   font-size: 14px;
 }
 .listCheck {
-  height: 50px;
-  line-height: 50px;
+  height: 30px;
+  line-height: 30px;
+}
+.aListData{
+  height: 30px;
+  position: relative;
 }
 .listInfo {
-  height: 50px;
+  height: 30px;
   margin-left: 10px;
-  line-height: 25px;
+  line-height: 30px;
+  display: flex;
+  flex-direction: row;
 }
 .listInfoName {
   font-size: 16px;
   color: #333;
+  display: inline-block;
+  width: 130px;
+}
+.good-comment-number{
+  margin-left: 0px;
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+.listInfo .vux-inline-x-number{
+  float: right;
+  margin-top: 0px;
+  margin-left: 20px;
 }
 .listInfoTime {
   font-size: 13px;
@@ -338,13 +371,13 @@ export default {
   margin-left: 20px;
   border: 1px solid #c7c7c7;
   margin-right: 10px;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 .my-check-icon-clicked {
   display: inline-block;
   width: 15px;
   height: 15px;
-  margin-top: 15px;
+  margin-top: 5px;
   background: #3891f0;
   border: 1px solid #3891f0;
   position: relative;

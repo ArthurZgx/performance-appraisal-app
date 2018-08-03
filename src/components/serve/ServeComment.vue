@@ -4,42 +4,17 @@
               style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
               @on-click-more="showMenus = true">绩效考评
     </x-header>
-
-    <!--<div class="commentTable">-->
-      <!--<div class="commentTableTitle">{{editTitle}}</div>-->
-      <!--<div class="commentTableContent">-->
-        <!--<div class="commentTableContentTitle">我的票数</div>-->
-        <!--<div class="commentTableContentGood">好评数-->
-          <!--<span class="minus" @click="goodOption('minus')">-</span>-->
-            <!--{{goodCommentNum}}-->
-          <!--<span @click="goodOption('plus')" class="plus">+</span>-->
-        <!--</div>-->
-        <!--<div class="commentTableContentBad">-->
-          <!--差评数<span class="minus" @click="badOption('minus')">-</span>{{badCommentNum}}-->
-          <!--<span @click="badOption('plus')" class="plus">+</span>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="commentTableComment">-->
-          <!--<textarea class="commentInput" v-model="badCommentText" placeholder="差评说明"></textarea>-->
-      <!--</div>-->
-      <!--<div class="commentTableFooterBtns">-->
-          <!--<div class="commentTableFooterBtn" @click="saveEvent">保存</div>-->
-          <!--<div class="commentTableFooterBtn primaryBtn"-->
-               <!--type="primary" @click="submitEvent">提交</div>-->
-      <!--</div>-->
-    <!--</div>-->
     <div class="serveComment_div">
+      <!-- 展示数据 -->
+      <div v-for="(list,index) in serveList">
       <flexbox>
         <flexbox-item>
-          <div class="serveTitle">{{editTitle}}</div>
+          <div class="serveTitle">{{list.name}}</div>
         </flexbox-item>
       </flexbox>
-      <!--<group>-->
-      <!--<cell-box value-align="right">{{editTitle}}</cell-box>-->
-      <!--</group>-->
-      <group title="我的票数: 5票" title-color="#666">
-        <x-number title="好评数：" align="left" v-model="goodCommentNum" button-style="round" :min="0" :max="5"></x-number>
-        <x-number title="差评数：" align="left" v-model="badCommentNum" button-style="round" :min="0" :max="5"></x-number>
+      <group title-color="#666">
+        <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="5"></x-number>
+        <x-number title="差评数：" align="left" v-model="10-list.goodCommentNumber" button-style="round" :min="0" :max="10"></x-number>
       </group>
       <!-- 差评说明 -->
       <group>
@@ -47,10 +22,12 @@
                     v-model="badCommentText"
                     @on-focus="onFocus()"
                     class="serveComment_textarea"
-                    style="height: 180px;border: 1px solid rgba(56,145,240,0.5);margin-bottom: 40px;"
+                    style="height: 60px;border: 1px solid rgba(56,145,240,0.5);margin-bottom: 40px;"
                     @on-blur="onBlur()">
         </x-textarea>
       </group>
+      </div>
+
       <!-- 保存提交按钮 -->
       <flexbox style="margin-bottom: 25px;">
         <flexbox-item>
@@ -72,10 +49,16 @@
            width="9em"
            position="bottom" style="">
     </toast>
+    <toast v-model="showSubmitToast" type="text"
+           :time="1000" is-show-mask text="已提交"
+           width="9em"
+           position="bottom" style="">
+    </toast>
   </div>
 </template>
 <script>
 import { XHeader, Toast, Icon, XNumber, Group, CellBox, Cell, Flexbox, FlexboxItem, XTextarea, XButton } from 'vux'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'serveComment',
@@ -94,17 +77,15 @@ export default {
   },
   data() {
     return {
-      goodCommentNum: 5, // 好评数
-      badCommentNum: 0, // 差评数
       showToast: false,
       editTitle: '',
       badCommentText: '', // 差评说明
-      serveList: []
+      serveList: [],
+      showSubmitToast: false
     }
   },
   created() {
-    this.serveList = JSON.parse(localStorage.getItem('serveList'))
-    this.editTitle = JSON.parse(localStorage.getItem('serveList')).name
+    this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
   },
   methods: {
     // 差评说明得焦函数
@@ -121,16 +102,21 @@ export default {
     },
     // 提交评价
     submitEvent() {
-      var json = {
-        goodCommentNum: this.goodCommentNum,
-        badCommentNum: this.badCommentNum,
-        badCommentText: this.badCommentText
-      }
-      this.serveList.status = '1'
-      localStorage.setItem('jsonTemp', JSON.stringify(json))
-      localStorage.setItem('serveList', JSON.stringify(this.serveList))
-      this.$router.push({ name: 'serveCommentSuccess' })
-      console.log(localStorage.getItem('serveList'))
+      this.showSubmitToast = true
+      var that = this
+      setTimeout(function() {
+        that.$router.push({ name: 'serve' })
+      }, 500)
+      // var json = {
+      //   goodCommentNum: this.goodCommentNum,
+      //   badCommentNum: this.badCommentNum,
+      //   badCommentText: this.badCommentText
+      // }
+      // this.serveList.status = '1'
+      // localStorage.setItem('jsonTemp', JSON.stringify(json))
+      // localStorage.setItem('serveList', JSON.stringify(this.serveList))
+      // this.$router.push({ name: 'serveCommentSuccess' })
+      // console.log(localStorage.getItem('serveList'))
     }
     // goodOption(type) {
     //   if (type === 'minus') {
