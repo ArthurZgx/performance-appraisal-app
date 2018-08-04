@@ -19,7 +19,7 @@
       <!-- 差评说明 -->
       <group>
         <x-textarea placeholder="差评说明"
-                    v-model="badCommentText"
+                    v-model="list.badCommentText"
                     @on-focus="onFocus()"
                     class="serveComment_textarea"
                     style="height: 60px;border: 1px solid rgba(56,145,240,0.5);"
@@ -58,6 +58,8 @@
 <script>
 import { XHeader, Toast, Icon, XNumber, Group, CellBox, Cell, Flexbox, FlexboxItem, XTextarea, XButton } from 'vux'
 import { setTimeout } from 'timers'
+import request from '@/utils/request'
+import { paramEncode } from '@/utils'
 
 export default {
   name: 'serveComment',
@@ -87,6 +89,7 @@ export default {
     this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
     for (var i = 0, len = this.serveList.length; i < len; i++) {
       this.serveList[i].badCommentNumber = 10 - this.serveList[i].goodCommentNumber
+      this.serveList[i].badCommentText = ''
     }
   },
   methods: {
@@ -118,6 +121,24 @@ export default {
     submitEvent() {
       this.showSubmitToast = true
       var that = this
+      for (var i = 0; i < this.serveList.length; i++) {
+        request('main_service_details/' + this.serveList[i].id + '/edit', {
+          params: {
+            numberVotes: this.serveList[i].goodCommentNumber + this.serveList[i].badCommentNumber,
+            praiseNumber: this.serveList[i].goodCommentNumber,
+            badNumber: this.serveList[i].badCommentNumber,
+            badReview: this.serveList[i].badCommentText,
+            status: 0
+          },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+            'LoginType': 'web'
+          },
+          transformRequest: paramEncode
+        })
+      }
       setTimeout(function() {
         that.$router.push({ name: 'serve' })
       }, 500)

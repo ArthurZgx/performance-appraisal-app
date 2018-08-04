@@ -81,7 +81,7 @@
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber } from 'vux'
 // import _ from 'lodash'
 import request from '@/utils/request'
-// import request from '@/utils/request'
+import { paramEncode } from '@/utils'
 
 var i = 0
 var j = 0
@@ -174,14 +174,14 @@ export default {
             time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
             type: res.data[i].includes.main_job_service_evaluation.type,
             status: res.data[i].superior.status,
-            id: res.data[i].includes.main_job_service_evaluation.id,
+            id: res.data[i].superior.id,
             userId: res.data[i].includes.main_job_service_evaluation.userId,
             goodCommentNumber: 0,
             checked: false
           })
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
-        filter = "{'hm_personnel':{'id':{in:[" + userIdTempArray + "]}}}"
+        filter = '{"hm_personnel":{"id":{in:[' + userIdTempArray + ']}}}'
         request('hm_personnels', {
           params: { filters: filter }
         }).then(res => {
@@ -247,27 +247,27 @@ export default {
         if (this.checklist1[i].goodCommentNumber !== 10) {
           tempArray.push(this.checklist1[i])
         }
-        if(this.checklist1[i].goodCommentNumber === 10){
+        if (this.checklist1[i].goodCommentNumber === 10) {
           tempArray2.push(this.checklist1[i])
         }
       }
       console.log(tempArray2)
-      for (var i = 0; i < tempArray2.length; i++) {
-        request('main_service_details/'+tempArray2[i].id+'/edit', {
+      for (i = 0; i < tempArray2.length; i++) {
+        request('main_service_details/' + tempArray2[i].id + '/edit', {
           params: {
             numberVotes: 10,
             praiseNumber: 10,
             badNumber: 0,
             badReview: '没有差评',
-            status: 2
+            status: 0
           },
           method: 'POST',
-          headers:{
-            'Content-Type':'application/json;charset=UTF-8',
-            'X-Auth-Token':'7235ba9e71f7493d9d56b29401d9f47c',
-            'LoginType':'web'
-            }
-          // transformRequest: paramEncode
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+            'LoginType': 'web'
+          },
+          transformRequest: paramEncode
         })
       }
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
