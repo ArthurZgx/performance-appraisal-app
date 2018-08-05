@@ -34,7 +34,7 @@
                 <div class="good-comment-number">好评数
                   <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="10" width="50px" button-style="round"></inline-x-number>
                 </div>
-                
+
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
             </div>
            </div>
@@ -117,13 +117,13 @@ export default {
       showSubmitToast: false,
       showSubmitErrorToast: false,
       serveList: [
-        {
-          title: '技术部',
-          list: [ // status 0 未评价 1 已评价 2 已过期
-            { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
-            { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }
-          ]
-        }
+        // {
+        //   title: '技术部',
+        //   list: [ // status 0 未评价 1 已评价 2 已过期
+        //     { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
+        //     { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }
+        //   ]
+        // }
       ]
     }
   },
@@ -207,6 +207,7 @@ export default {
             }
           }
           this.serveList = tempArray2
+          console.log(210, this.serveList)
         })
       })
     },
@@ -241,8 +242,8 @@ export default {
     affirmSubmit() {
       this.showSubmitDialog = false
       this.showSubmitToast = true
-      var tempArray = []
-      var tempArray2 = []
+      var tempArray = [] // 有差评的数据
+      var tempArray2 = [] // 全部好评的数据
       for (var i = 0, len = this.checklist1.length; i < len; i++) {
         if (this.checklist1[i].goodCommentNumber !== 10) {
           tempArray.push(this.checklist1[i])
@@ -270,8 +271,14 @@ export default {
           transformRequest: paramEncode
         })
       }
+      // 如果有差评的  跳转至差评列表页
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
-      this.$router.push({ name: 'serveComment' })
+      if (tempArray.length) {
+        this.$router.push({ name: 'serveComment' })
+      } else {
+        // 如果全部好评 刷新当前列表
+        this.getDatas()
+      }
     },
     // 全选
     checkAll() {

@@ -6,15 +6,15 @@
       绩效考评
     </x-header>
     <div class="content">
-      <div class="completeComment_div" style="text-align: center;">{{currentName}}工作完成度评价</div>
+      <div class="completeComment_div" style="text-align: center;">{{userName}}{{month}}月工作完成度评价</div>
       <!-- 任务列表 -->
       <group v-for="(task,index) in taskList" label-width="100%" :title="'任务' + (index+1)" :key="index">
         <!--<cell primary="content" title="default" value="long "></cell>-->
-        <cell :title="task.taskDesc" value-align="right">
+        <cell :title="task.taskName" value-align="right">
           <div slot="inline-desc" style="margin-top: 6px;">
             <div style="margin-bottom: 17px;">
-              <span style="margin-right: 5px;">权重</span> <span>{{task.proportion}}</span>
-              <span style="margin-left: 10px;margin-right: 5px;">实际完成度</span> <span>{{task.hasDone}}</span>
+              <span style="margin-right: 5px;">权重</span> <span>{{task.weights}}%</span>
+              <span style="margin-left: 10px;margin-right: 5px;">实际完成度</span> <span>{{task.completionRatio}}%</span>
             </div>
             <flexbox justify="flex-end" :gutter="20" style="margin-bottom: 20px;">
               <flexbox-item :span="2">
@@ -33,25 +33,26 @@
           </div>
         </cell>
       </group>
-      <p style="text-align: right;margin-bottom: 50px;margin-top: 17px;">最终系数 <span>{{totalHasDone}}</span></p>
+      <p  v-if="taskList.length" style="text-align: right;margin-bottom: 50px;margin-top: 17px;">最终系数 <span>{{totalCompleteRatio}}%</span></p>
       <!-- 保存提交按钮 -->
-      <flexbox style="margin-bottom: 25px;">
+      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;padding:5px 0 5px">
         <flexbox-item>
-          <x-button style="background: #f8f8f8;color: #333"
-                    @click.native="saveEvent">保存
+          <x-button style="background: #f8f8f8;color: #333;width:80%"
+                    @click.native="cancleEvent">取消
           </x-button>
         </flexbox-item>
         <flexbox-item>
-          <x-button style="background: #3891F0;color: #fff"
+          <x-button style="background: #3891F0;color: #fff;width:80%"
                     @click.native="submitEvent">提交
           </x-button>
         </flexbox-item>
       </flexbox>
-      <!-- 保存提示 -->
+      <!-- 取消提示 -->
       <toast v-model="showToast" type="text"
-             :time="1000" is-show-mask text="已保存至待办事项"
-             width="9em"
-             position="bottom" style="">
+             :time="1500" is-show-mask :text="toastText"
+             :width="toastWidth"
+             @on-hide="toastHide"
+             position="bottom">
       </toast>
       <!-- 点击未完成时的弹出框-->
       <confirm v-model="showConfirm"
@@ -69,7 +70,8 @@
 <script>
   import { XHeader, Toast, Icon, XTable, Flexbox, FlexboxItem, XButton, Cell, Group, Confirm } from 'vux'
   import _ from 'lodash'
-
+  import request from '@/utils/request'
+  import { paramEncode, isEmptyObject } from '@/utils'
   export default {
     name: 'completeComment',
     components: {
@@ -86,58 +88,98 @@
     },
     data() {
       return {
-        currentName: '', // 当前工作任务所属
         currentTask: {}, // 点击未完成时的当前任务
-        goodCommentNum: 0,
-        badCommentNum: 0,
-        editTitle: '',
-        showToast: false,
-        badCommentText: '',
+        month: '', // 任务月份
+        year: '', // 任务年份
+        userName: '', // 被评价人姓名
+        userId: '', // 被评价人id
+        commentId: '', // 评价人id 即当前用户id
+        showToast: false, // 提示隐
+        toastWidth: '9em', // 提示阴影宽度
+        toastText: '已取消', // 提示文字
         showConfirm: false, // 点击未完成的弹出框
+        resultTable: {}, // 当前被评价人的几个任务对应的结果表数据
         taskList: [
-          { taskDesc: '2018年是决胜全面建成小康社会、实施“十三五”规划承上启下的关键一年', proportion: '10%', order: 1, hasDone: '', clickCompleted: false, clickNoCompleted: false },
-          { taskDesc: '第十二届全国人民代表大会第一次会议以来的五年，是我国发展进程中极不平凡的五年', proportion: '20%', order: 2, hasDone: '', clickCompleted: false, clickNoCompleted: false },
-          { taskDesc: '五年来，经济实力跃上新台阶。国内生产总值从54万亿元增加到82.7万亿元，年均增长7.1%', proportion: '30%', order: 3, hasDone: '', clickCompleted: false, clickNoCompleted: false },
-          { taskDesc: '五年来，创新驱动发展成果丰硕。全社会研发投入年均增长11%，规模跃居世界第二位', proportion: '40%', order: 4, hasDone: '', clickCompleted: false, clickNoCompleted: false }
+          // { taskName: '2018年是决胜全面建成小康社会、实施“十三五”规划承上启下的关键一年', weights: '10', order: 1, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
+          // { taskName: '第十二届全国人民代表大会第一次会议以来的五年，是我国发展进程中极不平凡的五年', weights: '20', order: 2, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
+          // { taskName: '五年来，经济实力跃上新台阶。国内生产总值从54万亿元增加到82.7万亿元，年均增长7.1%', weights: '30', order: 3, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
+          // { taskName: '五年来，创新驱动发展成果丰硕。全社会研发投入年均增长11%，规模跃居世界第二位', weights: '40', order: 4, completionRatio: '', clickCompleted: false, clickNoCompleted: false }
         ]
       }
     },
     created() {
       this.editTitle = localStorage.getItem('serveList')
-      this.editTitle = JSON.parse(this.editTitle)
-      this.editTitle = this.editTitle.name
-      this.currentName = localStorage.getItem('currentName')
-      console.log(175, this.currentName)
-      var json = localStorage.getItem('jsonTemp')
-      json = JSON.parse(json)
-      console.log(json)
-      this.goodCommentNum = json.goodCommentNum
-      this.badCommentNum = json.badCommentNum
-      this.badCommentText = json.badCommentText
+      this.getCurrentTask()
+      // var json = localStorage.getItem('jsonTemp')
+      // json = JSON.parse(json)
+      // console.log(json)
+      // this.goodCommentNum = json.goodCommentNum
+      // this.badCommentNum = json.badCommentNum
+      // this.badCommentText = json.badCommentText
     },
     computed: {
-      totalHasDone: function() {
+      totalCompleteRatio: function() {
         let temp = 0
         _.each(this.taskList, function(item, key) {
-          if (item.hasDone) {
-            temp += parseInt(item.hasDone)
+          if (item.completionRatio) {
+            temp += parseInt(item.completionRatio) * parseInt(item.weights) / 100
           }
         })
-        return temp + '%'
+        return temp
       }
     },
     methods: {
+      // 获取缓存中当前任务主表信息
+      getCurrentTask() {
+        const self = this
+        self.currentTask = JSON.parse(localStorage.getItem('currentTask'))
+        console.log('currentTask', this.currentTask)
+        self.planAssessmentPlanId = self.currentTask.planAssessmentPlanId
+        self.userName = self.currentTask.userName // 被评价人姓名
+        self.userId = self.currentTask.userId // 被评价人id
+        self.year = self.currentTask.year
+        self.month = self.currentTask.month + ''
+        self.month = self.currentTask.month.length > 1 ? self.month : '0' + self.currentTask.month
+        self.getTasks()
+      },
+      // 获取当前评价人的所有任务
+      getTasks() {
+        const self = this
+        self.commentId = '-1062673909925590171'
+        const filters = {
+          'main_job_detail': {
+            'main_job_service_evaluation_id': { equalTo: self.currentTask.id },
+            'user_id': { equalTo: self.commentId },
+            'status': { equalTo: '0' }
+          }
+        }
+        request('main_job_details', {
+          params: { filters: filters }
+        }).then(res => {
+          console.log('所有任务', res.data)
+          const allTask = res.data
+          if (allTask.length) {
+            _.each(allTask, function(item, key) {
+              item.clickCompleted = false
+              item.clickNoCompleted = false
+              item.completionRatio = 0 // 每个任务的实际完成度
+              // item.coefficient = 0 // 每个任务的系数
+              self.taskList.push(item)
+            })
+          }
+        })
+      },
       // 完成函数
       hasCompleted(task) {
         task.clickCompleted = !task.clickCompleted
         task.clickNoCompleted = false
-        task.hasDone = task.hasDone ? '' : task.proportion
+        task.completionRatio = task.completionRatio === 100 ? 0 : 100
       },
       // 未完成函数
       noCompleted(task) {
         this.showConfirm = true
         this.currentTask = task
-        task.hasDone = ''
+        // task.completionRatio = ''
         // task.clickNoCompleted = !task.clickNoCompleted
         task.clickCompleted = false
       },
@@ -145,15 +187,16 @@
       confirm(value) {
         console.log('点击确定', value)
         if (value) {
-          this.currentTask.hasDone = value + '%'
+          this.currentTask.completionRatio = value
           this.currentTask.clickNoCompleted = true
         }
         console.log(this.currentTask)
       },
       // 弹出框点击取消时
-      cancelConfirm() {
-        console.log('取消')
+      cancelConfirm(value) {
+        console.log('取消', value)
         this.currentTask.clickNoCompleted = false
+        this.currentTask.completionRatio = 0
       },
       // 弹出框显示时
       confirmShow() {
@@ -164,17 +207,159 @@
         console.log('隐藏')
         this.currentTask = {}
       },
-      // 保存
-      saveEvent() {
-        console.log('保存')
-        this.showToast = true
+      // 提示信息隐藏
+      toastHide() {
+        if (this.toastText === '提交成功') {
+          this.$router.push({ name: 'completeCommentResult' })
+        }
+      },
+      // 取消
+      cancleEvent() {
+        console.log('取消')
+        const self = this
+        _.each(self.taskList, function(item, key) {
+          item.clickCompleted = false
+          item.clickNoCompleted = false
+          item.completionRatio = 0
+        })
+        self.toastWidth = '9em'
+        self.toastText = '已取消'
+        self.showToast = true
       },
       // 提交
       submitEvent() {
         // const json = list
-        localStorage.setItem('jsonTemp', JSON.stringify(this.taskList))
-        localStorage.setItem('totalHasDone', JSON.stringify(this.totalHasDone))
-        this.$router.push({ name: 'completeCommentSuccess' })
+        const self = this
+        console.log('点了提交', self.taskList)
+        // 判断是否有为打分的任务
+        if (!self.judgeAllTask()) {
+          self.toastWidth = '11em'
+          self.toastText = '请完成所有任务打分'
+          self.showToast = true
+          return
+        }
+        // 先查询结果表中有没有数据 如果没有则新建 如果有则修改
+        // 根据被评价人及年度、月度字段查询 bug 还应加计划id
+        const year = self.year + ''
+        console.log(self.userId, self.year, self.totalCompleteRatio)
+        console.log(typeof self.userId, typeof year, typeof self.totalCompleteRatio)
+        let filters = {
+          'main_job_service_evaluation_result': {
+            'user_id': { equalTo: self.userId },
+            'year': { equalTo: year },
+            'month': { equalTo: self.month }
+            // 'planAssessmentPlanId': { equalTo: self.planAssessmentPlanId }
+          }
+        }
+        filters = JSON.stringify(filters)
+        request('main_job_service_evaluation_results', {
+          params: { filters: filters }
+        }).then(res1 => {
+          console.log('结果表', res1.data)
+          const curResult = res1.data
+          // 如果已存在结果表则修改
+          if (curResult.length) {
+            const data = {
+              workCoefficient: self.totalCompleteRatio
+            }
+            request('main_job_service_evaluation_results/' + curResult[0].id + '/edit', {
+              method: 'POST',
+              params: data,
+              headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
+              transformRequest: paramEncode
+            }).then(res2 => {
+              console.log('编辑成功', res2, res2.data)
+              if (!isEmptyObject(res2.data)) {
+                // 编辑成功 修改各个任务明细表状态
+                // self.editStatus()
+                self.resultTable = res2.data
+                // 修改完 页面跳转到结果页 totalCompleteRatio
+                const resultDetail = {
+                  totalCompleteRatio: self.totalCompleteRatio,
+                  userName: self.userName,
+                  month: self.month
+                }
+                // 提交成功 提示
+                self.toastWidth = '7em'
+                self.toastText = '提交成功'
+                self.showToast = true
+
+                localStorage.setItem('taskList', JSON.stringify(self.taskList))
+                localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
+                localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+                // self.$router.push({ name: 'completeCommentResult' })
+              }
+            })
+          } else { // main_job_detail
+            const data = {
+              planAssessmentPlanId: self.planAssessmentPlanId,
+              userId: self.userId,
+              year: year,
+              month: self.month,
+              workCoefficient: self.totalCompleteRatio
+            }
+            // 如果不存在则新建
+            request('main_job_service_evaluation_results/new', {
+              method: 'POST',
+              headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
+              params: data,
+              transformRequest: paramEncode
+            }).then(res2 => {
+              console.log('新建成功', res2.data)
+              if (!isEmptyObject(res2.data)) {
+                // 新建成功 修改各个任务明细表状态
+                // self.editStatus()
+                self.resultTable = res2.data
+                // 提交成功 提示
+                self.toastWidth = '7em'
+                self.toastText = '提交成功'
+                self.showToast = true
+                // 修改完 页面跳转到结果页
+                const resultDetail = {
+                  totalCompleteRatio: self.totalCompleteRatio,
+                  userName: self.userName,
+                  month: self.month
+                }
+                localStorage.setItem('taskList', JSON.stringify(self.taskList))
+                localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
+                localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+                // self.$router.push({ name: 'completeCommentResult' })
+              }
+            })
+          }
+        })
+      },
+      // 提交之前 判断是否有没打分的任务 如果有 禁止提交
+      judgeAllTask() {
+        const self = this
+        for (let i = 0; i < self.taskList.length; i++) {
+          if (self.taskList[i].clickCompleted === false && self.taskList[i].clickNoCompleted === false) {
+            return false
+          }
+        }
+        return true
+      },
+      // 提交完成修改status
+      editStatus() {
+        const self = this
+        let params = []
+        _.each(self.taskList, function(item, key) {
+          const temp = {}
+          temp.id = item.id
+          temp.status = 2
+          temp.completionRatio = item.completionRatio
+          params.push(temp)
+        })
+
+        params = JSON.stringify(params)
+        request('main_job_details/edit/batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          params: { params: params },
+          transformRequest: paramEncode
+        }).then(res3 => {
+          console.log('修改状态成功', res3.data)
+        })
       }
     }
   }
@@ -194,6 +379,9 @@
 .completeComment .btn_hasCompleted {
   background-color: #3891f0;
   color: #fff;
+}
+.completeComment .weui-toast{
+  border-radius: 25px;
 }
 .completeComment .btn_default {
   color: #333;

@@ -41,7 +41,7 @@
            position="bottom" style="">
     </toast>
           <!-- 保存提交按钮 -->
-      <flexbox style="margin-bottom: 0px;position:fixed;bottom:0;left;0;background:white;width:100%;padding:10px 0;border-top:1px solid #eee;">
+      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;padding:10px 0;border-top:1px solid #eee;">
         <flexbox-item>
           <x-button style="background: #f8f8f8;color: #333;width:80%;"
                     @click.native="saveEvent">保存

@@ -21,11 +21,11 @@
     </search>
     <group class="home_group groupList">
       <div class="aGroupList" v-for="(item,index) in completeList" :key="index">
-        <div class="completeClassifyTitle">{{item.title}}</div>
+        <div class="completeClassifyTitle">{{item.department}}</div>
         <div>
           <div v-for="(list,index) in item.list" :key="index" class="aListData">
             <div class="listInfo" @click="goTocompleteComment(list)">
-              <div class="listInfoName">{{list.name}}工作完成度评价</div>
+              <div class="listInfoName">{{list.title}}</div>
               <div class="listInfoTime">{{list.time}}</div>
             </div>
           </div>
@@ -69,11 +69,10 @@
 
 <script>
   import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
-  // import _ from 'lodash'
+  import _ from 'lodash'
+  import request from '@/utils/request'
+  // import { paramEncode } from '@/utils'
 
-  var i = 0
-  var j = 0
-  var len = 0
   export default {
     name: 'complete',
     components: {
@@ -104,30 +103,31 @@
         showSubmitToast: false,
         showSubmitErrorToast: false,
         completeList: [
-          {
-            title: '技术部',
-            list: [
-              { name: '张三', time: '2018-08-08', checked: false },
-              { name: '刘备', time: '2018-08-08', checked: false }
-            ]
-          },
-          {
-            title: '法务部',
-            list: [{ name: '李四', time: '2018-08-08', checked: false }]
-          },
-          {
-            title: '宣传部',
-            list: [{ name: '王五', time: '2018-08-08', checked: false }]
-          },
-          {
-            title: '外交部',
-            list: [{ name: '赵六', time: '2018-08-08', checked: false }]
-          }
+          // {
+          //   title: '技术部',
+          //   list: [
+          //     { name: '张三', time: '2018-08-08', checked: false },
+          //     { name: '刘备', time: '2018-08-08', checked: false }
+          //   ]
+          // },
+          // {
+          //   title: '法务部',
+          //   list: [{ name: '李四', time: '2018-08-08', checked: false }]
+          // },
+          // {
+          //   title: '宣传部',
+          //   list: [{ name: '王五', time: '2018-08-08', checked: false }]
+          // },
+          // {
+          //   title: '外交部',
+          //   list: [{ name: '赵六', time: '2018-08-08', checked: false }]
+          // }
         ]
       }
     },
     created() {
-      this.getTotalLength()
+      // this.getTotalLength()
+      this.getDatas() // 获取数据
     },
     watch: {
       // checkedAll(newValue, oldValue) {
@@ -137,16 +137,71 @@
     },
     methods: {
       // 获取总评价数量
-      getTotalLength() {
-        for (i = 0; i < this.completeList.length; i++) {
-          for (j = 0, len = this.completeList[i].list.length; j < len; j++) {
-            this.childNodeNum++
-          }
-        }
-      },
+      // getTotalLength() {
+      //   for (i = 0; i < this.completeList.length; i++) {
+      //     for (j = 0, len = this.completeList[i].list.length; j < len; j++) {
+      //       this.childNodeNum++
+      //     }
+      //   }
+      // },
       // 跳转至home
       gotToTaskList() {
         this.$router.push({ name: 'home' })
+      },
+      // 获取工作任务明细表 带主表
+      getDatas() {
+        const self = this
+        const userId = '-1062673909925590171'
+        // 过滤条件 评价人为当前用户 状态为0
+        const filters1 = {
+          'main_job_detail': {
+            'user_id': { equalTo: userId }, 'status': { equalTo: '0' }
+          }
+        }
+        // 请求任务明细表中评价人为当前用户并且status=0的数据
+        request('main_job_details', {
+          params: { filters: filters1 }
+        }).then(res => {
+          console.log('工作任务明细表', res.data)
+          const resAll = res.data
+          let detailIds = []
+          if (resAll.length) {
+            _.each(resAll, function(item, key) {
+              detailIds.push(item.mainJobServiceEvaluationId)
+            })
+            // 根据主表id去重
+            detailIds = _.uniq(detailIds)
+            console.log('去重后', detailIds)
+            // 过滤条件 评价人为当前用户 状态为0
+            const filters2 = {
+              'main_job_service_evaluation': {
+                'id': { in: detailIds }
+              }
+            }
+            // 请求主表带用户表
+            request('main_job_service_evaluations', {
+              params: {
+                filters: filters2,
+                includes: {
+                  'hm_personnel': { includes: ['user_id'] }}
+              }
+            }).then(res2 => {
+              console.log('主表+用户表', res2.data)
+              const res2All = res2.data
+              if (res2All.length) {
+                _.each(res2All, function(item, key) {
+                  const temp = { department: '', list: [] }
+                  temp.department = item.includes.hm_personnel.departmentName
+                  item.superior.time = item.superior.createTime.split(' ')[0]
+                  item.superior.userName = item.includes.hm_personnel.name
+                  temp.list.push(item.superior)
+                  self.completeList.push(temp)
+                })
+                console.log('completeList', self.completeList)
+              }
+            })
+          }
+        })
       },
       searchFocus() {},
       searchCancel() {},
@@ -156,31 +211,31 @@
       clickList() {},
       // 跳转评价详情
       goTocompleteComment(list) {
-        localStorage.setItem('currentName', list.name)
-        console.log(list)
+        localStorage.setItem('currentTask', JSON.stringify(list))
+        console.log('list', list)
         this.$router.push({ name: 'completeComment' })
       },
       // 选中当前数据
-      listCheckClick(list) {
-        list.checked = !list.checked
-        this.checkedAll = false
-        if (list.checked === true) {
-          this.checklist1.push(list)
-          if (this.checklist1.length === this.childNodeNum) {
-            this.checkedAll = true
-          }
-          return false
-        }
-        if (list.checked === false) {
-          for (i = 0, len = this.checklist1.length; i < len; i++) {
-            if (this.checklist1[i].name === list.name) {
-              console.log(this.checklist1[i])
-              this.checklist1.splice(i, 1)
-              console.log(i)
-            }
-          }
-        }
-      },
+      // listCheckClick(list) {
+      //   list.checked = !list.checked
+      //   this.checkedAll = false
+      //   if (list.checked === true) {
+      //     this.checklist1.push(list)
+      //     if (this.checklist1.length === this.childNodeNum) {
+      //       this.checkedAll = true
+      //     }
+      //     return false
+      //   }
+      //   if (list.checked === false) {
+      //     for (i = 0, len = this.checklist1.length; i < len; i++) {
+      //       if (this.checklist1[i].name === list.name) {
+      //         console.log(this.checklist1[i])
+      //         this.checklist1.splice(i, 1)
+      //         console.log(i)
+      //       }
+      //     }
+      //   }
+      // },
       affirmSubmit() {
         this.showSubmitDialog = false
         this.showSubmitToast = true
@@ -188,36 +243,36 @@
       // 全选
       checkAll() {
         // this.checklist1 = []
-      },
-      // 点击全选
-      clickAll() {
-        console.log('点击全选')
-        // const all = _.without.appy(_, [this.commonList].concat(this.checklist1))
-        // this.checklist1 = all
-        // if (this.checklist1.length ==== 4) {
-        //   this.checklist1 = []
-        // } else {
-        //   this.checklist1 = this.commonList
-        // }
-        if (this.checkedAll === false) {
-          this.checkAll = true
-          for (j = 0; j < this.completeList.length; j++) {
-            for (i = 0, len = this.completeList[j].list.length; i < len; i++) {
-              this.completeList[j].list[i].checked = false
-            }
-          }
-          this.checklist1.splice(0, this.checklist1.length)
-        } else if (this.checkedAll === true) {
-          this.checklist1.splice(0, this.checklist1.length)
-          this.checkAll = false
-          for (j = 0; j < this.completeList.length; j++) {
-            for (i = 0, len = this.completeList[j].list.length; i < len; i++) {
-              this.completeList[j].list[i].checked = true
-              this.checklist1.push(this.completeList[j].list[i])
-            }
-          }
-        }
       }
+      // 点击全选
+      // clickAll() {
+      //   console.log('点击全选')
+      //   // const all = _.without.appy(_, [this.commonList].concat(this.checklist1))
+      //   // this.checklist1 = all
+      //   // if (this.checklist1.length ==== 4) {
+      //   //   this.checklist1 = []
+      //   // } else {
+      //   //   this.checklist1 = this.commonList
+      //   // }
+      //   if (this.checkedAll === false) {
+      //     this.checkAll = true
+      //     for (j = 0; j < this.completeList.length; j++) {
+      //       for (i = 0, len = this.completeList[j].list.length; i < len; i++) {
+      //         this.completeList[j].list[i].checked = false
+      //       }
+      //     }
+      //     this.checklist1.splice(0, this.checklist1.length)
+      //   } else if (this.checkedAll === true) {
+      //     this.checklist1.splice(0, this.checklist1.length)
+      //     this.checkAll = false
+      //     for (j = 0; j < this.completeList.length; j++) {
+      //       for (i = 0, len = this.completeList[j].list.length; i < len; i++) {
+      //         this.completeList[j].list[i].checked = true
+      //         this.checklist1.push(this.completeList[j].list[i])
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 </script>

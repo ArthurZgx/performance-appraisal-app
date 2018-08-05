@@ -286,3 +286,12 @@ export function deepClone(source) {
   }
   return targetObj
 }
+
+// 判断一个对象是否为空对象，没有任何属性
+export function isEmptyObject(e) {
+  var t
+  for (t in e) {
+    return !1
+  }
+  return !0
+}

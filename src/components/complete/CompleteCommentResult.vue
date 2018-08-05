@@ -7,7 +7,7 @@
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
-    <div class="completeCommentResult_div" style="text-align: center;">{{currentName}}工作完成度评价</div>
+    <div class="completeCommentResult_div" style="text-align: center;">{{resultDetail.userName}}{{resultDetail.month}}月工作完成度评价</div>
     <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
       <tr>
@@ -18,14 +18,14 @@
       </thead>
       <tbody>
       <tr v-for="task in taskList">
-        <td>{{task.taskDesc}}</td>
-        <td>{{task.proportion}}</td>
-        <td>{{task.hasDone}}</td>
+        <td>{{task.taskName}}</td>
+        <td>{{task.weights}}%</td>
+        <td>{{task.completionRatio}}%</td>
       </tr>
 
       <tr>
         <td>最终系数</td>
-        <td colspan="2">{{totalHasDone}}</td>
+        <td colspan="2">{{resultDetail.totalCompleteRatio}}%</td>
       </tr>
       </tbody>
     </x-table>
@@ -66,11 +66,8 @@ export default {
   },
   data() {
     return {
-      totalHasDone: 0, // 最终系数
-      taskList: 0, // 从localStorage获取的任务列表
-      currentName: '', // 任务所属者
-      editTitle: '',
-      badCommentText: ''
+      resultDetail: {}, // 结果详情 从localStorage获取的任务列表
+      taskList: [] // 从localStorage获取的任务列表
     }
   },
   created() {
@@ -79,9 +76,9 @@ export default {
   methods: {
     // 获取缓存内容
     getStorage() {
-      this.totalHasDone = JSON.parse(localStorage.getItem('totalHasDone'))
-      this.taskList = JSON.parse(localStorage.getItem('jsonTemp'))
-      this.currentName = localStorage.getItem('currentName')
+      this.resultDetail = JSON.parse(localStorage.getItem('resultDetail'))
+      this.taskList = JSON.parse(localStorage.getItem('taskList'))
+      // this.currentName = localStorage.getItem('currentName')
       console.log(this.taskList)
     },
     // 跳转至任务列表
