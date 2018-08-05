@@ -169,6 +169,9 @@ export default {
         var userIdTempArray = []
         var tempArray2 = []
         for (var i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+            res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+          }
           tempArray.push({
             name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
             time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
@@ -180,6 +183,9 @@ export default {
             checked: false
           })
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
+        }
+        if (res.data.length === 0) {
+          return false
         }
         filter = '{"hm_personnel":{"id":{in:[' + userIdTempArray + ']}}}'
         request('hm_personnels', {
@@ -252,25 +258,31 @@ export default {
           tempArray2.push(this.checklist1[i])
         }
       }
-      console.log(tempArray2)
-      for (i = 0; i < tempArray2.length; i++) {
-        request('main_service_details/' + tempArray2[i].id + '/edit', {
-          params: {
-            numberVotes: 10,
-            praiseNumber: 10,
-            badNumber: 0,
-            badReview: '没有差评',
-            status: 0
-          },
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
-            'LoginType': 'web'
-          },
-          transformRequest: paramEncode
-        })
-      }
+      this.showSubmitToast = true
+      let params = []
+      _.each(tempArray2, function(item, key) {
+        const temp = {}
+        temp.id = item.id
+        temp.status = 2
+        temp.numberVotes = 10
+        temp.praiseNumber = 10
+        temp.badNumber = 0
+        temp.badReview = '没有差评'
+        params.push(temp)
+      })
+      params = JSON.stringify(params)
+      request('main_service_details/edit/batch/', {
+        params: {
+          params: params
+        },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+          'LoginType': 'web'
+        },
+        transformRequest: paramEncode
+      })
       // 如果有差评的  跳转至差评列表页
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
       if (tempArray.length) {

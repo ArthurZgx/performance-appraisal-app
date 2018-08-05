@@ -352,6 +352,7 @@
         })
 
         params = JSON.stringify(params)
+        console.log(params)
         request('main_job_details/edit/batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

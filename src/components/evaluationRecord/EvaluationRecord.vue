@@ -272,6 +272,9 @@
         }).then(res => {
           var tempArray = []
           for (var i = 0, len = res.data.length; i < len; i++) {
+            if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+              res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+            }
             tempArray.push({
               title: res.data[i].includes.main_job_service_evaluation.title,
               date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
@@ -280,6 +283,7 @@
               id: res.data[i].includes.main_job_service_evaluation.id
             })
           }
+          console.log(this.serviceDataList)
           this.serviceDataList = tempArray
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"

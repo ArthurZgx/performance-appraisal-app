@@ -121,24 +121,31 @@ export default {
     submitEvent() {
       this.showSubmitToast = true
       var that = this
-      for (var i = 0; i < this.serveList.length; i++) {
-        request('main_service_details/' + this.serveList[i].id + '/edit', {
-          params: {
-            numberVotes: this.serveList[i].goodCommentNumber + this.serveList[i].badCommentNumber,
-            praiseNumber: this.serveList[i].goodCommentNumber,
-            badNumber: this.serveList[i].badCommentNumber,
-            badReview: this.serveList[i].badCommentText,
-            status: 0
-          },
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
-            'LoginType': 'web'
-          },
-          transformRequest: paramEncode
-        })
-      }
+      let params = []
+      _.each(that.serveList, function(item, key) {
+        const temp = {}
+        temp.id = item.id
+        temp.status = 2
+        temp.numberVotes = item.goodCommentNumber
+        temp.praiseNumber = item.goodCommentNumber
+        temp.badNumber = item.badCommentNumber
+        temp.badReview = item.badCommentText
+        params.push(temp)
+      })
+      params = JSON.stringify(params)
+      console.log(params)
+      request('main_service_details/edit/batch/', {
+        params: {
+          params: params
+        },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+          'LoginType': 'web'
+        },
+        transformRequest: paramEncode
+      })
       setTimeout(function() {
         that.$router.push({ name: 'serve' })
       }, 500)
