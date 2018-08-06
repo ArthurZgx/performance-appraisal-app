@@ -197,7 +197,8 @@ export default {
             status: res.data[i].superior.status,
             id: res.data[i].superior.id,
             userId: res.data[i].includes.main_job_service_evaluation.userId,
-            goodCommentNumber: 0,
+            goodCommentNumber: res.data[i].superior.numberVotes,
+            numberVotes: res.data[i].superior.numberVotes,
             checked: false
           })
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)

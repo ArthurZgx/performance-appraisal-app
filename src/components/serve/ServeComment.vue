@@ -89,7 +89,7 @@ export default {
   created() {
     this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
     for (var i = 0, len = this.serveList.length; i < len; i++) {
-      this.serveList[i].badCommentNumber = 10 - this.serveList[i].goodCommentNumber
+      this.serveList[i].badCommentNumber = this.serveList[i].numberVotes - this.serveList[i].goodCommentNumber
       this.serveList[i].badCommentText = ''
     }
   },
@@ -111,9 +111,9 @@ export default {
       var list = this.serveList[index]
       setTimeout(function() {
         if (type === 'good') {
-          list.badCommentNumber = 10 - list.goodCommentNumber
+          list.badCommentNumber = list.numberVotes - list.goodCommentNumber
         } else if (type === 'bad') {
-          list.goodCommentNumber = 10 - list.badCommentNumber
+          list.goodCommentNumber = list.numberVotes - list.badCommentNumber
         }
         that.serveList.splice(index, list)
       }, 1)
