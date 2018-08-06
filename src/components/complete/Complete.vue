@@ -113,7 +113,6 @@
         showScrollerLoading: true,
         pageNo: 1,
         onFacting: false
-
       }
     },
     created() {
@@ -165,7 +164,7 @@
         }
         // 请求任务明细表中评价人为当前用户并且status=0的数据
         request('main_job_details', {
-          params: { filters: filters1, pageNo: this.pageNo, pageSize: 10 }
+          params: { filters: filters1, pageNo: this.pageNo, pageSize: 10000 }
         }).then(res => {
           console.log('工作任务明细表', res.data)
           const resAll = res.data
@@ -177,13 +176,13 @@
             // 根据主表id去重
             detailIds = _.uniq(detailIds)
             console.log('去重后', detailIds)
-            // 过滤条件 评价人为当前用户 状态为0
+
+            // 请求主表带用户表
             const filters2 = {
               'main_job_service_evaluation': {
                 'id': { in: detailIds }
               }
             }
-            // 请求主表带用户表
             request('main_job_service_evaluations', {
               params: {
                 filters: filters2,
@@ -195,6 +194,7 @@
               const res2All = res2.data
               var tempArray = []
               if (res2All.length) {
+                // 遍历主表和用户表数据
                 _.each(res2All, function(item, key) {
                   const temp = { department: '', list: [] }
                   temp.department = item.includes.hm_personnel.departmentName
