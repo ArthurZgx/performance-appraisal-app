@@ -180,7 +180,7 @@ export default {
       var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
       // 请求数据
       request('main_service_details', {
-        params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 1 }
+        params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 10 }
       }).then(res => {
         var tempArray = []
         var userIdTempArray = []

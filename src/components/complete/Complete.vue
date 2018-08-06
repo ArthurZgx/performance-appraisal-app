@@ -20,6 +20,8 @@
             ref="search">
     </search>
     <group class="home_group groupList">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <div>
       <div class="aGroupList" v-for="(item,index) in completeList" :key="index">
         <div class="completeClassifyTitle">{{item.department}}</div>
         <div>
@@ -31,6 +33,9 @@
           </div>
         </div>
       </div>
+      </div>
+      <load-more tip="loading" v-show="showScrollerLoading"></load-more>
+      </scroller>
     </group>
     <!-- 一键提交 -->
     <!--<sticky ref="sticky"-->
@@ -68,7 +73,7 @@
 </template>
 
 <script>
-  import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast } from 'vux'
+  import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, Scroller, LoadMore } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
   // import { paramEncode } from '@/utils'
@@ -89,7 +94,9 @@
       Sticky,
       FlexboxItem,
       XDialog,
-      Toast
+      Toast,
+      Scroller,
+      LoadMore
     },
     data() {
       return {
@@ -102,27 +109,11 @@
         showSubmitDialog: false,
         showSubmitToast: false,
         showSubmitErrorToast: false,
-        completeList: [
-          // {
-          //   title: '技术部',
-          //   list: [
-          //     { name: '张三', time: '2018-08-08', checked: false },
-          //     { name: '刘备', time: '2018-08-08', checked: false }
-          //   ]
-          // },
-          // {
-          //   title: '法务部',
-          //   list: [{ name: '李四', time: '2018-08-08', checked: false }]
-          // },
-          // {
-          //   title: '宣传部',
-          //   list: [{ name: '王五', time: '2018-08-08', checked: false }]
-          // },
-          // {
-          //   title: '外交部',
-          //   list: [{ name: '赵六', time: '2018-08-08', checked: false }]
-          // }
-        ]
+        completeList: [],
+        showScrollerLoading: true,
+        pageNo: 1,
+        onFacting: false
+
       }
     },
     created() {
@@ -144,6 +135,20 @@
       //     }
       //   }
       // },
+      onScrollBottom() {
+        // 滑动触底
+        if (this.completeList.length >= 1) {
+          if (!this.onFacting) {
+            console.log('运行了')
+            this.pageNo = this.pageNo + 1
+            this.onFacting = true
+            setTimeout(() => {
+              this.getDatas()
+              this.onFacting = false
+            }, 1000)
+          }
+        }
+      },
       // 跳转至home
       gotToTaskList() {
         this.$router.push({ name: 'home' })
@@ -160,7 +165,7 @@
         }
         // 请求任务明细表中评价人为当前用户并且status=0的数据
         request('main_job_details', {
-          params: { filters: filters1 }
+          params: { filters: filters1, pageNo: this.pageNo, pageSize: 10 }
         }).then(res => {
           console.log('工作任务明细表', res.data)
           const resAll = res.data
@@ -188,6 +193,7 @@
             }).then(res2 => {
               console.log('主表+用户表', res2.data)
               const res2All = res2.data
+              var tempArray = []
               if (res2All.length) {
                 _.each(res2All, function(item, key) {
                   const temp = { department: '', list: [] }
@@ -195,8 +201,12 @@
                   item.superior.time = item.superior.createTime.split(' ')[0]
                   item.superior.userName = item.includes.hm_personnel.name
                   temp.list.push(item.superior)
-                  self.completeList.push(temp)
+                  tempArray.push(temp)
                 })
+                if (tempArray.length < 10) {
+                  self.showScrollerLoading = false
+                }
+                self.completeList = self.completeList.concat(tempArray)
                 console.log('completeList', self.completeList)
               }
             })
@@ -279,129 +289,129 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  .weui-search-bar__cancel-btn {
-    display: block;
-  }
-  .complete .vux-sticky-box {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-  }
-  .groupList {
-    /*padding-bottom: 50px;*/
-    padding: 0 10px;
-  }
-  .aListData {
-    display: flex;
-    flex-direction: row;
-    padding: 10px 0;
-  }
-  .completeClassifyTitle {
-    padding: 10px 5px;
-    border-bottom: 1px solid #eee;
-    color: #666;
-    font-size: 14px;
-  }
-  .listCheck {
-    height: 50px;
-    line-height: 50px;
-  }
-  .listInfo {
-    height: 50px;
-    margin-left: 10px;
-    line-height: 25px;
-  }
-  .listInfoName {
-    font-size: 16px;
-    color: #333;
-  }
-  .listInfoTime {
-    font-size: 13px;
-    color: #888;
-  }
-  .aListData {
-    border-bottom: 1px solid #eee;
-  }
+.weui-search-bar__cancel-btn {
+  display: block;
+}
+.complete .vux-sticky-box {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+.groupList {
+  /*padding-bottom: 50px;*/
+  padding: 0 10px;
+}
+.aListData {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0;
+}
+.completeClassifyTitle {
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  font-size: 14px;
+}
+.listCheck {
+  height: 50px;
+  line-height: 50px;
+}
+.listInfo {
+  height: 50px;
+  margin-left: 10px;
+  line-height: 25px;
+}
+.listInfoName {
+  font-size: 16px;
+  color: #333;
+}
+.listInfoTime {
+  font-size: 13px;
+  color: #888;
+}
+.aListData {
+  border-bottom: 1px solid #eee;
+}
 
-  .weui-dialog {
-    border-radius: 8px;
-    padding-bottom: 8px;
-    height: 150px;
-    max-width: 400px;
-  }
-  .dialog-title {
-    color: #666;
-  }
-  .img-box {
-    overflow: hidden;
-  }
-  .vux-close {
-    margin-top: 8px;
-    margin-bottom: 8px;
-  }
-  .img-box {
-    float: left;
-    background: #e11c1c;
-    display: block;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    margin-left: 20px;
-    margin-top: 20px;
-  }
-  .img-box img {
-    height: 50%;
-    margin-top: 11px;
-  }
-  .box-title {
-    line-height: 20px;
-    margin-top: 20px;
-    text-align: left;
-    margin-left: 90px;
-    margin-right: 20px;
-  }
-  .vux-sure {
-    color: #e11c1c;
-    margin-left: 20px;
-  }
-  .bottomBtn {
-    position: absolute;
-    bottom: 7px;
-    right: 10px;
-  }
-  .my-check-icon {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    background: white;
-    position: relative;
-    margin-left: 20px;
-    border: 1px solid #c7c7c7;
-    margin-right: 10px;
-    margin-top: 15px;
-  }
-  .my-check-icon-clicked {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    margin-top: 15px;
-    background: #3891f0;
-    border: 1px solid #3891f0;
-    position: relative;
-    margin-left: 20px;
-    margin-right: 10px;
-  }
-  .my-check-icon-clicked::after {
-    content: '\00a0';
-    display: inline-block;
-    border: 2px solid #fff;
-    border-top-width: 0;
-    border-right-width: 0;
-    width: 10px;
-    height: 5px;
-    -webkit-transform: rotate(-50deg);
-    position: absolute;
-    top: 2px;
-    left: 1px;
-  }
+.weui-dialog {
+  border-radius: 8px;
+  padding-bottom: 8px;
+  height: 150px;
+  max-width: 400px;
+}
+.dialog-title {
+  color: #666;
+}
+.img-box {
+  overflow: hidden;
+}
+.vux-close {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.img-box {
+  float: left;
+  background: #e11c1c;
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.img-box img {
+  height: 50%;
+  margin-top: 11px;
+}
+.box-title {
+  line-height: 20px;
+  margin-top: 20px;
+  text-align: left;
+  margin-left: 90px;
+  margin-right: 20px;
+}
+.vux-sure {
+  color: #e11c1c;
+  margin-left: 20px;
+}
+.bottomBtn {
+  position: absolute;
+  bottom: 7px;
+  right: 10px;
+}
+.my-check-icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background: white;
+  position: relative;
+  margin-left: 20px;
+  border: 1px solid #c7c7c7;
+  margin-right: 10px;
+  margin-top: 15px;
+}
+.my-check-icon-clicked {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-top: 15px;
+  background: #3891f0;
+  border: 1px solid #3891f0;
+  position: relative;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.my-check-icon-clicked::after {
+  content: '\00a0';
+  display: inline-block;
+  border: 2px solid #fff;
+  border-top-width: 0;
+  border-right-width: 0;
+  width: 10px;
+  height: 5px;
+  -webkit-transform: rotate(-50deg);
+  position: absolute;
+  top: 2px;
+  left: 1px;
+}
 </style>

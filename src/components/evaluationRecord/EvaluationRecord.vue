@@ -98,14 +98,19 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
       @click.native="goTo(item.id,item.type,item.status)"></cell>
+      </div>
+      <load-more tip="loading" v-show="showScrollerLoading"></load-more>
+    </scroller> 
     </group>
   </div>
 </template>
 
 <script>
-  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar } from 'vux'
+  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore } from 'vux'
   import request from '../../../src/utils/request.js'
 
   export default {
@@ -119,7 +124,9 @@
       Panel,
       XHeader,
       Radio,
-      InlineCalendar
+      InlineCalendar,
+      Scroller,
+      LoadMore
     },
     data() {
       return {
@@ -142,41 +149,64 @@
         jobDataList: [],
         selectedOptionType: '',
         pageType: '',
-        tempDataList: []
+        tempDataList: [],
+        showScrollerLoading: true,
+        pageNo: 1,
+        onFacting: false,
+        pageSize: 5
       }
     },
     mounted() {
+      // 初始化数据
+      this.initData()
       // this.list.push(JSON.parse(localStorage.getItem('serveList')))
       // _.each(this.list, function(item, key) {
       //   item.title = item.name
       //   item.desc = item.time
       // })
       // console.log(this.list)
-      this.pageType = this.$route.params.type || localStorage.getItem('selectedOptionType')
-      if (this.$route.params.type) {
-        localStorage.setItem('selectedOptionType', this.$route.params.type)
-      }
-      var type = this.$route.params.type || localStorage.getItem('selectedOptionType')
-      switch (type) {
-        // 如果是已提交
-        case 'alreadySubmit':
-          this.getDatas(2, 2)
-          break
-          // 如果是已过期
-        case 'pastSubmit':
-          this.getDatas(3, 3)
-          break
-          // 如果是未提交
-        case 'inSubmit':
-          this.getDatas(2, 2, 'lessThan')
-          break
-      }
+      // 判断选择进入的页面类型,并设置localStorage
       // request('main_job_service_evaluations').then(res => {
       //   this.allDataList = res.data
       //   this.list = res.data
       // })
     },
     methods: {
+      onScrollBottom() {
+        // 滑动触底
+        if (this.list.length >= 1) {
+          if (!this.onFacting) {
+            console.log('运行了')
+            this.pageNo = this.pageNo + 1
+            this.onFacting = true
+            setTimeout(() => {
+              this.getDatas()
+              this.onFacting = false
+            }, 1000)
+          }
+        }
+      },
+      initData() {
+        this.pageType = this.$route.params.type || localStorage.getItem('selectedOptionType')
+        if (this.$route.params.type) {
+          localStorage.setItem('selectedOptionType', this.$route.params.type)
+        }
+        var type = this.$route.params.type || localStorage.getItem('selectedOptionType')
+        switch (type) {
+          // 如果是已提交
+          case 'alreadySubmit':
+            this.getDatas(2, 2)
+            break
+            // 如果是已过期
+          case 'pastSubmit':
+            this.getDatas(3, 3)
+            break
+            // 如果是未提交
+          case 'inSubmit':
+            this.getDatas(2, 2, 'lessThan')
+            break
+        }
+      },
       onImgError(item, $event) {
         console.log(item, $event)
       },
@@ -259,6 +289,9 @@
       },
       // 获取数据
       getDatas(param1, param2, type) {
+        if (this.pageSize === 0) {
+          return false
+        }
         var userId = localStorage.getItem('userId')
         if (type === undefined) {
           type = 'equalTo'
@@ -268,13 +301,21 @@
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
         request('main_service_details', {
-          params: { filters: filter, includes: includes }
+          params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
         }).then(res => {
           var tempArray = []
           for (var i = 0, len = res.data.length; i < len; i++) {
+            // 如果数据格式错误就分配一个参数
             if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
               res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
             }
+            if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
+              res.data[i].includes.main_job_service_evaluation.title = '错误数据'
+              res.data[i].includes.main_job_service_evaluation.type = -1
+              res.data[i].superior.status = -1
+              res.data[i].includes.main_job_service_evaluation.id = -1
+            }
+            // 压入数据
             tempArray.push({
               title: res.data[i].includes.main_job_service_evaluation.title,
               date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
@@ -283,13 +324,16 @@
               id: res.data[i].includes.main_job_service_evaluation.id
             })
           }
-          console.log(this.serviceDataList)
+          // 获取数据
           this.serviceDataList = tempArray
+          if (this.serviceDataList.length < this.pageSize) {
+            this.pageSize = 10 - this.serviceDataList.length
+          }
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
           // 再次请求数据
           request('main_job_details', {
-            params: { filters: filter, includes: includes }
+            params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
           }).then(res => {
             tempArray = []
             for (var i = 0, len = res.data.length; i < len; i++) {
@@ -301,15 +345,27 @@
                 id: res.data[i].includes.main_job_service_evaluation.id
               })
             }
-            for (var a = 0, b = tempArray.length - 1; a < b; a++) {
-              for (var c = 1, d = tempArray.length; c < d; c++) {
+            // 去除重复数据
+            for (var a = 0; a < tempArray.length - 1; a++) {
+              for (var c = 1; c < tempArray.length; c++) {
                 if (tempArray[a].title === tempArray[c].title && tempArray[a].id === tempArray[c].id) {
                   tempArray.splice(c, 1)
                 }
               }
             }
             this.jobDataList = tempArray
-            this.list = this.serviceDataList.concat(this.jobDataList)
+            // 根据获取的数据条数判断下次应该加载多少条数据
+            if (this.jobDataList.length < this.pageSize && this.serviceDataList.length < this.pageSize) {
+              this.pageSize = 0
+            } else if (this.jobDataList.length < this.pageSize || this.serviceDataList.length < this.pageSize) {
+              this.pageSize = 10
+            }
+            // 如果获取的总数据小于10条就关闭加载显示
+            if (this.serviceDataList.length + this.jobDataList.length < 10) {
+              this.showScrollerLoading = false
+            }
+            // 拼接数据
+            this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
           })
         })
       },

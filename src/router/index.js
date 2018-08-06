@@ -123,16 +123,16 @@ export default new Router({
       name: 'serveEvaluate',
       component: _import('serveEvaluate/ServeEvaluate')
     },
-    // {
-    //   path: '/bindingPhone',
-    //   name: 'bindingPhone',
-    //   component: _import('bindingPhone/bindingPhone.vue')
-    // },
-    // {
-    //   path: '/alreadyBound',
-    //   name: 'alreadyBound',
-    //   component: _import('bindingPhone/alreadyBound.vue')
-    // },
+    {
+      path: '/bindingPhone',
+      name: 'bindingPhone',
+      component: _import('bindingPhone/bindingPhone')
+    },
+    {
+      path: '/alreadyBound',
+      name: 'alreadyBound',
+      component: _import('bindingPhone/alreadyBound')
+    },
 
     // {
     //   path: '/home',
