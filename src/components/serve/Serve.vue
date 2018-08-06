@@ -79,7 +79,7 @@
 
 <script>
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber } from 'vux'
-// import _ from 'lodash'
+import _ from 'lodash'
 import request from '@/utils/request'
 import { paramEncode } from '@/utils'
 

@@ -57,6 +57,7 @@
 </template>
 <script>
 import { XHeader, Toast, Icon, XNumber, Group, CellBox, Cell, Flexbox, FlexboxItem, XTextarea, XButton } from 'vux'
+import _ from 'lodash'
 import { setTimeout } from 'timers'
 import request from '@/utils/request'
 import { paramEncode } from '@/utils'
