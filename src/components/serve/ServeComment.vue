@@ -22,7 +22,7 @@
                     v-model="list.badCommentText"
                     @on-focus="onFocus()"
                     class="serveComment_textarea"
-                    style="height: 60px;border: 1px solid rgba(56,145,240,0.5);"
+                    style="height: 62px;border: 1px solid rgba(56,145,240,0.5);"
                     @on-blur="onBlur()">
         </x-textarea>
       </group>
@@ -187,12 +187,15 @@ export default {
 .serveComment {
   background: #fff;
 }
-.serveTitle {
+.serveComment .serveTitle {
   padding: 5px 0 5px;
   text-align: center;
   font-size: 18px;
   color: #333;
   border-bottom: 1px solid rgba(56, 145, 240, 0.5);
+}
+.serveComment .weui-toast {
+  border-radius: 20px;
 }
 .serveComment_div {
   background: #fff;
@@ -201,48 +204,48 @@ export default {
   margin: 0 15px;
   padding: 10px;
 }
-.serveComment_div .weui-cells{
+.serveComment_div .weui-cells {
   margin-top: 0px;
 }
-.serveComment .weui-cell::before{
+.serveComment .weui-cell::before {
   border-top: none;
 }
-.serveComment .weui-cells::before{
+.serveComment .weui-cells::before {
   border: none;
 }
-.serveComment .weui-cells::after{
+.serveComment .weui-cells::after {
   border: none;
 }
-.serveComment .commentNumber .vux-no-group-title .weui-cell{
+.serveComment .commentNumber .vux-no-group-title .weui-cell {
   padding: 5px 5px;
 }
 .vux-number-selector svg {
   /*fill: #3891F0 !important;*/
 }
-.weui-cells__title {
+.serveComment .weui-cells__title {
   font-size: 16px;
 }
-.commentTable {
+.serveComment .commentTable {
   width: 90%;
   height: 700px;
   border: 1px solid #ccc;
   margin: 10px auto;
 }
-.commentTableTitle {
+.serveComment .commentTableTitle {
   text-align: center;
   padding: 15px 0;
   font-weight: bold;
   border-bottom: 1px solid #eee;
 }
-.commentTableContent {
+.serveComment .commentTableContent {
   color: #666;
 }
-.commentTableContentTitle {
+.serveComment .commentTableContentTitle {
   padding: 10px 15px;
   border-bottom: 1px solid #eee;
 }
-.minus,
-.plus {
+.serveComment .minus,
+.serveComment .plus {
   width: 22px;
   height: 22px;
   text-align: center;
@@ -255,17 +258,17 @@ export default {
   margin: 0 10px;
   color: #999;
 }
-.commentTableContentGood,
-.commentTableContentBad {
+.serveComment .commentTableContentGood,
+.serveComment .commentTableContentBad {
   font-weight: normal;
   padding: 15px 30px;
 }
-.commentTableComment {
+.serveComment .commentTableComment {
   width: 100%;
 
   text-align: center;
 }
-.commentInput {
+.serveComment .commentInput {
   width: 90%;
   height: 200px;
   margin: 10px auto;
@@ -273,12 +276,12 @@ export default {
   background: #fbf9fe;
   border: 1px solid #eee;
 }
-.commentTableFooterBtns {
+.serveComment .commentTableFooterBtns {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-.commentTableFooterBtn {
+.serveComment .commentTableFooterBtn {
   width: 100px;
   height: 30px;
   text-align: center;
@@ -286,7 +289,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-.primaryBtn {
+.serveComment .primaryBtn {
   background: #3891f0;
   color: white;
   margin-left: 30px;

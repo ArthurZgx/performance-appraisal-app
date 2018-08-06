@@ -19,6 +19,8 @@
     </search>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
         <div class="serveClassifyTitle">{{item.title}}</div>
         <div>
@@ -40,6 +42,9 @@
            </div>
         </div>
       </div>
+      </div>
+      <load-more tip="loading" v-show="showScrollerLoading"></load-more>
+    </scroller>      
     </group>
     <!-- 一键提交 -->
     <sticky ref="sticky"
@@ -78,10 +83,11 @@
 </template>
 
 <script>
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber, Scroller, LoadMore } from 'vux'
 import _ from 'lodash'
 import request from '@/utils/request'
 import { paramEncode } from '@/utils'
+import { setTimeout } from 'timers'
 
 var i = 0
 var j = 0
@@ -103,7 +109,9 @@ export default {
     FlexboxItem,
     XDialog,
     Toast,
-    InlineXNumber
+    InlineXNumber,
+    Scroller,
+    LoadMore
   },
   data() {
     return {
@@ -116,15 +124,10 @@ export default {
       showSubmitDialog: false,
       showSubmitToast: false,
       showSubmitErrorToast: false,
-      serveList: [
-        // {
-        //   title: '技术部',
-        //   list: [ // status 0 未评价 1 已评价 2 已过期
-        //     { name: '张三', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 },
-        //     { name: '刘备', time: '2018-08-08', checked: false, status: '0', type: '1', goodCommentNumber: 0 }
-        //   ]
-        // }
-      ]
+      serveList: [],
+      showScrollerLoading: true,
+      pageNo: 1,
+      onFacting: false
     }
   },
   created() {
@@ -155,6 +158,20 @@ export default {
     searchSubmit() {},
     searchChange() {},
     clickList() {},
+    onScrollBottom() {
+      // 滑动触底
+      if (this.serveList.length >= 1) {
+        if (!this.onFacting) {
+          console.log('运行了')
+          this.pageNo = this.pageNo + 1
+          this.onFacting = true
+          setTimeout(() => {
+            this.getDatas()
+            this.onFacting = false
+          }, 1000)
+        }
+      }
+    },
     // 获取服务质量明细表数据
     getDatas() {
       var userId = '-1062673909925590171'
@@ -163,11 +180,12 @@ export default {
       var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
       // 请求数据
       request('main_service_details', {
-        params: { filters: filter, includes: includes }
+        params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 1 }
       }).then(res => {
         var tempArray = []
         var userIdTempArray = []
         var tempArray2 = []
+        console.log(res)
         for (var i = 0, len = res.data.length; i < len; i++) {
           if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
             res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
@@ -212,7 +230,10 @@ export default {
               }
             }
           }
-          this.serveList = tempArray2
+          this.serveList = this.serveList.concat(tempArray2)
+          if (this.serveList.length < 10) {
+            this.showScrollerLoading = false
+          }
           console.log(210, this.serveList)
         })
       })
@@ -327,14 +348,16 @@ export default {
     }
   },
   mounted() {
-
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.weui-search-bar__cancel-btn {
+<style>
+.serve .weui-toast {
+  border-radius: 25px;
+}
+.serve .weui-search-bar__cancel-btn {
   display: block;
 }
 .serve .vux-sticky-box {
@@ -342,77 +365,77 @@ export default {
   width: 100%;
   bottom: 0;
 }
-.groupList {
+.serve .groupList {
   padding-bottom: 50px;
 }
-.aListData {
+.serve .aListData {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
 }
-.serveClassifyTitle {
+.serve .serveClassifyTitle {
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
   color: #666;
   font-size: 14px;
 }
-.listCheck {
+.serve .listCheck {
   height: 30px;
   line-height: 30px;
 }
-.aListData{
+.serve .aListData {
   height: 30px;
   position: relative;
 }
-.listInfo {
+.serve .listInfo {
   height: 30px;
   margin-left: 10px;
   line-height: 30px;
   display: flex;
   flex-direction: row;
 }
-.listInfoName {
+.serve .listInfoName {
   font-size: 16px;
   color: #333;
   display: inline-block;
   width: 130px;
 }
-.good-comment-number{
+.serve .good-comment-number {
   margin-left: 0px;
   position: absolute;
   right: 0;
   top: 10px;
 }
-.listInfo .vux-inline-x-number{
+.serve .listInfo .vux-inline-x-number {
   float: right;
   margin-top: 0px;
   margin-left: 20px;
 }
-.listInfoTime {
+.serve.listInfoTime {
   font-size: 13px;
   color: #888;
 }
-.aListData {
+.serve .aListData {
   border-bottom: 1px solid #eee;
 }
 
-.weui-dialog {
+.serve .weui-dialog {
   border-radius: 8px;
   padding-bottom: 8px;
   height: 150px;
   max-width: 400px;
 }
-.dialog-title {
+.serve .dialog-title {
   color: #666;
 }
-.img-box {
+.serve .img-box {
   overflow: hidden;
 }
-.vux-close {
+.serve .vux-close {
   margin-top: 8px;
   margin-bottom: 8px;
 }
-.img-box {
+.serve .img-box {
   float: left;
   background: #e11c1c;
   display: block;
@@ -422,11 +445,11 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
 }
-.img-box img {
+.serve .img-box img {
   height: 50%;
   margin-top: 11px;
 }
-.box-title {
+.serve .box-title {
   line-height: 20px;
   margin-top: 20px;
   text-align: left;
@@ -435,16 +458,16 @@ export default {
   width: 200px;
   height: 100px;
 }
-.vux-sure {
+.serve .vux-sure {
   color: #e11c1c;
   margin-left: 20px;
 }
-.bottomBtn {
+.serve .bottomBtn {
   position: absolute;
   bottom: 7px;
   right: 10px;
 }
-.my-check-icon {
+.serve .my-check-icon {
   display: inline-block;
   width: 15px;
   height: 15px;
@@ -455,7 +478,7 @@ export default {
   margin-right: 10px;
   margin-top: 5px;
 }
-.my-check-icon-clicked {
+.serve .my-check-icon-clicked {
   display: inline-block;
   width: 15px;
   height: 15px;
@@ -466,7 +489,7 @@ export default {
   margin-left: 20px;
   margin-right: 10px;
 }
-.my-check-icon-clicked::after {
+.serve .my-check-icon-clicked::after {
   content: '\00a0';
   display: inline-block;
   border: 2px solid #fff;
