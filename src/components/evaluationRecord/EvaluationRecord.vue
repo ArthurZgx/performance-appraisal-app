@@ -36,7 +36,6 @@
           :border-intent="false"
           :arrow-direction="chakan ? 'up' : 'down'"
           @click.native="chakan = !chakan,kaoping = false, riqi = false" ></cell>
-
         <!-- <template v-if="chakan">
           <cell-box :border-intent="false" class="sub-item">全部</cell-box>
           <cell-box :border-intent="false" class="sub-item">已查看类型</cell-box>
@@ -44,15 +43,12 @@
         </template> -->
       </div></flexbox-item>
       <flexbox-item><div class="flex-demo">
-
-
         <cell
           :title="('日期')"
           is-link
           :border-intent="false"
           :arrow-direction="riqi ? 'up' : 'down'"
           @click.native="riqi = !riqi,kaoping = false,chakan = false" ></cell>
-
         <!-- <template v-if="riqi">
           <cell-box :border-intent="false" class="sub-item">2018年6月</cell-box>
           <cell-box :border-intent="false" class="sub-item">2018年5月</cell-box>
@@ -180,7 +176,7 @@
             this.pageNo = this.pageNo + 1
             this.onFacting = true
             setTimeout(() => {
-              this.getDatas()
+              this.initData()
               this.onFacting = false
             }, 1000)
           }
@@ -231,47 +227,57 @@
       },
       // 类型筛选
       evaluationType() {
-        console.log(this.r1)
-        switch (this.r1) {
-          case '全部类型':
-            this.list = this.serviceDataList.concat(this.jobDataList)
-            break
-          case '服务质量评价':
-            this.list = this.serviceDataList
-            break
-          case '工作完成评价':
-            this.list = this.jobDataList
-            break
-        }
+        this.showScrollerLoading = true
+        this.list = []
+        this.pageSize = 5
+        this.pageNo = 1
+        this.initData()
+        // console.log(this.r1)
+        // switch (this.r1) {
+        //   case '全部类型':
+        //     this.list = this.serviceDataList.concat(this.jobDataList)
+        //     break
+        //   case '服务质量评价':
+        //     this.list = this.serviceDataList
+        //     break
+        //   case '工作完成评价':
+        //     this.list = this.jobDataList
+        //     break
+        // }
       },
       // 是否查看筛选
       watchEvaluationType() {
-        this.list = this.serviceDataList.concat(this.jobDataList)
-        var tempDataList = []
-        switch (this.r2) {
-          case '全部':
-            break
-          case '已查看通知':
-            tempDataList = []
-            console.log(this.list)
-            for (var i = 0, len = this.list.length; i < len; i++) {
-              if (this.list[i].status !== 0) {
-                tempDataList.push(this.list[i])
-              }
-              console.log(tempDataList)
-            }
-            this.list = tempDataList
-            break
-          case '未查看通知':
-            tempDataList = []
-            for (i = 0, len = this.list.length; i < len; i++) {
-              if (this.list[i].status === 0) {
-                tempDataList.push(this.list[i])
-              }
-            }
-            this.list = tempDataList
-            break
-        }
+        this.showScrollerLoading = true
+        this.list = []
+        this.pageSize = 5
+        this.pageNo = 1
+        this.initData()
+        // this.list = this.serviceDataList.concat(this.jobDataList)
+        // var tempDataList = []
+        // switch (this.r2) {
+        //   case '全部':
+        //     break
+        //   case '已查看通知':
+        //     tempDataList = []
+        //     console.log(this.list)
+        //     for (var i = 0, len = this.list.length; i < len; i++) {
+        //       if (this.list[i].status !== 0) {
+        //         tempDataList.push(this.list[i])
+        //       }
+        //       console.log(tempDataList)
+        //     }
+        //     this.list = tempDataList
+        //     break
+        //   case '未查看通知':
+        //     tempDataList = []
+        //     for (i = 0, len = this.list.length; i < len; i++) {
+        //       if (this.list[i].status === 0) {
+        //         tempDataList.push(this.list[i])
+        //       }
+        //     }
+        //     this.list = tempDataList
+        //     break
+        // }
       },
       // 根据日期筛选
       selectedDateChange() {
@@ -295,6 +301,23 @@
         var userId = localStorage.getItem('userId')
         if (type === undefined) {
           type = 'equalTo'
+        }
+        // 判断选择类型
+        if (this.r1 === '全部类型') {
+          this.pageSize = 5
+        } else if (this.r1 === '服务质量评价') {
+          this.pageSize = 10
+        } else if (this.r1 === '工作完成评价') {
+          this.pageSize = 0
+        }
+        // 判断是否查看
+        if (this.r2 === '已查看通知') {
+          type = 'notEqualTo'
+          param1 = 0
+          param2 = 0
+        } else if (this.r2 === '未查看通知') {
+          param1 = 0
+          param2 = 0
         }
         // 设置过滤器
         var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
@@ -326,8 +349,10 @@
           }
           // 获取数据
           this.serviceDataList = tempArray
-          if (this.serviceDataList.length < this.pageSize) {
+          if (this.pageSize === '全部类型') {
             this.pageSize = 10 - this.serviceDataList.length
+          } else {
+            this.pageSize = 10 - this.pageSize
           }
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
