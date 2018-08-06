@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="evaluationRecord">
 
     <div class="vux-demo">
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
@@ -80,13 +80,18 @@
           </flexbox-item>         
         </flexbox>
       </flexbox> -->
-  <inline-calendar
+  <!-- <inline-calendar
   ref="calendar"
   @on-change="onDateChange"
   class="inline-calendar-demo"
   v-model="selectedData"
-  >
-  </inline-calendar>
+  > -->
+  <!-- </inline-calendar> -->
+  <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM"></datetime-view>
+  <flexbox>
+    <flexbox-item><x-button @click.native="clearSelectedDate">清空</x-button></flexbox-item>
+    <flexbox-item><x-button @click.native="selectedDateChange" type="primary">确认</x-button></flexbox-item>
+  </flexbox>
     </group>
     <!-- 选中菜单栏设置半透明蒙版 -->
     <div class="mask" v-if="riqi||chakan||kaoping" @click="riqi=false,chakan = false, kaoping = false"></div>
@@ -102,11 +107,12 @@
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
     </scroller> 
     </group>
+    <toast v-model="showErrorDateToast" type="text" style="width:12.6em;" :time="800" is-show-mask text="仅有一年内数据" position="bottom"></toast>
   </div>
 </template>
 
 <script>
-  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore } from 'vux'
+  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore, DatetimeView, XButton, Toast } from 'vux'
   import request from '../../../src/utils/request.js'
 
   export default {
@@ -122,7 +128,10 @@
       Radio,
       InlineCalendar,
       Scroller,
-      LoadMore
+      LoadMore,
+      DatetimeView,
+      XButton,
+      Toast
     },
     data() {
       return {
@@ -134,12 +143,9 @@
         riqi: false,
         radio001: ['全部类型', '服务质量评价', '工作完成评价'],
         radio002: ['全部', '已查看通知', '未查看通知'],
-        years: ['2018', '2017', '2016', '2015'],
-        month: ['8', '7', '6', '5', '4', '3'],
-        selectedYearIndex: 0,
-        selectedMouthIndex: 0,
         type: '2',
-        selectedData: '2018-08-01',
+        selectedDate: '2018-08',
+        isSelectedDate: false,
         list: [],
         serviceDataList: [],
         jobDataList: [],
@@ -149,7 +155,8 @@
         showScrollerLoading: true,
         pageNo: 1,
         onFacting: false,
-        pageSize: 5
+        pageSize: 5,
+        showErrorDateToast: false
       }
     },
     mounted() {
@@ -279,19 +286,37 @@
         //     break
         // }
       },
+      clearSelectedDate() {
+        console.log('确实清空了')
+        this.isSelectedDate = false
+        this.closeRadioWindow()
+        this.showScrollerLoading = true
+        this.list = []
+        this.pageSize = 5
+        this.pageNo = 1
+        this.initData()
+      },
       // 根据日期筛选
       selectedDateChange() {
-        this.list = this.serviceDataList.concat(this.jobDataList)
-        var tempDataList = []
-        for (var i = 0, len = this.list.length; i < len; i++) {
-          console.log(this.list[i].date)
-          console.log(this.selectedData)
-          console.log(this.list[i].date === this.selectedData)
-          if (this.list[i].date === this.selectedData) {
-            tempDataList.push(this.list[i])
-          }
+        var year = this.selectedDate.split('-')[0]
+        var month = this.selectedDate.split('-')[1]
+        var date = new Date()
+        var year1 = date.getFullYear()
+        var month1 = date.getMonth() + 1
+        if (month1 < 10) {
+          month1 = '0' + month1
         }
-        this.list = tempDataList
+        if ((year1 - year === 1 && month > month1) || (year1 - year === 0 && month1 >= month)) {
+          this.isSelectedDate = true
+          this.closeRadioWindow()
+          this.showScrollerLoading = true
+          this.list = []
+          this.pageSize = 5
+          this.pageNo = 1
+          this.initData()
+        } else {
+          this.showErrorDateToast = true
+        }
       },
       // 获取数据
       getDatas(param1, param2, type) {
@@ -321,6 +346,12 @@
         }
         // 设置过滤器
         var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+        // 如果开启了时间选择
+        if (this.isSelectedDate) {
+          var year = this.selectedDate.split('-')[0]
+          var month = this.selectedDate.split('-')[1]
+          filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
+        }
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
         request('main_service_details', {
@@ -356,6 +387,11 @@
           }
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+          if (this.isSelectedDate) {
+            var year = this.selectedDate.split('-')[0]
+            var month = this.selectedDate.split('-')[1]
+            filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
+          }
           // 再次请求数据
           request('main_job_details', {
             params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
@@ -433,10 +469,6 @@
       r2: function() {
         this.closeRadioWindow()
         this.watchEvaluationType()
-      },
-      selectedData: function() {
-        this.closeRadioWindow()
-        this.selectedDateChange()
       }
     }
   }
@@ -444,32 +476,32 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component o
 nly -->
-<style scoped>
-h1,
-h2 {
+<style>
+.evaluationRecord h1,
+.evaluationRecord h2 {
   font-weight: normal;
 }
-ul {
+.evaluationRecord ul {
   list-style-type: none;
   padding: 0;
 }
-li {
+.evaluationRecord li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
+.evaluationRecord a {
   color: #42b983;
 }
-.sub-item {
+.evaluationRecord .sub-item {
   color: #888;
 }
-.slide {
+.evaluationRecord .slide {
   padding: 0 20px;
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.5s cubic-bezier(0, 1, 0, 1) -0.1s;
 }
-.mask {
+.evaluationRecord .mask {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -477,7 +509,7 @@ a {
   z-index: 100;
 }
 @import '~vux/src/styles/1px.less';
-.flex-demo {
+.evaluationRecord .flex-demo {
   width: 33;
   text-align: center;
   color: #333;
@@ -485,8 +517,11 @@ a {
   border-radius: 4px;
   background-clip: padding-box;
 }
-.weui-panel {
+.evaluationRecord .weui-panel {
   margin-top: 0;
   font-family: 'PingFangSC-Medium';
+}
+.evaluationRecord .weui-toast.weui-toast_text {
+  border-radius: 20px;
 }
 </style>
