@@ -5,14 +5,25 @@
                 @on-click-more="showMenus = true">
                 个人工作完成度评价
       </x-header>
-      <group>
-          <cell v-for="(alist,index) in list" :key="index" :title="alist.taskName" is-link :link="{name:'userJobCompleteResult',params:{id:alist.id}}"></cell>
-      </group>
+      <!-- <group> -->
+          <!-- <cell v-for="(alist,index) in list" :key="index" :title="alist.taskName" is-link :link="{name:'userJobCompleteResult',params:{id:alist.id}}"></cell> -->
+        <x-table full-bordered style="width:90%;margin:10px auto">
+          <thead>
+            <td>任务名称</td><td>权重</td>
+          </thead>
+          <tbody>
+            <tr v-for="(alist,index) in list" :key="index">
+              <td>{{alist.taskName}}</td>
+              <td>{{alist.weights}}%</td>
+            </tr>
+          </tbody>
+        </x-table>
+      <!-- </group> -->
     </div>
 </template>
 
 <script>
-import { Group, Cell, XHeader } from 'vux'
+import { Group, Cell, XHeader, XTable } from 'vux'
 import request from '../../../src/utils/request.js'
 export default {
   data() {
@@ -23,14 +34,15 @@ export default {
   components: {
     Group,
     Cell,
-    XHeader
+    XHeader,
+    XTable
   },
   methods: {
     getDatas() {
       //   获取数据
-      var userId = localStorage.getItem('userId')
-      var filter = "{'main_job_detail':{'status':{equalTo:'2'},'user_id':{equalTo:'" + userId + "'}}}"
-      request('main_job_details', {
+      var userId = '-1006996897483634546'
+      var filter = "{'main_annual_work_task':{'user_id':{equalTo:'" + userId + "'}}}"
+      request('main_annual_work_tasks', {
         params: {
           filters: filter
         }
