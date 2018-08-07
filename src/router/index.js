@@ -133,7 +133,16 @@ export default new Router({
       name: 'alreadyBound',
       component: _import('bindingPhone/alreadyBound')
     },
-
+    {
+      path: '/userJobComplete',
+      name: 'userJobComplete',
+      component: _import('userJobComplete/userJobComplete')
+    },
+    {
+      path: '/userJobCompleteResult',
+      name: 'userJobCompleteResult',
+      component: _import('userJobComplete/userJobCompleteResult')
+    },
     // {
     //   path: '/home',
     //   name: 'Home',

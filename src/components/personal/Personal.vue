@@ -39,8 +39,18 @@
         </div>
         </router-link>
       </flexbox-item>
+    </flexbox>
+    <flexbox class="personal-nav-list">
       <flexbox-item>
-        <router-link to="/alreadyBound">        
+        <router-link to="/userJobComplete">        
+        <div class="a-nav-href">
+          <img src="../../assets/job.png" alt="">
+          <div>工作评价</div>
+        </div>
+        </router-link>
+      </flexbox-item>
+            <flexbox-item>
+        <router-link to="/alreadyBound">      
         <div class="a-nav-href">
           <img src="../../assets/TheBindingOfIdentity.png" alt="">
           <div>身份绑定</div>
@@ -48,6 +58,7 @@
         </router-link>
       </flexbox-item>
     </flexbox>
+    
     </div>
 
     <tabbar>

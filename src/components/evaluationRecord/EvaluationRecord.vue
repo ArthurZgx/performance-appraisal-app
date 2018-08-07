@@ -156,12 +156,20 @@
         pageNo: 1,
         onFacting: false,
         pageSize: 5,
-        showErrorDateToast: false
+        showErrorDateToast: false,
+        year: 2018,
+        month: 8
       }
     },
     mounted() {
       // 初始化数据
       this.initData()
+      var date = new Date()
+      this.year = date.getFullYear()
+      this.month = date.getMonth() + 1
+      if (this.month < 10) {
+        this.month = '0' + this.month
+      }
       // this.list.push(JSON.parse(localStorage.getItem('serveList')))
       // _.each(this.list, function(item, key) {
       //   item.title = item.name
@@ -375,8 +383,21 @@
               date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
               type: res.data[i].includes.main_job_service_evaluation.type,
               status: res.data[i].superior.status,
-              id: res.data[i].includes.main_job_service_evaluation.id
+              id: res.data[i].includes.main_job_service_evaluation.id,
+              year: res.data[i].superior.year,
+              month: res.data[i].superior.month
             })
+          }
+          for (i = 0; i < tempArray.length; i++) {
+            if (tempArray[i].year === this.year) {
+              if (tempArray[i].month > this.month) {
+                tempArray.splice(i, 1)
+              }
+            } else if (tempArray[i].year === this.year - 1) {
+              if (tempArray[i].month < this.month) {
+                tempArray.splice(i, 1)
+              }
+            }
           }
           // 获取数据
           this.serviceDataList = tempArray
@@ -403,7 +424,9 @@
                 date: res.data[i].superior.year + '-' + res.data[i].superior.month,
                 type: res.data[i].includes.main_job_service_evaluation.type,
                 status: res.data[i].superior.status,
-                id: res.data[i].includes.main_job_service_evaluation.id
+                id: res.data[i].includes.main_job_service_evaluation.id,
+                year: res.data[i].superior.year,
+                month: res.data[i].superior.month
               })
             }
             // 去除重复数据
@@ -411,6 +434,17 @@
               for (var c = 1; c < tempArray.length; c++) {
                 if (tempArray[a].title === tempArray[c].title && tempArray[a].id === tempArray[c].id) {
                   tempArray.splice(c, 1)
+                }
+              }
+            }
+            for (i = 0; i < tempArray.length; i++) {
+              if (tempArray[i].year === this.year) {
+                if (tempArray[i].month > this.month) {
+                  tempArray.splice(i, 1)
+                }
+              } else if (tempArray[i].year === this.year - 1) {
+                if (tempArray[i].month < this.month) {
+                  tempArray.splice(i, 1)
                 }
               }
             }
