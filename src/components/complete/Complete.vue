@@ -1,6 +1,6 @@
 <template>
   <div class="complete">
-    <x-header :right-options="{showMore: true}"
+    <x-header :right-options="{showMore: false}"
               :left-options="{preventGoBack: true}"
               @on-click-back="gotToTaskList"
               @on-click-more="showMenus = true">
@@ -109,15 +109,16 @@
         showSubmitDialog: false,
         showSubmitToast: false,
         showSubmitErrorToast: false,
-        completeList: [],
-        showScrollerLoading: true,
+        completeList: [], // 数据列表
+        completeList2: [], // 数据列表
+        showScrollerLoading: false, // 修改第一处 改为true
         pageNo: 1,
         onFacting: false
       }
     },
     created() {
       // this.getTotalLength()
-      this.getDatas() // 获取数据
+      this.getDetailId() // 获取数据
     },
     watch: {
       // checkedAll(newValue, oldValue) {
@@ -135,25 +136,25 @@
       //   }
       // },
       onScrollBottom() {
-        // 滑动触底
-        if (this.completeList.length >= 1) {
-          if (!this.onFacting) {
-            console.log('运行了')
-            this.pageNo = this.pageNo + 1
-            this.onFacting = true
-            setTimeout(() => {
-              this.getDatas()
-              this.onFacting = false
-            }, 1000)
-          }
-        }
+        // 滑动触底  // 修改第二处 取消注释
+        // if (this.completeList.length >= 1) {
+        //   if (!this.onFacting) {
+        //     console.log('运行了')
+        //     this.pageNo = this.pageNo + 1
+        //     this.onFacting = true
+        //     setTimeout(() => {
+        //       this.getDetailId()
+        //       this.onFacting = false
+        //     }, 1000)
+        //   }
+        // }
       },
       // 跳转至home
       gotToTaskList() {
         this.$router.push({ name: 'home' })
       },
-      // 获取工作任务明细表 带主表
-      getDatas() {
+      // 获取所有工作任务明细表数据
+      getDetailId() {
         const self = this
         const userId = '-1062673909925590171'
         // 过滤条件 评价人为当前用户 状态为0
@@ -164,7 +165,7 @@
         }
         // 请求任务明细表中评价人为当前用户并且status=0的数据
         request('main_job_details', {
-          params: { filters: filters1, pageNo: this.pageNo, pageSize: 10000 }
+          params: { filters: filters1, pageNo: 1, pageSize: 10000 }
         }).then(res => {
           console.log('工作任务明细表', res.data)
           const resAll = res.data
@@ -176,42 +177,74 @@
             // 根据主表id去重
             detailIds = _.uniq(detailIds)
             console.log('去重后', detailIds)
-
-            // 请求主表带用户表
-            const filters2 = {
-              'main_job_service_evaluation': {
-                'id': { in: detailIds }
-              }
-            }
-            request('main_job_service_evaluations', {
-              params: {
-                filters: filters2,
-                includes: {
-                  'hm_personnel': { includes: ['user_id'] }}
-              }
-            }).then(res2 => {
-              console.log('主表+用户表', res2.data)
-              const res2All = res2.data
-              var tempArray = []
-              if (res2All.length) {
-                // 遍历主表和用户表数据
-                _.each(res2All, function(item, key) {
-                  const temp = { department: '', list: [] }
-                  temp.department = item.includes.hm_personnel.departmentName
-                  item.superior.time = item.superior.createTime.split(' ')[0]
-                  item.superior.userName = item.includes.hm_personnel.name
-                  temp.list.push(item.superior)
-                  tempArray.push(temp)
-                })
-                if (tempArray.length < 10) {
-                  self.showScrollerLoading = false
-                }
-                self.completeList = self.completeList.concat(tempArray)
-                console.log('completeList', self.completeList)
-              }
-            })
+            // 根据去重后的主表ID过滤出所有主表带用户表数据
+            self.getMainData(detailIds)
           }
         })
+      },
+      getMainData(detailIds) {
+        if (detailIds.length === 0) return
+        const self = this
+        // 用明细表中的字段过滤主表带用户表
+        const filters2 = {
+          'main_job_service_evaluation': {
+            'id': { in: detailIds }
+          }
+        }
+        request('main_job_service_evaluations', {
+          params: {
+            filters: filters2,
+            pageNo: 1, // 修改第三处 self.pageNo 下面 pageSize=10
+            pageSize: 10000,
+            includes: {
+              'hm_personnel': { includes: ['user_id'] }}
+          }
+        }).then(res2 => {
+          console.log('主表+用户表', res2.data)
+          const res2All = res2.data
+          const tempArray = []
+          if (res2All.length) {
+            // 遍历主表和用户表数据
+            _.each(res2All, function(item, key) {
+              const temp = { department: '', list: [] }
+              temp.department = item.includes.hm_personnel.departmentName
+              item.superior.time = item.superior.createTime.split(' ')[0]
+              item.superior.userName = item.includes.hm_personnel.name
+              temp.list.push(item.superior)
+              tempArray.push(temp)
+            })
+            if (tempArray.length <= 1) {
+              // self.showScrollerLoading = false  // 修改第四处 取消注释 并且 tempArray.length < 10
+            }
+            // self.completeList2 = self.completeList2.concat(tempArray) 修改第五处 取消注释 下一行参数改为self.completeList2
+            self.dealData(tempArray)
+            console.log('tempArray', tempArray)
+          }
+        })
+      },
+      // 对数据处理 按部门分 按首字母排序
+      dealData(tempArray) {
+        const self = this
+        let list = []
+        // 先获取所有的部门
+        _.each(tempArray, function(item, key) {
+          const temp = { department: item.department, list: [] }
+          list.push(temp)
+        })
+        // 部门去重
+        list = _.uniqWith(list, _.isEqual)
+        _.each(tempArray, function(item, key) {
+          const curItem1 = item.department
+          _.each(list, function(item2, key2) {
+            const curItem2 = item2.department
+            if (curItem1 === curItem2) {
+              item2.list.push(item.list[0])
+            }
+          })
+        })
+        // 部门排序
+        self.completeList = list
+        console.log(235, list)
       },
       searchFocus() {},
       searchCancel() {},
