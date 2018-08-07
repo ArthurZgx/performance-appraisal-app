@@ -45,7 +45,7 @@
         <router-link to="/userJobComplete">        
         <div class="a-nav-href">
           <img src="../../assets/job.png" alt="">
-          <div>工作评价</div>
+          <div>我的工作任务</div>
         </div>
         </router-link>
       </flexbox-item>
