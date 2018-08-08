@@ -241,6 +241,16 @@ export default {
               }
             }
           }
+          // 根据部门首字母进行排序
+          for (i = 0; i < tempArray2; i++) {
+            tempArray2[i].list.sort(function(param1,param2){
+              return param1.name.localeCompare(param2.name)
+            })
+            tempArray2.sort(function(param1,param2){
+              return param1.title.localeCompare(param2.title)
+            })
+          }
+          console.log(tempArray2)
           this.serveList = this.serveList.concat(tempArray2)
           if (this.serveList.length < 10) {
             this.showScrollerLoading = false
