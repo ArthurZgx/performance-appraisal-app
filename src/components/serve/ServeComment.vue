@@ -7,25 +7,25 @@
     <div class="serveComment_div">
       <!-- 展示数据 -->
       <div v-for="(list,index) in serveList" :key="index">
-      <flexbox>
-        <flexbox-item>
-          <div class="serveTitle">{{list.name}}</div>
-        </flexbox-item>
-      </flexbox>
-      <group title-color="#666" class="commentNumber">
-        <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'good')"></x-number>
-        <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'bad')"></x-number>
-      </group>
-      <!-- 差评说明 -->
-      <group>
-        <x-textarea placeholder="差评说明"
-                    v-model="list.badCommentText"
-                    @on-focus="onFocus()"
-                    class="serveComment_textarea"
-                    style="height: 62px;border: 1px solid rgba(56,145,240,0.5);"
-                    @on-blur="onBlur()">
-        </x-textarea>
-      </group>
+        <flexbox>
+          <flexbox-item>
+            <div class="serveTitle">{{list.name}}</div>
+          </flexbox-item>
+        </flexbox>
+        <group title-color="#666" class="commentNumber">
+          <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'good')"></x-number>
+          <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'bad')"></x-number>
+        </group>
+        <!-- 差评说明 -->
+        <group>
+          <x-textarea placeholder="差评说明"
+                      v-model="list.badCommentText"
+                      @on-focus="onFocus()"
+                      class="serveComment_textarea"
+                      style="height: 62px;border: 1px solid rgba(56,145,240,0.5);"
+                      @on-blur="onBlur()">
+          </x-textarea>
+        </group>
       </div>
     </div>
 

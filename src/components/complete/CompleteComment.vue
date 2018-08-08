@@ -217,6 +217,7 @@
       cancleEvent() {
         console.log('取消')
         const self = this
+        if (self.taskList.length < 1) return
         _.each(self.taskList, function(item, key) {
           item.clickCompleted = false
           item.clickNoCompleted = false
@@ -230,6 +231,7 @@
       submitEvent() {
         // const json = list
         const self = this
+        if (self.taskList.length < 1) return
         console.log('点了提交', self.taskList)
         // 判断是否有为打分的任务
         if (!self.judgeAllTask()) {
@@ -271,7 +273,7 @@
               console.log('编辑成功', res2, res2.data)
               if (!isEmptyObject(res2.data)) {
                 // 编辑成功 修改各个任务明细表状态
-                // self.editStatus()
+                self.editStatus()
                 self.resultTable = res2.data
                 // 修改完 页面跳转到结果页 totalCompleteRatio
                 const resultDetail = {
@@ -308,7 +310,7 @@
               console.log('新建成功', res2.data)
               if (!isEmptyObject(res2.data)) {
                 // 新建成功 修改各个任务明细表状态
-                // self.editStatus()
+                self.editStatus()
                 self.resultTable = res2.data
                 // 提交成功 提示
                 self.toastWidth = '7em'
