@@ -492,6 +492,15 @@
 <!-- Add "scoped" attribute to limit CSS to this component o
 nly -->
 <style>
+.evaluationRecord .vux-no-group-title{
+ margin-top: 0px;
+}
+.evaluationRecord .weui-cell:before{
+  border: none;
+}
+.evaluationRecord .weui-cell{
+  border-bottom: 1px solid #eee;
+}
 .evaluationRecord h1,
 .evaluationRecord h2 {
   font-weight: normal;

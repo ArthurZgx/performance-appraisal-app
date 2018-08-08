@@ -18,10 +18,10 @@
       <thead>
       <tr>
         <th>考评周期</th>
-        <th>服务质量评价系数</th>
-        <th>工作完成度系数</th>
-        <th>考勤系数</th>
-        <th>最终系数</th>
+        <th style="max-width:79px;">服务质量评价系数</th>
+        <th>工作完成度评价系数</th>
+        <th style="max-width:47px;">考勤系数</th>
+        <th style="max-width:47px;">最终系数</th>
       </tr>
       </thead>
       <tbody>
