@@ -17,7 +17,7 @@
     <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
       <tr>
-        <th>考评周期</th>
+        <th style="max-width:47px;">考评周期</th>
         <th style="max-width:79px;">服务质量评价系数</th>
         <th>工作完成度评价系数</th>
         <th style="max-width:47px;">考勤系数</th>
