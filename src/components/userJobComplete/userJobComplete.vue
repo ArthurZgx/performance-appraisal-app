@@ -1,9 +1,9 @@
 <!-- 个人工作完成记录记录 -->
 <template>
     <div class="userJobComplete">
-      <x-header :right-options="{showMore: true}"
+      <x-header :right-options="{showMore: false}"
                 @on-click-more="showMenus = true">
-                个人工作任务
+                我的工作任务
       </x-header>
       <!-- <group> -->
           <!-- <cell v-for="(alist,index) in list" :key="index" :title="alist.taskName" is-link :link="{name:'userJobCompleteResult',params:{id:alist.id}}"></cell> -->

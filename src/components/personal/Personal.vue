@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="vux-demo">
-      <x-header :right-options="{showMore: true}"
+      <x-header :right-options="{showMore: false}"
                 style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
                 @on-click-more="showMenus = true">
         绩效考评
@@ -32,7 +32,7 @@
         </router-link>
       </flexbox-item>
       <flexbox-item>
-        <router-link to="/evaluationResult">        
+        <router-link to="/evaluationResult">
         <div class="a-nav-href">
           <img src="../../assets/MyAssessmentResults.png" alt="">
           <div>我的考评结果</div>
@@ -42,7 +42,7 @@
     </flexbox>
     <flexbox class="personal-nav-list">
       <flexbox-item>
-        <router-link to="/userJobComplete">        
+        <router-link to="/userJobComplete">
         <div class="a-nav-href">
           <img src="../../assets/job.png" alt="">
           <div>我的工作任务</div>
@@ -50,7 +50,7 @@
         </router-link>
       </flexbox-item>
             <flexbox-item>
-        <router-link to="/alreadyBound">      
+        <router-link to="/alreadyBound">
         <div class="a-nav-href">
           <img src="../../assets/TheBindingOfIdentity.png" alt="">
           <div>身份绑定</div>
@@ -58,7 +58,7 @@
         </router-link>
       </flexbox-item>
     </flexbox>
-    
+
     </div>
 
     <tabbar>

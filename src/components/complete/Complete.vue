@@ -3,22 +3,26 @@
     <x-header :right-options="{showMore: false}"
               :left-options="{preventGoBack: true}"
               @on-click-back="gotToTaskList"
-              @on-click-more="showMenus = true">
+              @on-click-more="showMenus = true"
+              right-options.showMore="false">
       绩效考评
     </x-header>
-    <search @result-click="resultClick"
-            @on-change="searchChange"
-            :results="results"
-            v-model="searchValue"
-            position="absolute"
-            auto-scroll-to-top
-            cancel-text="取消"
-            top="46px"
-            @on-focus="searchFocus"
-            @on-cancel="searchCancel"
-            @on-submit="searchSubmit"
-            ref="search">
-    </search>
+    <div class="clearfix">
+      <search @result-click="resultClick"
+              @on-change="searchChange"
+              :results="results"
+              v-model="searchValue"
+              position="absolute"
+              auto-scroll-to-top
+              cancel-text="取消"
+              top="46px"
+              @on-focus="searchFocus"
+              @on-cancel="searchCancel"
+              @on-submit="searchSubmit"
+              @on-clear="searchClear"
+              ref="search">
+      </search>
+    </div>
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
       <div>
@@ -251,19 +255,49 @@
             return p1.title.localeCompare(p2.title)
           })
         })
-        console.log('排序前', list)
         // 部门排序
         list.sort(function(p1, p2) {
           return p2.department.localeCompare(p1.department)
         })
         self.completeList = list
-        console.log('排序后', list)
       },
       searchFocus() {},
-      searchCancel() {},
+      searchCancel() {
+        console.log('cancel')
+      },
+      searchClear() {
+        this.getDetailId()
+      },
       resultClick() {},
-      searchSubmit() {},
-      searchChange() {},
+      searchSubmit(val) {
+        const self = this
+        const searchName = val.trim()
+        const completeList = self.completeList
+        if (searchName === '') {
+          self.getDetailId()
+          return null
+        }
+        self.completeList = completeList.filter(item => {
+          console.log('completeList', item)
+          if (item.list && item.list.length) {
+            item.list = item.list.filter(it => {
+              if (it.userName.includes(searchName)) {
+                return true
+              }
+            })
+            if (item.list.length) {
+              return true
+            }
+          }
+        })
+      },
+      searchChange(val) {
+        const self = this
+        const searchName = val.trim()
+        if (searchName === '') {
+          self.getDetailId()
+        }
+      },
       clickList() {},
       // 跳转评价详情
       goTocompleteComment(list) {
@@ -459,5 +493,9 @@
   position: absolute;
   top: 2px;
   left: 1px;
+}
+.clearfix {
+   *zoom: 1;
+   height: 44px;
 }
 </style>

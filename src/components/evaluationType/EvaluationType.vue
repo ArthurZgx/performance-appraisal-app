@@ -1,8 +1,9 @@
 <!-- 考评记录  -->
 <template>
   <div>
-      <x-header :right-options="{showMore: true}"
-                @on-click-more="showMenus = true">
+      <x-header :right-options="{showMore: false}"
+                @on-click-more="showMenus = true"
+                right-options.showMore="false">
                 考评记录
       </x-header>
       <group>

@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="vux-demo">
-      <x-header :right-options="{showMore: true}"
-                @on-click-more="showMenus = true">
+      <x-header :right-options="{showMore: false}"
+                @on-click-more="showMenus = true"
+                right-options.showMore="false">
         绩效考评
       </x-header>
       <!-- <img class="logo" src="../../assets/vux_logo.png">
