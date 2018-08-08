@@ -19,7 +19,6 @@
     </search>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
-      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="0">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
@@ -46,6 +45,7 @@
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
     </scroller>
+      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
     </group>
     <!-- 一键提交 -->
     <sticky ref="sticky"
@@ -251,6 +251,9 @@ export default {
     },
     // 获取服务质量明细表数据
     getDatas() {
+      if (this.pageSize === 0) {
+        return false
+      }
       var userId = localStorage.getItem('userId')
       // 设置过滤器
       var filter = "{'main_service_detail':{'status':{equalTo:'0'},'user_id':{equalTo:'" + userId + "'}}}"
@@ -341,6 +344,9 @@ export default {
           })
         }
         console.log(tempArray2)
+        if (tempArray2.length < this.pageSize) {
+          this.pageSize = 0
+        }
         this.serveList = this.serveList.concat(tempArray2)
         if (this.serveList.length < 10) {
           this.showScrollerLoading = false
