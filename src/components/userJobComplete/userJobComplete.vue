@@ -3,7 +3,7 @@
     <div class="userJobComplete">
       <x-header :right-options="{showMore: true}"
                 @on-click-more="showMenus = true">
-                个人工作任务
+                我的工作任务
       </x-header>
       <!-- <group> -->
           <!-- <cell v-for="(alist,index) in list" :key="index" :title="alist.taskName" is-link :link="{name:'userJobCompleteResult',params:{id:alist.id}}"></cell> -->
@@ -41,8 +41,8 @@ export default {
   methods: {
     getDatas() {
       //   获取数据
-      var userId = '-1006996897483634546'
-      var filter = "{'main_annual_work_task':{'user_id':{equalTo:'" + userId + "'}}}"
+      const userId = localStorage.getItem('userId')
+      const filter = "{'main_annual_work_task':{'user_id':{equalTo:'" + userId + "'}}}"
       request('main_annual_work_tasks', {
         params: {
           filters: filter

@@ -13,7 +13,7 @@
       <!--<cell title="返回首页" value="cool" is-link link="/personal"></cell>-->
     <!--</group>-->
     <!-- <load-more tip="" :show-loading="false" background-color="#fbf9fe"></load-more> -->
-    <div class="table-title">本人的考评结果</div>
+    <div class="table-title">我的考评结果</div>
     <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
       <tr>
@@ -25,6 +25,9 @@
       </tr>
       </thead>
       <tbody>
+      <tr v-if="!resultList.length">
+        <td colspan="5" height="60px">暂无数据</td>
+      </tr>
       <tr v-for="(result,index) in resultList" :key="index">
         <td>{{result.period}}</td>
         <td>{{result.serviceCoefficient}}%</td>
@@ -108,10 +111,11 @@
       getEvaluations() {
         const self = this
         // 获取当前用户考评结果
+        const userId = localStorage.getItem('userId')
         const params = {
           filters: {
             main_job_service_evaluation_result: {
-              user_id: { equalTo: '-2645543387805825621' }
+              user_id: { equalTo: userId }
             }
           }
         }
