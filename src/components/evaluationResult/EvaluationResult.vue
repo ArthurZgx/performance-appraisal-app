@@ -25,7 +25,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="result in resultList">
+      <tr v-for="(result,index) in resultList" :key="index">
         <td>{{result.period}}</td>
         <td>{{result.serviceCoefficient}}%</td>
         <td>{{result.workCoefficient}}%</td>
@@ -90,11 +90,19 @@
     data() {
       return {
         msg: 'Welcome to Your Vue.js App',
-        resultList: [] // 结果列表
+        resultList: [], // 结果列表
+        year: 0,
+        month: 0
       }
     },
     created() {
       this.getEvaluations()
+      var date = new Date()
+      this.year = date.getFullYear()
+      this.month = date.getMonth() + 1
+      if (this.month < 10) {
+        this.month = '0' + this.month
+      }
     },
     methods: {
       getEvaluations() {
@@ -114,11 +122,17 @@
           if (res.data.length) {
             self.resultList = res.data
             // 增加考评周期字段
+            var that = this
             _.each(self.resultList, function(item, key) {
-              // 处理月份位数 1--> 01
-              item.month = item.month + ''
-              item.month = item.month.length > 1 ? item.month : '0' + item.month
-              item.period = item.year + '.' + item.month
+              if ((item.year === that.year && item.month <= that.month) || (item.year === that.year - 1 && item.month >= that.month)) {
+                // 处理月份位数 1--> 01
+                item.month = item.month + ''
+                item.month = item.month.length > 1 ? item.month : '0' + item.month
+                item.period = item.year + '.' + item.month
+              } else {
+                self.resultList.splice(key, 1)
+              }
+              console.log(key)
             })
           }
         })

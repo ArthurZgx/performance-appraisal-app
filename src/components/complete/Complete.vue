@@ -233,6 +233,7 @@
         })
         // 部门去重
         list = _.uniqWith(list, _.isEqual)
+        console.log(236, tempArray)
         _.each(tempArray, function(item, key) {
           const curItem1 = item.department
           _.each(list, function(item2, key2) {

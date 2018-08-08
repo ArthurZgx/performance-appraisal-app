@@ -6,7 +6,7 @@
     </x-header>
     <div class="serveComment_div">
       <!-- 展示数据 -->
-      <div v-for="(list,index) in serveList">
+      <div v-for="(list,index) in serveList" :key="index">
       <flexbox>
         <flexbox-item>
           <div class="serveTitle">{{list.name}}</div>

@@ -19,7 +19,7 @@
     </search>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="0">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
         <div class="serveClassifyTitle">{{item.title}}</div>
@@ -34,7 +34,7 @@
             <div class="listInfo">
                 <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
                 <div class="good-comment-number">好评数
-                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="10" width="50px" button-style="round"></inline-x-number>
+                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="list.numberVotes" width="50px" button-style="round"></inline-x-number>
                 </div>
 
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
@@ -88,7 +88,6 @@ import _ from 'lodash'
 import request from '@/utils/request'
 import { paramEncode } from '@/utils'
 import { setTimeout } from 'timers'
-
 var i = 0
 var j = 0
 var len = 0
@@ -135,10 +134,6 @@ export default {
     this.getDatas()
   },
   watch: {
-    // checkedAll(newValue, oldValue) {
-    //   console.log('改变了', '旧', oldValue)
-    //   console.log('改变了', '新', newValue)
-    // }
     searchValue() {
       console.log('搜索')
     }
@@ -234,6 +229,15 @@ export default {
                   }
                   tempArray2[j].list.push(tempArray[i])
                 }
+              }
+            }
+          }
+          // 合并重复部门
+          for (i = 0; i < tempArray2.length; i++) {
+            for (j = 0; j < tempArray2.length; j++) {
+              if (tempArray2[i].title === tempArray2[j].title && i !== j && i < j) {
+                tempArray2[i].list = tempArray2[i].list.concat(tempArray2[j].list)
+                tempArray2.splice(j, 1)
               }
             }
           }

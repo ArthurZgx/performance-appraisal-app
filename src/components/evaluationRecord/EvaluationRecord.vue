@@ -354,12 +354,6 @@
         }
         // 设置过滤器
         var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
-        // 如果开启了时间选择
-        if (this.isSelectedDate) {
-          var year = this.selectedDate.split('-')[0]
-          var month = this.selectedDate.split('-')[1]
-          filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
-        }
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
         request('main_service_details', {
@@ -388,17 +382,6 @@
               month: res.data[i].superior.month
             })
           }
-          for (i = 0; i < tempArray.length; i++) {
-            if (tempArray[i].year === this.year) {
-              if (tempArray[i].month > this.month) {
-                tempArray.splice(i, 1)
-              }
-            } else if (tempArray[i].year === this.year - 1) {
-              if (tempArray[i].month < this.month) {
-                tempArray.splice(i, 1)
-              }
-            }
-          }
           // 获取数据
           this.serviceDataList = tempArray
           if (this.pageSize === '全部类型') {
@@ -408,11 +391,6 @@
           }
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
-          if (this.isSelectedDate) {
-            var year = this.selectedDate.split('-')[0]
-            var month = this.selectedDate.split('-')[1]
-            filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
-          }
           // 再次请求数据
           request('main_job_details', {
             params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
@@ -434,17 +412,6 @@
               for (var c = 1; c < tempArray.length; c++) {
                 if (tempArray[a].title === tempArray[c].title && tempArray[a].id === tempArray[c].id) {
                   tempArray.splice(c, 1)
-                }
-              }
-            }
-            for (i = 0; i < tempArray.length; i++) {
-              if (tempArray[i].year === this.year) {
-                if (tempArray[i].month > this.month) {
-                  tempArray.splice(i, 1)
-                }
-              } else if (tempArray[i].year === this.year - 1) {
-                if (tempArray[i].month < this.month) {
-                  tempArray.splice(i, 1)
                 }
               }
             }
