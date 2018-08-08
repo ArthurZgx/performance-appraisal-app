@@ -102,7 +102,7 @@
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
       <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
-      @click.native="goTo(item.id,item.type,item.status)"></cell>
+      @click.native="goTo(item.id,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
     </scroller> 
@@ -372,6 +372,7 @@
               res.data[i].includes.main_job_service_evaluation.id = -1
             }
             // 压入数据
+            console.log(res.data)
             tempArray.push({
               title: res.data[i].includes.main_job_service_evaluation.title,
               date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
@@ -379,7 +380,9 @@
               status: res.data[i].superior.status,
               id: res.data[i].includes.main_job_service_evaluation.id,
               year: res.data[i].superior.year,
-              month: res.data[i].superior.month
+              month: res.data[i].superior.month,
+              numberVotes: res.data[i].superior.numberVotes,
+              goodCommentNumber: res.data[i].superior.praiseNumber
             })
           }
           // 获取数据
@@ -404,7 +407,8 @@
                 status: res.data[i].superior.status,
                 id: res.data[i].includes.main_job_service_evaluation.id,
                 year: res.data[i].superior.year,
-                month: res.data[i].superior.month
+                month: res.data[i].superior.month,
+                userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
               })
             }
             // 去除重复数据
@@ -432,10 +436,13 @@
         })
       },
       // 跳转页面方法
-      goTo(id, type, status) {
+      goTo(id, type, status, list) {
         // 判断类型是服务质量还是工作完成度
         if (type === 1 && status === 0) {
           // 如果是服务质量且状态是未读就跳转到服务质量评价页
+          list.name = list.title
+          localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
+          console.log(list)
           this.$router.push({
             name: 'serveComment',
             params: {
@@ -445,6 +452,8 @@
         }
         if (type === 0 && status === 0) {
           // 如果是工作完成度且状态是未读就跳转到工作完成度评价页
+          console.log(list)
+          localStorage.setItem('currentTask', JSON.stringify(list))
           this.$router.push({
             name: 'completeComment',
             params: {

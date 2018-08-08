@@ -10,12 +10,12 @@
         <x-table full-bordered style="width:90%;margin:20px auto">
           <thead>
             <tr><td colspan="2" style="font-weight:bold;">工作任务</td></tr>
-            <tr><td>任务名称</td><td>权重</td></tr>
+            <tr><td style="min-width:100px;">任务名称</td><td style="min-width:100px;">任务内容</td></tr>
           </thead>
           <tbody>
             <tr v-for="(alist,index) in list" :key="index">
               <td>{{alist.taskName}}</td>
-              <td>{{alist.weights}}%</td>
+              <td>{{alist.planContent}}</td>
             </tr>
           </tbody>
         </x-table>
@@ -40,16 +40,23 @@ export default {
   },
   methods: {
     getDatas() {
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      if (this.month < 10) {
+        this.month = '0' + this.month
+      }
+      console.log(month)
       //   获取数据
-      var userId = '-1006996897483634546'
-      var filter = "{'main_annual_work_task':{'user_id':{equalTo:'" + userId + "'}}}"
-      request('main_annual_work_tasks', {
+      var userId = localStorage.getItem('userId')
+      var filter = `{'main_job_detail':{'hmPersonnelId':{equalTo:'${userId}'},'year':{equalTo:'${year}'},'month':{equalTo:'${month}'},'status':{lessThan:'3'}}}`
+      request('main_job_details', {
         params: {
           filters: filter
         }
       }).then(res => {
-        console.log(res)
         this.list = res.data
+        console.log(this.list)
       })
     }
 

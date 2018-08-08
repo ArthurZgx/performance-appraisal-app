@@ -109,7 +109,6 @@
     created() {
       const self = this
       self.init()
-      localStorage.setItem('userId', '-1062673909925590171')
     },
     methods: {
       init() {
