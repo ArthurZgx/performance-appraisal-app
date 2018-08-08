@@ -38,8 +38,10 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import moment from 'moment'
+// import _ from 'lodash'
+// import moment from 'moment'
+import request from '@/utils/request'
+import { isEmptyObject } from '@/utils'
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon } from 'vux'
 
 export default {
@@ -62,19 +64,43 @@ export default {
     }
   },
   created() {
-    const self = this
-    self.init()
+    this.init()
+    this.getUserInfo()
   },
   methods: {
     init() {
-      console.log('init')
-      const a = [1, 2, 3, 4, 5]
-      _.each(a, function(i, j) {
-        console.log(i, j)
-      })
+      // console.log('init')
+      // const a = [1, 2, 3, 4, 5]
+      // _.each(a, function(i, j) {
+      //   console.log(i, j)
+      // })
       // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); // 七月 11日 2018, 9:36:25 上午
-      const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50
-      console.log(time)
+      // const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50
+      // console.log('地址', window.location.href)
+    },
+    // 获取用户信息
+    getUserInfo() {
+      let code = ''
+      // 获取URL中参数code
+      // let url = window.location.href // 线上部署用此处
+      let url = 'http://yinxin.tentop.com.cn/?code=kxUx7jOIPJvip3b20y4i4aD8qFCiW8XpQMqQ_trtTTM&state=1234556#/home' // 本地测试用此处
+      if (url.indexOf('code') > 0) {
+        url = url.split('?')[1]
+        url = url.split('&')[0]
+        code = url.split('=')[1]
+        request('extends/wechartLogin', {
+          params: { code: code }
+        }).then(res => {
+          console.log('用户信息', res)
+          if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
+            const userId = res.data.fields.id
+            // 将用户信息存入localStorage
+            localStorage.setItem('userId', userId)
+            // console.log('获取缓存', localStorage.getItem('userId'))
+          }
+        })
+      }
+      // console.log('code', code)
     }
   }
 }

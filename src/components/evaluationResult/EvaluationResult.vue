@@ -13,7 +13,7 @@
       <!--<cell title="返回首页" value="cool" is-link link="/personal"></cell>-->
     <!--</group>-->
     <!-- <load-more tip="" :show-loading="false" background-color="#fbf9fe"></load-more> -->
-    <div class="table-title">本人的考评结果</div>
+    <div class="table-title">我的考评结果</div>
     <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
       <tr>
@@ -25,7 +25,10 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="result in resultList">
+      <tr v-if="!resultList.length">
+        <td colspan="5" height="60px">暂无数据</td>
+      </tr>
+      <tr v-for="(result,index) in resultList" :key="index">
         <td>{{result.period}}</td>
         <td>{{result.serviceCoefficient}}%</td>
         <td>{{result.workCoefficient}}%</td>
@@ -90,20 +93,29 @@
     data() {
       return {
         msg: 'Welcome to Your Vue.js App',
-        resultList: [] // 结果列表
+        resultList: [], // 结果列表
+        year: 0,
+        month: 0
       }
     },
     created() {
       this.getEvaluations()
+      var date = new Date()
+      this.year = date.getFullYear()
+      this.month = date.getMonth() + 1
+      if (this.month < 10) {
+        this.month = '0' + this.month
+      }
     },
     methods: {
       getEvaluations() {
         const self = this
         // 获取当前用户考评结果
+        const userId = localStorage.getItem('userId')
         const params = {
           filters: {
             main_job_service_evaluation_result: {
-              user_id: { equalTo: '-2645543387805825621' }
+              user_id: { equalTo: userId }
             }
           }
         }
@@ -114,11 +126,17 @@
           if (res.data.length) {
             self.resultList = res.data
             // 增加考评周期字段
+            var that = this
             _.each(self.resultList, function(item, key) {
-              // 处理月份位数 1--> 01
-              item.month = item.month + ''
-              item.month = item.month.length > 1 ? item.month : '0' + item.month
-              item.period = item.year + '.' + item.month
+              if ((item.year === that.year && item.month <= that.month) || (item.year === that.year - 1 && item.month >= that.month)) {
+                // 处理月份位数 1--> 01
+                item.month = item.month + ''
+                item.month = item.month.length > 1 ? item.month : '0' + item.month
+                item.period = item.year + '.' + item.month
+              } else {
+                self.resultList.splice(key, 1)
+              }
+              console.log(key)
             })
           }
         })
