@@ -156,7 +156,8 @@
       // 获取所有工作任务明细表数据
       getDetailId() {
         const self = this
-        const userId = '-1062673909925590171'
+        console.log('获取缓存', localStorage.getItem('userId'))
+        const userId = localStorage.getItem('userId')
         // 过滤条件 评价人为当前用户 状态为0
         const filters1 = {
           'main_job_detail': {
