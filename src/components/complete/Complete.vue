@@ -281,7 +281,7 @@
           console.log('completeList', item)
           if (item.list && item.list.length) {
             item.list = item.list.filter(it => {
-              if (it.userName.includes(searchName)) {
+              if (it.title.includes(searchName)) {
                 return true
               }
             })
