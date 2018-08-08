@@ -83,7 +83,7 @@ export default {
       let code = ''
       // 获取URL中参数code
       // let url = window.location.href // 线上部署用此处
-      let url = 'http://yinxin.tentop.com.cn/?code=JLhoqlyitlI_404oP3rd1NZRUuNtDe2GUpLPK5z95N8&state=1234556#/home' // 本地测试用此处
+      let url = 'http://yinxin.tentop.com.cn/?code=AFtY-nQYO8uZeK3o_DQPP2PHe3eA3w5O7gv72a3Hi3U&state=1234556#/home' // 本地测试用此处
       if (url.indexOf('code') > 0) {
         url = url.split('?')[1]
         url = url.split('&')[0]
@@ -94,8 +94,10 @@ export default {
           console.log('用户信息', res)
           if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
             const userId = res.data.fields.id
+            const name = res.data.fields.name
             // 将用户信息存入localStorage
             localStorage.setItem('userId', userId)
+            localStorage.setItem('userName', name)
             // console.log('获取缓存', localStorage.getItem('userId'))
           }
         })

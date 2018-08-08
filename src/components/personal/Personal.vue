@@ -12,7 +12,7 @@
       <router-link to="/personalInfo">
         <div class="personal-top-content">
         <img class="logo" src="../../assets/vux_logo.png">
-        <h3 text-align="center">用户名</h3>
+        <h3 text-align="center">{{userName}}</h3>
         </div>
       </router-link>
     </div>
@@ -83,8 +83,8 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import moment from 'moment'
+  // import _ from 'lodash'
+  // import moment from 'moment'
   import { Group, Cell, TabbarItem, Tabbar, XHeader, Icon, Flexbox, FlexboxItem } from 'vux'
   export default {
     name: 'personal',
@@ -104,7 +104,8 @@
         // with hot-reload because the reloaded component
         // preserves its current state and we are modifying
         // its initial state.
-        msg: 'Hello World!'
+        msg: 'Hello World!',
+        userName: ''
       }
     },
     created() {
@@ -113,14 +114,15 @@
     },
     methods: {
       init() {
-        console.log('init')
-        const a = [1, 2, 3, 4, 5]
-        _.each(a, function(i, j) {
-          console.log(i, j)
-        })
-        // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); //七月 11日 2018, 9:36:25 上午
-        const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50
-        console.log(time)
+        this.userName = localStorage.getItem('userName')
+        // console.log('init')
+        // const a = [1, 2, 3, 4, 5]
+        // _.each(a, function(i, j) {
+        //   console.log(i, j)
+        // })
+        // // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); //七月 11日 2018, 9:36:25 上午
+        // const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50
+        // console.log(time)
       }
     }
   }
