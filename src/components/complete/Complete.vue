@@ -251,13 +251,11 @@
             return p1.title.localeCompare(p2.title)
           })
         })
-        console.log('排序前', list)
         // 部门排序
         list.sort(function(p1, p2) {
-          return p1.department.localeCompare(p2.department)
+          return p2.department.localeCompare(p1.department)
         })
         self.completeList = list
-        console.log('排序后', list)
       },
       searchFocus() {},
       searchCancel() {},
