@@ -127,7 +127,8 @@ export default {
       showScrollerLoading: true,
       pageNo: 1,
       onFacting: false,
-      searchPageNo: 0
+      searchPageNo: 1,
+      searching: false
     }
   },
   created() {
@@ -149,7 +150,14 @@ export default {
       }
     },
     searchFocus() {},
-    searchCancel() {},
+    searchCancel() {
+      this.serveList = []
+      this.searching = false
+      this.searchPageNo = 1
+      this.pageNo = 1
+      this.getDatas()
+      return false
+    },
     resultClick() {},
     searchSubmit() {
       console.log('提交搜索')
@@ -158,9 +166,15 @@ export default {
     searchChange() {},
     clickList() {},
     getSearchDatas() {
-      this.serveList = []
+      if (this.searching === false) {
+        this.serveList = []
+      }
+      this.searching = true
       this.showScrollerLoading = true
       if (this.searchValue === '') {
+        this.searching = false
+        this.searchPageNo = 1
+        this.pageNo = 1
         this.getDatas()
         return false
       }
@@ -193,7 +207,8 @@ export default {
             main_job_service_evaluation: {
               includes: ['main_job_service_evaluation_id']
             }
-          }
+          },
+          pageNo: this.searchPageNo
         }
         // 请求数据
         request('main_service_details', { params: params }).then(res => {
@@ -206,10 +221,15 @@ export default {
       if (this.serveList.length >= 1) {
         if (!this.onFacting) {
           console.log('运行了')
-          this.pageNo = this.pageNo + 1
           this.onFacting = true
           setTimeout(() => {
-            this.getDatas()
+            if (this.searching) {
+              this.searchPageNo = this.searchPageNo + 1
+              this.getSearchDatas()
+            } else {
+              this.pageNo = this.pageNo + 1
+              this.getDatas()
+            }
             this.onFacting = false
           }, 1000)
         }
@@ -299,10 +319,10 @@ export default {
         for (i = 0; i < tempArray2.length; i++) {
           tempArray2[i].list.sort(function(param1, param2) {
             console.log(name)
-            return param2.name.localeCompare(param1.name)
+            return param1.name.localeCompare(param2.name)
           })
           tempArray2.sort(function(param1, param2) {
-            return param2.title.localeCompare(param1.title)
+            return param1.title.localeCompare(param2.title)
           })
         }
         console.log(tempArray2)
