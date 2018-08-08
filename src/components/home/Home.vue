@@ -83,7 +83,7 @@ export default {
       let code = ''
       // 获取URL中参数code
       // let url = window.location.href // 线上部署用此处
-      let url = 'http://yinxin.tentop.com.cn/?code=kxUx7jOIPJvip3b20y4i4aD8qFCiW8XpQMqQ_trtTTM&state=1234556#/home' // 本地测试用此处
+      let url = 'http://yinxin.tentop.com.cn/?code=JLhoqlyitlI_404oP3rd1NZRUuNtDe2GUpLPK5z95N8&state=1234556#/home' // 本地测试用此处
       if (url.indexOf('code') > 0) {
         url = url.split('?')[1]
         url = url.split('&')[0]
