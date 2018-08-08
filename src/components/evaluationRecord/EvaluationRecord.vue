@@ -99,6 +99,7 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
+      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
       <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
@@ -158,7 +159,8 @@
         pageSize: 5,
         showErrorDateToast: false,
         year: 2018,
-        month: 8
+        month: 8,
+        noData: false
       }
     },
     mounted() {
@@ -432,6 +434,9 @@
             }
             // 拼接数据
             this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+            if (this.list.length === 0) {
+              this.noData = true
+            }
           })
         })
       },

@@ -19,6 +19,7 @@
     </search>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
+      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="0">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
@@ -114,6 +115,7 @@ export default {
   },
   data() {
     return {
+      noData: false,
       results: [], // 搜索结果列表
       searchValue: '', // 搜索绑定的数据
       checklist1: [], // 选择列表
@@ -138,6 +140,15 @@ export default {
   watch: {
     searchValue() {
       console.log('搜索')
+    },
+    serveList() {
+      console.log(this.serveList.length)
+      if (this.serveList.length === 0) {
+        this.noData = true
+      } else {
+        this.noData = false
+      }
+      console.log(this.noData)
     }
   },
   methods: {
@@ -172,6 +183,7 @@ export default {
       this.searching = true
       this.showScrollerLoading = true
       if (this.searchValue === '') {
+        this.serveList = []
         this.searching = false
         this.searchPageNo = 1
         this.pageNo = 1
@@ -188,7 +200,9 @@ export default {
           serviceIds.push(res.data[i].id)
         }
         if (serviceIds.length === 0) {
+          this.serveList = []
           console.log('无数据')
+          this.showScrollerLoading = false
           return false
         }
         // 配置请求参数
@@ -279,6 +293,7 @@ export default {
         userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
       }
       if (res.data.length === 0) {
+        this.noData = true
         return false
       }
       filter = '{"hm_personnel":{"id":{in:[' + userIdTempArray + ']}}}'

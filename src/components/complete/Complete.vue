@@ -24,6 +24,7 @@
       </search>
     </div>
     <group class="home_group groupList">
+      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
       <div>
       <div class="aGroupList" v-for="(item,index) in completeList" :key="index">
@@ -117,7 +118,8 @@
         completeList2: [], // 数据列表
         showScrollerLoading: false, // 修改第一处 改为true
         pageNo: 1,
-        onFacting: false
+        onFacting: false,
+        noData: false
       }
     },
     created() {
@@ -174,6 +176,9 @@
         }).then(res => {
           console.log('工作任务明细表', res.data)
           const resAll = res.data
+          if (resAll.length === 0) {
+            this.noData = true
+          }
           let detailIds = []
           if (resAll.length) {
             _.each(resAll, function(item, key) {

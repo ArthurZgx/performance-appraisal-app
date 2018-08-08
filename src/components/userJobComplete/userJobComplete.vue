@@ -17,6 +17,7 @@
               <td>{{alist.taskName}}</td>
               <td>{{alist.planContent}}</td>
             </tr>
+            <tr><td colspan="2" v-if="list.length == '0'">没有数据</td></tr>
           </tbody>
         </x-table>
       <!-- </group> -->
