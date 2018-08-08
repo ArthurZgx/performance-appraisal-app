@@ -295,3 +295,8 @@ export function isEmptyObject(e) {
   }
   return !0
 }
+
+// 根据本地特定规则排序(中文拼音)
+export function compare(param1, param2) {
+  return param1.localeCompare(param2)
+}

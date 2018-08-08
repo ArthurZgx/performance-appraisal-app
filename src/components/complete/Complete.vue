@@ -76,7 +76,7 @@
   import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, Scroller, LoadMore } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  // import { paramEncode } from '@/utils'
+  // import { compare } from '@/utils'
 
   export default {
     name: 'complete',
@@ -156,7 +156,8 @@
       // 获取所有工作任务明细表数据
       getDetailId() {
         const self = this
-        const userId = '-1062673909925590171'
+        console.log('获取缓存', localStorage.getItem('userId'))
+        const userId = localStorage.getItem('userId')
         // 过滤条件 评价人为当前用户 状态为0
         const filters1 = {
           'main_job_detail': {
@@ -234,6 +235,7 @@
         // 部门去重
         list = _.uniqWith(list, _.isEqual)
         console.log(236, tempArray)
+        // 部门分组
         _.each(tempArray, function(item, key) {
           const curItem1 = item.department
           _.each(list, function(item2, key2) {
@@ -243,9 +245,19 @@
             }
           })
         })
+        // 人名排序
+        _.each(list, function(item, key) {
+          item.list.sort(function(p1, p2) {
+            return p1.title.localeCompare(p2.title)
+          })
+        })
+        console.log('排序前', list)
         // 部门排序
+        list.sort(function(p1, p2) {
+          return p1.department.localeCompare(p2.department)
+        })
         self.completeList = list
-        console.log(235, list)
+        console.log('排序后', list)
       },
       searchFocus() {},
       searchCancel() {},
