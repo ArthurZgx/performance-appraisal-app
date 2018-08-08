@@ -39,25 +39,26 @@
         </div>
         </router-link>
       </flexbox-item>
-    </flexbox>
-    <flexbox class="personal-nav-list">
       <flexbox-item>
         <router-link to="/userJobComplete">
-        <div class="a-nav-href">
-          <img src="../../assets/job.png" alt="">
-          <div>我的工作任务</div>
-        </div>
-        </router-link>
-      </flexbox-item>
-            <flexbox-item>
-        <router-link to="/alreadyBound">
-        <div class="a-nav-href">
-          <img src="../../assets/TheBindingOfIdentity.png" alt="">
-          <div>身份绑定</div>
-        </div>
+          <div class="a-nav-href">
+            <img src="../../assets/job.png" alt="">
+            <div>我的工作任务</div>
+          </div>
         </router-link>
       </flexbox-item>
     </flexbox>
+    <!--<flexbox class="personal-nav-list">-->
+      <!---->
+      <!--<flexbox-item>-->
+        <!--<router-link to="/alreadyBound">-->
+        <!--<div class="a-nav-href">-->
+          <!--<img src="../../assets/TheBindingOfIdentity.png" alt="">-->
+          <!--<div>身份绑定</div>-->
+        <!--</div>-->
+        <!--</router-link>-->
+      <!--</flexbox-item>-->
+    <!--</flexbox>-->
 
     </div>
 
