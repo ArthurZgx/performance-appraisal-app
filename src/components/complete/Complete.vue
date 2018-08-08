@@ -257,7 +257,7 @@
         })
         // 部门排序
         list.sort(function(p1, p2) {
-          return p2.department.localeCompare(p1.department)
+          return p1.department.localeCompare(p2.department)
         })
         self.completeList = list
       },
