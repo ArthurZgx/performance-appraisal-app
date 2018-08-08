@@ -76,7 +76,7 @@
   import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, Scroller, LoadMore } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  // import { paramEncode } from '@/utils'
+  // import { compare } from '@/utils'
 
   export default {
     name: 'complete',
@@ -235,6 +235,7 @@
         // 部门去重
         list = _.uniqWith(list, _.isEqual)
         console.log(236, tempArray)
+        // 部门分组
         _.each(tempArray, function(item, key) {
           const curItem1 = item.department
           _.each(list, function(item2, key2) {
@@ -244,9 +245,19 @@
             }
           })
         })
+        // 人名排序
+        _.each(list, function(item, key) {
+          item.list.sort(function(p1, p2) {
+            return p1.title.localeCompare(p2.title)
+          })
+        })
+        console.log('排序前', list)
         // 部门排序
+        list.sort(function(p1, p2) {
+          return p1.department.localeCompare(p2.department)
+        })
         self.completeList = list
-        console.log(235, list)
+        console.log('排序后', list)
       },
       searchFocus() {},
       searchCancel() {},
