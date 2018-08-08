@@ -1,7 +1,7 @@
 <!-- 个人工作完成记录记录 -->
 <template>
     <div>
-      <x-header :right-options="{showMore: true}"
+      <x-header :right-options="{showMore: false}"
                 @on-click-more="showMenus = true">
                 个人工作完成度评价
       </x-header>

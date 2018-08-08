@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <x-header :right-options="{showMore: true}"
+    <x-header :right-options="{showMore: false}"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
@@ -14,7 +14,7 @@
             is-link link="complete">
         <!-- <icon slot="icon" type="info"></icon> -->
         <img src="../../assets/computer.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
-        
+
       </cell>
     </group>
     <!-- style="position: fixed !important;z-index: 500"-->

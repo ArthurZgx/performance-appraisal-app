@@ -2,7 +2,8 @@
   <div class="completeCommentSuccess">
     <!-- 顶部导航 -->
     <x-header style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
-              @on-click-more="showMenus = true">绩效考评
+              @on-click-more="showMenus = true"
+              right-options.showMore="false">绩效考评
     </x-header>
     <!-- 提交成功图片 -->
     <div class="completeCommentSuccess_div">

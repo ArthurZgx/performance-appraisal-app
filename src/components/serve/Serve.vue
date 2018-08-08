@@ -1,6 +1,6 @@
 <template>
   <div class="serve">
-    <x-header :right-options="{showMore: true}"
+    <x-header :right-options="{showMore: false}"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
@@ -44,7 +44,7 @@
       </div>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
-    </scroller>      
+    </scroller>
     </group>
     <!-- 一键提交 -->
     <sticky ref="sticky"

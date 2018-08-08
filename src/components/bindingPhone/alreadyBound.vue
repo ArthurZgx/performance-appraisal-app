@@ -2,7 +2,8 @@
 <template>
   <div>
     <x-header :right-options="{showMore: true}"
-              @on-click-more="showMenus = true">
+              @on-click-more="showMenus = true"
+              right-options.showMore="false">
              绑定账号
     </x-header>
     <div style="width:80%;text-align:center;margin:0 auto;">

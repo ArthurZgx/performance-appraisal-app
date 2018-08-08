@@ -1,12 +1,12 @@
 <!-- 查看个人任务完成详情 -->
 <template>
     <div>
-      <x-header :right-options="{showMore: true}"
+      <x-header :right-options="{showMore: false}"
                 @on-click-more="showMenus = true">
                 个人工作完成度评价
       </x-header>
       <group>
-      <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;"> 
+      <x-table full-bordered style="background-color:#fff;width:90%;margin: 20px auto;color:#333;">
           <tbody>
           <tr>
             <td>任务名称</td>
@@ -25,7 +25,7 @@
               <td>{{result.judge}}%</td>
           </tr>
           <tr>
-              <td>最终得分</td>              
+              <td>最终得分</td>
               <td>{{result.scoreScore}}</td>
           </tr>
           </tbody>

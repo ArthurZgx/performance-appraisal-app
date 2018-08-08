@@ -4,7 +4,7 @@
     <div class="vux-demo">
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>考评记录</h3>-->
-      <x-header :right-options="{showMore: true}"
+      <x-header :right-options="{showMore: false}"
                 style="box-shadow:none;"
                 @on-click-more="showMenus = true">
                 考评记录
@@ -71,13 +71,13 @@
         <!-- <flexbox orient="vertical" :gutter="0">
           <flexbox-item  v-for="(item,index) in years" :key="index">
             <cell :title="item+'年'" is-link :style="selectedYearIndex==index?'color:#3891F0;':''"  @click.native="selectedYearIndex=index"></cell>
-          </flexbox-item>         
+          </flexbox-item>
         </flexbox> -->
         <!-- 显示月份 -->
           <!-- <flexbox orient="vertical" :style="'height:'+years.length*44+'px;overflow:scroll;background:#eee;'" :gutter="0">
           <flexbox-item  v-for="(item,index) in month" :key="index">
             <cell :title="item+'月'" :style="selectedMouthIndex==index?'color:#3891F0;':''" @click.native="selectedMouth(index)"></cell>
-          </flexbox-item>         
+          </flexbox-item>
         </flexbox>
       </flexbox> -->
   <!-- <inline-calendar
@@ -101,11 +101,11 @@
     <group>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
       <div>
-      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date"
       @click.native="goTo(item.id,item.type,item.status)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
-    </scroller> 
+    </scroller>
     </group>
     <toast v-model="showErrorDateToast" type="text" style="width:12.6em;" :time="800" is-show-mask text="仅有一年内数据" position="bottom"></toast>
   </div>

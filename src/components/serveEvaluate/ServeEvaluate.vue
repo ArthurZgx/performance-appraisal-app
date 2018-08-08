@@ -1,6 +1,6 @@
 <template>
   <div class="serveEvaluate">
-    <x-header :right-options="{showMore: true}"
+    <x-header :right-options="{showMore: false}"
               @on-click-more="showMenus = true">
               绩效考评
     </x-header>
