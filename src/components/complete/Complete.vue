@@ -117,7 +117,7 @@
         completeList2: [], // 数据列表
         showScrollerLoading: false, // 修改第一处 改为true
         pageNo: 1,
-        onFacting: false,
+        onFacting: false
       }
     },
     created() {
@@ -281,7 +281,7 @@
           console.log('completeList', item)
           if (item.list && item.list.length) {
             item.list = item.list.filter(it => {
-              if (it.userName.includes(searchName)) {
+              if (it.title.includes(searchName)) {
                 return true
               }
             })
