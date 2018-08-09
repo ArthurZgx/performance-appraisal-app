@@ -17,9 +17,9 @@
     <x-table full-bordered style="margin:0 auto;width:90%;">
       <thead>
       <tr>
-        <th style="max-width:47px;">考评周期</th>
-        <th style="max-width:79px;">服务质量评价系数</th>
-        <th style="max-width:88px;">工作完成度评价系数</th>
+        <th style="min-width:66px;">考评周期</th>
+        <th style="width:79px;">服务质量评价系数</th>
+        <th>工作完成度评价系数</th>
         <th style="max-width:47px;">考勤系数</th>
         <th style="max-width:47px;">最终系数</th>
       </tr>
@@ -35,45 +35,23 @@
         <td>{{result.cardCoefficient}}%</td>
         <td>{{result.endCoefficient}}%</td>
       </tr>
-      <!--<tr>-->
-        <!--<td>2018.06</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>72.9%</td>-->
-      <!--</tr>-->
-      <!--<tr>-->
-        <!--<td>2018.06</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>72.9%</td>-->
-      <!--</tr>-->
-      <!--<tr>-->
-        <!--<td>2018.06</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>72.9%</td>-->
-      <!--</tr>-->
-      <!--<tr>-->
-        <!--<td>2018.06</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>72.9%</td>-->
-      <!--</tr>-->
-      <!--<tr>-->
-        <!--<td>2018.06</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>90%</td>-->
-        <!--<td>72.9%</td>-->
-      <!--</tr>-->
       </tbody>
     </x-table>
-
-  </div>
+    <!-- <flexbox align="flex-start" style="wdith:90%;border:1px solid blue;">
+      <flexbox-item style="max-width:47px;">考评周期</flexbox-item>
+      <flexbox-item>服务质量评价系数</flexbox-item>
+      <flexbox-item style="min-width:81px;">工作完成度评价系数</flexbox-item>
+      <flexbox-item style="max-width:47px;">考勤系数</flexbox-item>
+      <flexbox-item style="max-width:47px;">最终系数</flexbox-item>
+    </flexbox>
+    <flexbox align="flex-start" style="wdith:90%;border:1px solid blue;" v-for="(result,index) in resultList" :key="index">
+      <flexbox-item style="max-width:47px;">{{result.period}}</flexbox-item>
+      <flexbox-item>{{result.serviceCoefficient}}%</flexbox-item>
+      <flexbox-item style="min-width:81px;">工作完成度评价系数</flexbox-item>
+      <flexbox-item style="max-width:47px;">考勤系数</flexbox-item>
+      <flexbox-item style="max-width:47px;">最终系数</flexbox-item>
+    </flexbox> -->
+    </div>
 </template>
 
 <script>
@@ -168,9 +146,6 @@ a {
   font-weight: bold;
   text-align: center;
   padding: 10px 0;
-}
-td {
-  padding: 0 5px;
 }
 /* 表格下边框 */
 .vux-table td:before,
