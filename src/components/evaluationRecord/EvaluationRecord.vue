@@ -232,6 +232,8 @@
           this.list = []
           this.pageSize = 5
           this.pageNo = 1
+          this.year = year
+          this.month = month
           this.initData()
         } else {
           this.showErrorDateToast = true
@@ -265,6 +267,9 @@
         }
         // 设置过滤器
         var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+        if (this.isSelectedDate) {
+          filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+        }
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
         request('main_service_details', {
@@ -303,6 +308,9 @@
           }
           // 更改过滤条件
           filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+          if (this.isSelectedDate) {
+            filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+          }
           // 再次请求数据
           request('main_job_details', {
             params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
@@ -362,7 +370,7 @@
       // 跳转页面方法
       goTo(id, type, status, list) {
         // 判断类型是服务质量还是工作完成度
-        if (type === 1 && status === 0) {
+        if (type === 1 && status < 2) {
           // 如果是服务质量且状态是未读就跳转到服务质量评价页
           list.name = list.title
           localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
