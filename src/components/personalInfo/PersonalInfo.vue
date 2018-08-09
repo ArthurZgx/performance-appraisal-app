@@ -89,7 +89,11 @@
         const userId = localStorage.getItem('userId')
         const self = this
         if (userId) {
-          request('hm_personnels/' + userId).then(res => {
+          request('hm_personnels/' + userId, {
+            headers: {
+              'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c'
+            }
+          }).then(res => {
             console.log('用户信息1', res.data)
             if (!isEmptyObject(res.data)) {
               self.userInfo.userName = res.data.name
