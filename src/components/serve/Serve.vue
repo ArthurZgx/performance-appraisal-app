@@ -130,7 +130,8 @@ export default {
       pageNo: 1,
       onFacting: false,
       searchPageNo: 1,
-      searching: false
+      searching: false,
+      tempSearchValue: ''
     }
   },
   created() {
@@ -139,7 +140,6 @@ export default {
   },
   watch: {
     searchValue() {
-      console.log('搜索')
     },
     serveList() {
       console.log(this.serveList.length)
@@ -177,8 +177,9 @@ export default {
     searchChange() {},
     clickList() {},
     getSearchDatas() {
-      if (this.searching === false) {
+      if (this.searchValue !== this.tempSearchValue) {
         this.serveList = []
+        this.tempSearchValue = this.searchValue
       }
       this.searching = true
       this.showScrollerLoading = true
@@ -214,6 +215,9 @@ export default {
               },
               user_id: {
                 equalTo: localStorage.getItem('userId')
+              },
+              status: {
+                lessThan: '2'
               }
             }
           },
