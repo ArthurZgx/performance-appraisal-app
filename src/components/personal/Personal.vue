@@ -11,7 +11,7 @@
       <!--<h3>用户名</h3>-->
       <router-link to="/personalInfo">
         <div class="personal-top-content">
-          <img v-if="!avatar" class="logo" src="../../assets/wechat.png">
+          <img v-if="!avatar" class="logo" src="../../assets/top.png">
           <img v-if="avatar" class="logo" :src="avatar">
           <h3 text-align="center">{{userName}}</h3>
         </div>
@@ -146,6 +146,7 @@
 .logo {
   width: 100px;
   height: 100px;
+  border-radius: 50%;
 }
 .personal-center-content {
   width: 94%;

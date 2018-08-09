@@ -6,7 +6,8 @@
                 @on-click-more="showMenus = true">
                 我的信息
       </x-header>
-      <img class="logo" src="../../assets/vux_logo.png">
+      <img v-if="userInfo.avatar==null" class="logo" src="../../assets/top.png">
+      <img v-if="userInfo.avatar" class="logo" :src="userInfo.avatar">
       <!--<h3>个人信息页</h3>-->
     </div>
     <div>
@@ -63,7 +64,8 @@
           userName: '',
           postName: '',
           departmentName: '',
-          gender: ''
+          gender: '',
+          avatar: ''
         },
         addressData: ['ChinaAddressData'],
         addressValue: ['广东省', '深圳市', '南山区'],
@@ -82,6 +84,7 @@
       }
     },
     created() {
+      this.userInfo.avatar = localStorage.getItem('avatar')
       this.getUserInfo()
     },
     methods: {
@@ -139,5 +142,10 @@ li {
 }
 a {
   color: #42b983;
+}
+.logo{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 </style>

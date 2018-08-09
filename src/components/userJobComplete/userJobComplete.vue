@@ -64,6 +64,8 @@ export default {
         this.list = res.data
         this.msg = '接受数据' + res.data.length
         console.log(this.list)
+      }).catch(err => {
+        this.msg = err
       })
     }
 

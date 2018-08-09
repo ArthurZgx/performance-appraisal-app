@@ -17,7 +17,6 @@
 
       </cell>
     </group>
-    {{msg}}
     <!-- style="position: fixed !important;z-index: 500"-->
     <tabbar>
       <!--<tabbar-item>-->
@@ -96,12 +95,11 @@ export default {
           if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
             const userId = res.data.fields.id
             const name = res.data.fields.name
-            const avatar = res.data.workscope
-            this.msg = res.data.workscope
+            const avatar = res.data.fields.workscope
+            localStorage.setItem('avatar', avatar)
             // 将用户信息存入localStorage
             localStorage.setItem('userId', userId)
             localStorage.setItem('userName', name)
-            localStorage.setItem('avatar', avatar)
             // console.log('获取缓存', localStorage.getItem('userId'))
           }
         })
