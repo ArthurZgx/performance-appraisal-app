@@ -241,6 +241,10 @@
       },
       // 获取数据
       getDatas(param1, param2, type) {
+        if (localStorage.getItem('userId') === null) {
+          this.noData = true
+          return false
+        }
         if (this.pageSize === 0) {
           return false
         }

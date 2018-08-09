@@ -206,7 +206,10 @@ export default {
           this.showScrollerLoading = false
           return false
         }
-        // 配置请求参数
+        if (localStorage.getItem('userId') === null) {
+          return false
+        }
+          // 配置请求参数
         var params = {
           filters: {
             main_service_detail: {
@@ -261,6 +264,10 @@ export default {
         return false
       }
       var userId = localStorage.getItem('userId')
+      if (localStorage.getItem('userId') === null) {
+        this.noData = true
+        return false
+      }
       // 设置过滤器
       var filter = "{'main_service_detail':{'status':{lessThan:'2'},'user_id':{equalTo:'" + userId + "'}}}"
       var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"

@@ -18,6 +18,7 @@
               <td>{{alist.planContent}}</td>
             </tr>
             <tr><td colspan="2" v-if="list.length == '0'">没有数据</td></tr>
+            {{msg}}
           </tbody>
         </x-table>
       <!-- </group> -->
@@ -30,7 +31,8 @@ import request from '../../../src/utils/request.js'
 export default {
   data() {
     return {
-      list: []
+      list: [],
+      msg: '没有数据'
     }
   },
   components: {
@@ -50,6 +52,9 @@ export default {
       console.log(month)
       //   获取数据
       var userId = localStorage.getItem('userId')
+      if (userId === null) {
+        return false
+      }
       var filter = `{'main_job_detail':{'hmPersonnelId':{equalTo:'${userId}'},'year':{equalTo:'${year}'},'month':{equalTo:'${month}'},'status':{lessThan:'3'}}}`
       request('main_job_details', {
         params: {
@@ -57,6 +62,7 @@ export default {
         }
       }).then(res => {
         this.list = res.data
+        this.msg = '接受数据' + res.data.length
         console.log(this.list)
       })
     }

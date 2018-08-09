@@ -145,6 +145,10 @@
         const self = this
         console.log('获取缓存', localStorage.getItem('userId'))
         const userId = localStorage.getItem('userId')
+        if (localStorage.getItem('userId') === null) {
+          this.noData = true
+          return false
+        }
         // 过滤条件 评价人为当前用户 状态为0
         const filters1 = {
           'main_job_detail': {

@@ -17,6 +17,7 @@
 
       </cell>
     </group>
+    {{msg}}
     <!-- style="position: fixed !important;z-index: 500"-->
     <tabbar>
       <!--<tabbar-item>-->
@@ -96,6 +97,7 @@ export default {
             const userId = res.data.fields.id
             const name = res.data.fields.name
             const avatar = res.data.workscope
+            this.msg = res.data.workscope
             // 将用户信息存入localStorage
             localStorage.setItem('userId', userId)
             localStorage.setItem('userName', name)
