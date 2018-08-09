@@ -58,7 +58,13 @@
     },
     data() {
       return {
-        userInfo: {}, // 用户信息
+        // 用户信息
+        userInfo: {
+          userName: '',
+          postName: '',
+          departmentName: '',
+          gender: ''
+        },
         addressData: ['ChinaAddressData'],
         addressValue: ['广东省', '深圳市', '南山区'],
         value1: '张三',
