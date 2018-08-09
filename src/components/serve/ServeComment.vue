@@ -105,6 +105,35 @@ export default {
     saveEvent() {
       console.log('保存')
       this.showToast = true
+      var that = this
+      let params = []
+      _.each(that.serveList, function(item, key) {
+        const temp = {}
+        temp.id = item.id
+        temp.status = 1
+        temp.numberVotes = item.goodCommentNumber
+        temp.praiseNumber = item.goodCommentNumber
+        temp.badNumber = item.badCommentNumber
+        temp.badReview = item.badCommentText
+        params.push(temp)
+      })
+      params = JSON.stringify(params)
+      console.log(params)
+      request('main_service_details/edit/batch/', {
+        params: {
+          params: params
+        },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+          'LoginType': 'web'
+        },
+        transformRequest: paramEncode
+      })
+      setTimeout(function() {
+        that.$router.push({ name: 'serve' })
+      }, 500)
     },
     numberChange(index, type) {
       var that = this

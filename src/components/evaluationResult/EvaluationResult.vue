@@ -19,7 +19,7 @@
       <tr>
         <th style="max-width:47px;">考评周期</th>
         <th style="max-width:79px;">服务质量评价系数</th>
-        <th>工作完成度评价系数</th>
+        <th style="max-width:88px;">工作完成度评价系数</th>
         <th style="max-width:47px;">考勤系数</th>
         <th style="max-width:47px;">最终系数</th>
       </tr>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-  import { Group, Cell, XHeader, XTable, LoadMore } from 'vux'
+  import { Group, Cell, XHeader, XTable, LoadMore, Flexbox, FlexboxItem } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
 
@@ -88,7 +88,9 @@
       Cell,
       XHeader,
       XTable,
-      LoadMore
+      LoadMore,
+      Flexbox,
+      FlexboxItem
     },
     data() {
       return {
