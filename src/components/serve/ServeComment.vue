@@ -143,7 +143,7 @@ export default {
           list.goodCommentNumber = list.numberVotes - list.badCommentNumber
         }
         that.serveList.splice(index, list)
-      }, 1)
+      }, 30)
     },
     // 提交评价
     submitEvent() {
