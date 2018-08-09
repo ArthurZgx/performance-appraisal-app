@@ -82,8 +82,8 @@ export default {
     getUserInfo() {
       let code = ''
       // 获取URL中参数code
-      // let url = window.location.href // 线上部署用此处
-      let url = 'http://yinxin.tentop.com.cn/?code=AgU2V3pO6OJtMpOflXKEuvI-Y9G8SR8Kphg9wDo3WjA&state=1234556#/home' // 本地测试用此处
+      let url = window.location.href // 线上部署用此处
+      // let url = 'http://yinxin.tentop.com.cn/?code=AgU2V3pO6OJtMpOflXKEuvI-Y9G8SR8Kphg9wDo3WjA&state=1234556#/home' // 本地测试用此处
       if (url.indexOf('code') > 0) {
         url = url.split('?')[1]
         url = url.split('&')[0]
