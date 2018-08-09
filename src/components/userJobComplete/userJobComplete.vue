@@ -55,7 +55,7 @@ export default {
       if (userId === null) {
         return false
       }
-      var filter = `{'main_job_detail':{'hmPersonnelId':{equalTo:'${userId}'},'year':{equalTo:'${year}'},'month':{equalTo:'${month}'},'status':{lessThan:'3'}}}`
+      var filter = "{'main_job_detail':{'hmPersonnelId':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'},'status':{lessThan:'3'}}}"
       request('main_job_details', {
         params: {
           filters: filter
