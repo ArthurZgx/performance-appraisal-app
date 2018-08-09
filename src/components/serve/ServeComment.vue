@@ -13,8 +13,8 @@
           </flexbox-item>
         </flexbox>
         <group title-color="#666" class="commentNumber">
-          <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'good')"></x-number>
-          <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'bad')"></x-number>
+          <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'good', $event)"></x-number>
+          <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'bad', $event)"></x-number>
         </group>
         <!-- 差评说明 -->
         <group>
@@ -133,7 +133,7 @@ export default {
         that.$router.push({ name: 'serve' })
       }, 500)
     },
-    numberChange(index, type) {
+    numberChange(index, type, e) {
       var that = this
       var list = this.serveList[index]
       setTimeout(function() {
@@ -143,7 +143,7 @@ export default {
           list.goodCommentNumber = list.numberVotes - list.badCommentNumber
         }
         that.serveList.splice(index, list)
-      }, 30)
+      }, 100)
     },
     // 提交评价
     submitEvent() {
