@@ -11,8 +11,9 @@
       <!--<h3>用户名</h3>-->
       <router-link to="/personalInfo">
         <div class="personal-top-content">
-        <img class="logo" src="../../assets/vux_logo.png">
-        <h3 text-align="center">{{userName}}</h3>
+          <img v-if="!avatar" class="logo" src="../../assets/wechat.png">
+          <img v-if="avatar" class="logo" :src="avatar">
+          <h3 text-align="center">{{userName}}</h3>
         </div>
       </router-link>
     </div>
@@ -105,7 +106,8 @@
         // preserves its current state and we are modifying
         // its initial state.
         msg: 'Hello World!',
-        userName: ''
+        userName: '',
+        avatar: '' // 从缓存获取的用户头像
       }
     },
     created() {
@@ -115,6 +117,7 @@
     methods: {
       init() {
         this.userName = localStorage.getItem('userName')
+        this.avatar = localStorage.getItem('avatar')
         // console.log('init')
         // const a = [1, 2, 3, 4, 5]
         // _.each(a, function(i, j) {

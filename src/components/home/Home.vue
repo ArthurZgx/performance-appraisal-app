@@ -83,7 +83,7 @@ export default {
       let code = ''
       // 获取URL中参数code
       let url = window.location.href // 线上部署用此处
-      // let url = 'http://yinxin.tentop.com.cn/?code=AFtY-nQYO8uZeK3o_DQPP2PHe3eA3w5O7gv72a3Hi3U&state=1234556#/home' // 本地测试用此处
+      // let url = 'http://yinxin.tentop.com.cn/?code=Jwp7MxoTPOKamEsd-KR3mEy0e-bGcAvKra_1yi6gL1Q&state=1234556#/home' // 本地测试用此处
       if (url.indexOf('code') > 0) {
         url = url.split('?')[1]
         url = url.split('&')[0]
@@ -95,13 +95,19 @@ export default {
           if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
             const userId = res.data.fields.id
             const name = res.data.fields.name
+            const avatar = res.data.workscope
             // 将用户信息存入localStorage
             localStorage.setItem('userId', userId)
             localStorage.setItem('userName', name)
+            localStorage.setItem('avatar', avatar)
             // console.log('获取缓存', localStorage.getItem('userId'))
           }
         })
       }
+      // else {
+      //   localStorage.setItem('userId', '-1062673909925590171')
+      //   localStorage.setItem('userName', '刘婧')
+      // }
       // console.log('code', code)
     }
   }
