@@ -13,8 +13,8 @@
           </flexbox-item>
         </flexbox>
         <group title-color="#666" class="commentNumber">
-          <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'good')"></x-number>
-          <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="10" @click.native="numberChange(index,'bad')"></x-number>
+          <x-number title="好评数：" align="left" v-model="list.goodCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'good')"></x-number>
+          <x-number title="差评数：" align="left" v-model="list.badCommentNumber" button-style="round" :min="0" :max="list.numberVotes" @click.native="numberChange(index,'bad')"></x-number>
         </group>
         <!-- 差评说明 -->
         <group>
@@ -90,7 +90,6 @@ export default {
     this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
     for (var i = 0, len = this.serveList.length; i < len; i++) {
       this.serveList[i].badCommentNumber = this.serveList[i].numberVotes - this.serveList[i].goodCommentNumber
-      this.serveList[i].badCommentText = ''
     }
   },
   methods: {
@@ -111,7 +110,6 @@ export default {
         const temp = {}
         temp.id = item.id
         temp.status = 1
-        temp.numberVotes = item.goodCommentNumber
         temp.praiseNumber = item.goodCommentNumber
         temp.badNumber = item.badCommentNumber
         temp.badReview = item.badCommentText
@@ -156,7 +154,6 @@ export default {
         const temp = {}
         temp.id = item.id
         temp.status = 2
-        temp.numberVotes = item.goodCommentNumber
         temp.praiseNumber = item.goodCommentNumber
         temp.badNumber = item.badCommentNumber
         temp.badReview = item.badCommentText
@@ -179,35 +176,7 @@ export default {
       setTimeout(function() {
         that.$router.push({ name: 'serve' })
       }, 500)
-      // var json = {
-      //   goodCommentNum: this.goodCommentNum,
-      //   badCommentNum: this.badCommentNum,
-      //   badCommentText: this.badCommentText
-      // }
-      // this.serveList.status = '1'
-      // localStorage.setItem('jsonTemp', JSON.stringify(json))
-      // localStorage.setItem('serveList', JSON.stringify(this.serveList))
-      // this.$router.push({ name: 'serveCommentSuccess' })
-      // console.log(localStorage.getItem('serveList'))
     }
-    // goodOption(type) {
-    //   if (type === 'minus') {
-    //     if (this.goodCommentNum > 0) {
-    //       this.goodCommentNum--
-    //     }
-    //   } else if (type === 'plus') {
-    //     this.goodCommentNum++
-    //   }
-    // },
-    // badOption(type) {
-    //   if (type === 'minus') {
-    //     if (this.badCommentNum > 0) {
-    //       this.badCommentNum--
-    //     }
-    //   } else if (type === 'plus') {
-    //     this.badCommentNum++
-    //   }
-    // }
   }
 }
 </script>

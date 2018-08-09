@@ -24,8 +24,7 @@
       </search>
     </div>
     <group class="home_group groupList">
-      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-108">
       <div>
       <div class="aGroupList" v-for="(item,index) in completeList" :key="index">
         <div class="completeClassifyTitle">{{item.department}}</div>
@@ -40,25 +39,9 @@
       </div>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
+       <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
       </scroller>
     </group>
-    <!-- 一键提交 -->
-    <!--<sticky ref="sticky"-->
-            <!--:offset="100"-->
-            <!--:check-sticky-support="false"-->
-            <!--disabled="disabled">-->
-      <!--<flexbox style="background:white;">-->
-        <!--<flexbox-item :span="3.5">-->
-          <!--<div @click="clickAll" class="home_div">-->
-            <!--<span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选-->
-          <!--</div>-->
-        <!--</flexbox-item>-->
-        <!--<flexbox-item>-->
-          <!--<x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>-->
-        <!--</flexbox-item>-->
-      <!--</flexbox>-->
-    <!--</sticky>-->
-    <!-- 弹出框 -->
     <div>
       <x-dialog v-model="showSubmitDialog" class="dialog-demo">
         <span class="img-box">
@@ -81,8 +64,6 @@
   import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, Scroller, LoadMore } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  // import { compare } from '@/utils'
-
   export default {
     name: 'complete',
     components: {

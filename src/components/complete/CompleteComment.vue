@@ -145,7 +145,7 @@
       // 获取当前评价人的所有任务
       getTasks() {
         const self = this
-        self.commentId = '-1062673909925590171'
+        self.commentId = localStorage.getItem('userId')
         const filters = {
           'main_job_detail': {
             'main_job_service_evaluation_id': { equalTo: self.currentTask.id },
@@ -156,6 +156,7 @@
         request('main_job_details', {
           params: { filters: filters }
         }).then(res => {
+          console.log(res)
           console.log('所有任务', res.data)
           const allTask = res.data
           if (allTask.length) {

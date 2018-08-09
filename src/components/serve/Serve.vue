@@ -19,7 +19,7 @@
     </search>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="0">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-145">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
         <div class="serveClassifyTitle">{{item.title}}</div>
@@ -44,8 +44,8 @@
       </div>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
-    </scroller>
       <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
+    </scroller>
     </group>
     <!-- 一键提交 -->
     <sticky ref="sticky"
@@ -252,11 +252,13 @@ export default {
     // 获取服务质量明细表数据
     getDatas() {
       if (this.pageSize === 0) {
+        this.showScrollerLoading = false
+        this.noData = true
         return false
       }
       var userId = localStorage.getItem('userId')
       // 设置过滤器
-      var filter = "{'main_service_detail':{'status':{equalTo:'0'},'user_id':{equalTo:'" + userId + "'}}}"
+      var filter = "{'main_service_detail':{'status':{lessThan:'2'},'user_id':{equalTo:'" + userId + "'}}}"
       var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
       // 请求数据
       request('main_service_details', {
@@ -277,25 +279,25 @@ export default {
           res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
         }
         if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
-          res.data[i].includes.main_job_service_evaluation.title = '错误数据'
-          res.data[i].includes.main_job_service_evaluation.type = -1
-          res.data[i].superior.status = -1
-          res.data[i].includes.main_job_service_evaluation.id = -1
+          console.log('数据格式有错误')
+        } else {
+          tempArray.push({
+            name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
+            time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+            type: res.data[i].includes.main_job_service_evaluation.type,
+            status: res.data[i].superior.status,
+            id: res.data[i].superior.id,
+            userId: res.data[i].includes.main_job_service_evaluation.userId,
+            goodCommentNumber: res.data[i].superior.praiseNumber,
+            numberVotes: res.data[i].superior.numberVotes,
+            badCommentText: res.data[i].superior.badReview,
+            checked: false
+          })
+          userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
-        tempArray.push({
-          name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
-          time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
-          type: res.data[i].includes.main_job_service_evaluation.type,
-          status: res.data[i].superior.status,
-          id: res.data[i].superior.id,
-          userId: res.data[i].includes.main_job_service_evaluation.userId,
-          goodCommentNumber: res.data[i].superior.numberVotes,
-          numberVotes: res.data[i].superior.numberVotes,
-          checked: false
-        })
-        userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
       }
       if (res.data.length === 0) {
+        this.showScrollerLoading = false
         this.noData = true
         return false
       }
@@ -388,10 +390,10 @@ export default {
       var tempArray = [] // 有差评的数据
       var tempArray2 = [] // 全部好评的数据
       for (var i = 0, len = this.checklist1.length; i < len; i++) {
-        if (this.checklist1[i].goodCommentNumber !== 10) {
+        if (this.checklist1[i].goodCommentNumber !== this.checklist1[i].numberVotes && this.checklist1[i].status === 0) {
           tempArray.push(this.checklist1[i])
         }
-        if (this.checklist1[i].goodCommentNumber === 10) {
+        if (this.checklist1[i].goodCommentNumber === this.checklist1[i].numberVotes || this.checklist1[i].status === 1) {
           tempArray2.push(this.checklist1[i])
         }
       }
@@ -401,10 +403,10 @@ export default {
         const temp = {}
         temp.id = item.id
         temp.status = 2
-        temp.numberVotes = 10
-        temp.praiseNumber = 10
+        temp.praiseNumber = item.goodCommentNumber
+        temp.badNumber = item.numberVotes - item.goodCommentNumber
         temp.badNumber = 0
-        temp.badReview = '没有差评'
+        temp.badReview = item.badCommentText || '无评价'
         params.push(temp)
       })
       params = JSON.stringify(params)
@@ -426,6 +428,7 @@ export default {
         this.$router.push({ name: 'serveComment' })
       } else {
         // 如果全部好评 刷新当前列表
+        this.serveList = []
         this.getDatas()
       }
     },

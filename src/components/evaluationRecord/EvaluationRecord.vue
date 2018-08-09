@@ -2,17 +2,12 @@
   <div class="evaluationRecord">
 
     <div class="vux-demo">
-      <!--<img class="logo" src="../../assets/vux_logo.png">-->
-      <!--<h3>考评记录</h3>-->
       <x-header :right-options="{showMore: false}"
                 style="box-shadow:none;"
                 @on-click-more="showMenus = true">
                 考评记录
       </x-header>
     </div>
-    <!--<group>-->
-    <!--<cell title="考评记录" value="..." is-link link="/personal"></cell>-->
-    <!--</group>-->
 
     <flexbox style="background:#F0EFF5;font-size:13px;">
       <flexbox-item><div class="flex-demo">
@@ -22,11 +17,6 @@
           :border-intent="false"
           :arrow-direction="kaoping ? 'up' : 'down'"
           @click.native="kaoping = !kaoping,chakan = false,riqi = false" ></cell>
-        <!-- <template v-if="kaoping">
-          <cell-box :border-intent="false" class="sub-item">全部类型</cell-box>
-          <cell-box :border-intent="false" class="sub-item">服务质量评价</cell-box>
-          <cell-box :border-intent="false" class="sub-item">工作完成评价</cell-box>
-        </template> -->
       </div></flexbox-item>
       <flexbox-item v-if="!(pageType === 'alreadySubmit')">
       <div class="flex-demo">
@@ -36,11 +26,6 @@
           :border-intent="false"
           :arrow-direction="chakan ? 'up' : 'down'"
           @click.native="chakan = !chakan,kaoping = false, riqi = false" ></cell>
-        <!-- <template v-if="chakan">
-          <cell-box :border-intent="false" class="sub-item">全部</cell-box>
-          <cell-box :border-intent="false" class="sub-item">已查看类型</cell-box>
-          <cell-box :border-intent="false" class="sub-item">未查看类型</cell-box>
-        </template> -->
       </div></flexbox-item>
       <flexbox-item><div class="flex-demo">
         <cell
@@ -58,35 +43,14 @@
     </flexbox>
     <!-- 判断点击菜单类型,显示选择栏 -->
     <!-- 显示考评类型 -->
-    <group v-show="kaoping" style="margin-top:-1.2em;">
+    <group v-show="kaoping" style="margin-top:-0em;">
       <radio v-model="r1" :options="radio001" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
     <!-- 显示查看类型 -->
-    <group v-show="chakan" style="margin-top:-1.2em;">
+    <group v-show="chakan" style="margin-top:-0em;">
       <radio v-model="r2" :options="radio002" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
-    <group v-show="riqi" style="margin-top:-1.2em;">
-      <!-- <flexbox> -->
-        <!-- 显示年份 -->
-        <!-- <flexbox orient="vertical" :gutter="0">
-          <flexbox-item  v-for="(item,index) in years" :key="index">
-            <cell :title="item+'年'" is-link :style="selectedYearIndex==index?'color:#3891F0;':''"  @click.native="selectedYearIndex=index"></cell>
-          </flexbox-item>
-        </flexbox> -->
-        <!-- 显示月份 -->
-          <!-- <flexbox orient="vertical" :style="'height:'+years.length*44+'px;overflow:scroll;background:#eee;'" :gutter="0">
-          <flexbox-item  v-for="(item,index) in month" :key="index">
-            <cell :title="item+'月'" :style="selectedMouthIndex==index?'color:#3891F0;':''" @click.native="selectedMouth(index)"></cell>
-          </flexbox-item>
-        </flexbox>
-      </flexbox> -->
-  <!-- <inline-calendar
-  ref="calendar"
-  @on-change="onDateChange"
-  class="inline-calendar-demo"
-  v-model="selectedData"
-  > -->
-  <!-- </inline-calendar> -->
+    <group v-show="riqi" style="margin-top:-0em;">
   <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM"></datetime-view>
   <flexbox>
     <flexbox-item><x-button @click.native="clearSelectedDate">清空</x-button></flexbox-item>
@@ -99,13 +63,13 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
-      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="1700">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-92">
       <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
       @click.native="goTo(item.id,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
+      <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
     </scroller>
     </group>
     <toast v-model="showErrorDateToast" type="text" style="width:12.6em;" :time="800" is-show-mask text="仅有一年内数据" position="bottom"></toast>
@@ -172,17 +136,6 @@
       if (this.month < 10) {
         this.month = '0' + this.month
       }
-      // this.list.push(JSON.parse(localStorage.getItem('serveList')))
-      // _.each(this.list, function(item, key) {
-      //   item.title = item.name
-      //   item.desc = item.time
-      // })
-      // console.log(this.list)
-      // 判断选择进入的页面类型,并设置localStorage
-      // request('main_job_service_evaluations').then(res => {
-      //   this.allDataList = res.data
-      //   this.list = res.data
-      // })
     },
     methods: {
       onScrollBottom() {
@@ -232,12 +185,6 @@
       selectedMouth(index) {
         this.selectedMouthIndex = index
         this.closeRadioWindow()
-        // var year = this.years[this.selectedYearIndex]
-        // var mouth = this.month[this.selectedMouthIndex]
-        // var tempArray = []
-        // for(var i = 0, len = this.list.length; i < len; i++) {
-        //   console.log('i')
-        // }
       },
       onDateChange() {
         this.riqi = false
@@ -249,18 +196,6 @@
         this.pageSize = 5
         this.pageNo = 1
         this.initData()
-        // console.log(this.r1)
-        // switch (this.r1) {
-        //   case '全部类型':
-        //     this.list = this.serviceDataList.concat(this.jobDataList)
-        //     break
-        //   case '服务质量评价':
-        //     this.list = this.serviceDataList
-        //     break
-        //   case '工作完成评价':
-        //     this.list = this.jobDataList
-        //     break
-        // }
       },
       // 是否查看筛选
       watchEvaluationType() {
@@ -269,32 +204,6 @@
         this.pageSize = 5
         this.pageNo = 1
         this.initData()
-        // this.list = this.serviceDataList.concat(this.jobDataList)
-        // var tempDataList = []
-        // switch (this.r2) {
-        //   case '全部':
-        //     break
-        //   case '已查看通知':
-        //     tempDataList = []
-        //     console.log(this.list)
-        //     for (var i = 0, len = this.list.length; i < len; i++) {
-        //       if (this.list[i].status !== 0) {
-        //         tempDataList.push(this.list[i])
-        //       }
-        //       console.log(tempDataList)
-        //     }
-        //     this.list = tempDataList
-        //     break
-        //   case '未查看通知':
-        //     tempDataList = []
-        //     for (i = 0, len = this.list.length; i < len; i++) {
-        //       if (this.list[i].status === 0) {
-        //         tempDataList.push(this.list[i])
-        //       }
-        //     }
-        //     this.list = tempDataList
-        //     break
-        // }
       },
       clearSelectedDate() {
         console.log('确实清空了')
@@ -368,24 +277,22 @@
               res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
             }
             if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
-              res.data[i].includes.main_job_service_evaluation.title = '错误数据'
-              res.data[i].includes.main_job_service_evaluation.type = -1
-              res.data[i].superior.status = -1
-              res.data[i].includes.main_job_service_evaluation.id = -1
+              console.log('格式有错误')
+            } else {
+              // 压入数据
+              console.log(res.data)
+              tempArray.push({
+                title: res.data[i].includes.main_job_service_evaluation.title,
+                date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+                type: res.data[i].includes.main_job_service_evaluation.type,
+                status: res.data[i].superior.status,
+                id: res.data[i].includes.main_job_service_evaluation.id,
+                year: res.data[i].superior.year,
+                month: res.data[i].superior.month,
+                numberVotes: res.data[i].superior.numberVotes,
+                goodCommentNumber: res.data[i].superior.praiseNumber
+              })
             }
-            // 压入数据
-            console.log(res.data)
-            tempArray.push({
-              title: res.data[i].includes.main_job_service_evaluation.title,
-              date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
-              type: res.data[i].includes.main_job_service_evaluation.type,
-              status: res.data[i].superior.status,
-              id: res.data[i].includes.main_job_service_evaluation.id,
-              year: res.data[i].superior.year,
-              month: res.data[i].superior.month,
-              numberVotes: res.data[i].superior.numberVotes,
-              goodCommentNumber: res.data[i].superior.praiseNumber
-            })
           }
           // 获取数据
           this.serviceDataList = tempArray
@@ -400,18 +307,27 @@
           request('main_job_details', {
             params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
           }).then(res => {
+            console.log(310, res)
             tempArray = []
             for (var i = 0, len = res.data.length; i < len; i++) {
-              tempArray.push({
-                title: res.data[i].includes.main_job_service_evaluation.title,
-                date: res.data[i].superior.year + '-' + res.data[i].superior.month,
-                type: res.data[i].includes.main_job_service_evaluation.type,
-                status: res.data[i].superior.status,
-                id: res.data[i].includes.main_job_service_evaluation.id,
-                year: res.data[i].superior.year,
-                month: res.data[i].superior.month,
-                userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
-              })
+              // 如果数据格式错误就分配一个参数
+              if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+                res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+              }
+              if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
+                console.log('格式有错误')
+              } else {
+                tempArray.push({
+                  title: res.data[i].includes.main_job_service_evaluation.title,
+                  date: res.data[i].superior.year + '-' + res.data[i].superior.month,
+                  type: res.data[i].includes.main_job_service_evaluation.type,
+                  status: res.data[i].superior.status,
+                  id: res.data[i].includes.main_job_service_evaluation.id,
+                  year: res.data[i].superior.year,
+                  month: res.data[i].superior.month,
+                  userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
+                })
+              }
             }
             // 去除重复数据
             for (var a = 0; a < tempArray.length - 1; a++) {
@@ -434,8 +350,11 @@
             }
             // 拼接数据
             this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+            console.log(347, this.list)
             if (this.list.length === 0) {
               this.noData = true
+            } else {
+              this.noData = false
             }
           })
         })
