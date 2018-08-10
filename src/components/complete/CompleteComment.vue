@@ -71,7 +71,7 @@
   import { XHeader, Toast, Icon, XTable, Flexbox, FlexboxItem, XButton, Cell, Group, Confirm } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  import { paramEncode } from '@/utils'
+  import { paramEncode, parseTime } from '@/utils'
   export default {
     name: 'completeComment',
     components: {
@@ -99,6 +99,7 @@
         toastText: '已取消', // 提示文字
         showConfirm: false, // 点击未完成的弹出框
         resultTable: {}, // 当前被评价人的几个任务对应的结果表数据
+        evaluateTime: '', // 评价时间
         taskList: [
           // { taskName: '2018年是决胜全面建成小康社会、实施“十三五”规划承上启下的关键一年', weights: '10', order: 1, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
           // { taskName: '第十二届全国人民代表大会第一次会议以来的五年，是我国发展进程中极不平凡的五年', weights: '20', order: 2, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
@@ -381,6 +382,25 @@
           transformRequest: paramEncode
         }).then(res3 => {
           console.log('修改状态成功', res3.data)
+          console.log('时间', res3.headers.date)
+          self.editEvaluateTime(res3.headers.date)
+
+          // const evaluateYear = res
+        })
+      },
+      // 提交后 存储评价时间
+      editEvaluateTime(dateString) {
+        if (!dateString) return
+        const date = new Date(dateString)
+        const evaluateTime = parseTime(date)
+        console.log(393, evaluateTime)
+        request('main_job_service_evaluations/' + this.currentTask.id + '/edit', {
+          method: 'POST',
+          params: { evaluationTime: evaluateTime },
+          headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
+          transformRequest: paramEncode
+        }).then(res => {
+          console.log('添加评价时间成功', res)
         })
       }
     }
