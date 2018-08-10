@@ -365,16 +365,21 @@
       editStatus() {
         const self = this
         let params = []
+        debugger
+        // 状态修改为2 计算得分
         _.each(self.taskList, function(item, key) {
           const temp = {}
           temp.id = item.id
           temp.status = 2
           temp.completionRatio = item.completionRatio
+          temp.scoreScore = parseInt(item.weights) * parseInt(item.completionRatio) / 100
+          debugger
           params.push(temp)
         })
 
         params = JSON.stringify(params)
         console.log(params)
+        // 批量修改明细表
         request('main_job_details/edit/batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -383,7 +388,7 @@
         }).then(res3 => {
           console.log('修改状态成功', res3.data)
           console.log('时间', res3.headers.date)
-          self.editEvaluateTime(res3.headers.date)
+          // self.editEvaluateTime(res3.headers.date)
 
           // const evaluateYear = res
         })
