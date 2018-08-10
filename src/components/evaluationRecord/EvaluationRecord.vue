@@ -18,7 +18,7 @@
           :arrow-direction="kaoping ? 'up' : 'down'"
           @click.native="kaoping = !kaoping,chakan = false,riqi = false" ></cell>
       </div></flexbox-item>
-      <flexbox-item v-if="!(pageType === 'alreadySubmit')">
+      <flexbox-item v-if="(pageType === 'inSubmit')">
       <div class="flex-demo">
         <cell
           :title="('查看类型')"
@@ -169,7 +169,7 @@
             break
             // 如果是未提交
           case 'inSubmit':
-            this.getDatas(2, 2, 'lessThan')
+            this.getDatas(3, 3, 'lessThan')
             break
         }
       },
@@ -206,7 +206,13 @@
         this.initData()
       },
       clearSelectedDate() {
-        console.log('确实清空了')
+        // 恢复为当前日期
+        var date = new Date()
+        this.year = date.getFullYear()
+        this.month = date.getMonth() + 1
+        if (this.month < 10) {
+          this.month = '0' + this.month
+        }
         this.isSelectedDate = false
         this.closeRadioWindow()
         this.showScrollerLoading = true
@@ -243,6 +249,7 @@
       getDatas(param1, param2, type) {
         if (localStorage.getItem('userId') === null) {
           this.noData = true
+          this.showScrollerLoading = false
           return false
         }
         if (this.pageSize === 0) {
@@ -262,12 +269,12 @@
         }
         // 判断是否查看
         if (this.r2 === '已查看通知') {
-          type = 'notEqualTo'
-          param1 = 0
-          param2 = 0
+          type = 'in'
+          param1 = param2 = [1, 2]
         } else if (this.r2 === '未查看通知') {
           param1 = 0
           param2 = 0
+        } else if (this.r2 === '全部') {
         }
         // 设置过滤器
         var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
