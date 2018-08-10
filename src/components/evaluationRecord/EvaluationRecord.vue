@@ -161,15 +161,15 @@
         switch (type) {
           // 如果是已提交
           case 'alreadySubmit':
-            this.getDatas(2, 2)
+            this.getDatas("'2'", "'2'")
             break
             // 如果是已过期
           case 'pastSubmit':
-            this.getDatas(3, 3)
+            this.getDatas("'3'", "'3'")
             break
             // 如果是未提交
           case 'inSubmit':
-            this.getDatas(3, 3, 'lessThan')
+            this.getDatas("'3'", "'3'", 'lessThan')
             break
         }
       },
@@ -213,6 +213,9 @@
         if (this.month < 10) {
           this.month = '0' + this.month
         }
+        this.selectedDate = this.year + '-' + this.month
+        this.$refs.datetime.render()
+        console.log(this.selectedDate)
         this.isSelectedDate = false
         this.closeRadioWindow()
         this.showScrollerLoading = true
@@ -223,6 +226,7 @@
       },
       // 根据日期筛选
       selectedDateChange() {
+        console.log(this.selectedDate)
         var year = this.selectedDate.split('-')[0]
         var month = this.selectedDate.split('-')[1]
         var date = new Date()
@@ -270,16 +274,16 @@
         // 判断是否查看
         if (this.r2 === '已查看通知') {
           type = 'in'
-          param1 = param2 = [1, 2]
+          param1 = param2 = '[1,2]'
         } else if (this.r2 === '未查看通知') {
+          type = 'equalTo'
           param1 = 0
           param2 = 0
-        } else if (this.r2 === '全部') {
-        }
+        } 
         // 设置过滤器
-        var filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+        var filter = "{'main_service_detail':{'status':{" + type + ":" + param1 + "},'user_id':{equalTo:'" + userId + "'}}}"
         if (this.isSelectedDate) {
-          filter = "{'main_service_detail':{'status':{" + type + ":'" + param1 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+          filter = "{'main_service_detail':{'status':{" + type + ":" + param1 + "},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
         }
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
@@ -319,9 +323,9 @@
             this.pageSize = 10 - this.pageSize
           }
           // 更改过滤条件
-          filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'}}}"
+          filter = "{'main_job_detail':{'status':{" + type + ":" + param2 + "},'user_id':{equalTo:'" + userId + "'}}}"
           if (this.isSelectedDate) {
-            filter = "{'main_job_detail':{'status':{" + type + ":'" + param2 + "'},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+            filter = "{'main_job_detail':{'status':{" + type + ":" + param2 + "},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
           }
           // 再次请求数据
           request('main_job_details', {
