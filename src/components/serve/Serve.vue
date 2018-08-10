@@ -172,15 +172,20 @@ export default {
     resultClick() {},
     searchSubmit() {
       console.log('提交搜索')
-      this.getSearchDatas()
+      this.getSearchDatas(true)
     },
     searchChange() {},
     clickList() {},
-    getSearchDatas() {
+    getSearchDatas(sub) {
+      if (this.searchValue === this.tempSearchValue && sub) {
+        return false
+      }
       if (this.searchValue !== this.tempSearchValue) {
         this.serveList = []
         this.tempSearchValue = this.searchValue
       }
+      console.log(sub)
+      this.tempSearchValue = this.searchValue
       this.searching = true
       this.showScrollerLoading = true
       if (this.searchValue === '') {
@@ -246,7 +251,7 @@ export default {
           setTimeout(() => {
             if (this.searching) {
               this.searchPageNo = this.searchPageNo + 1
-              this.getSearchDatas()
+              this.getSearchDatas(false)
             } else {
               this.pageNo = this.pageNo + 1
               this.getDatas()
@@ -410,6 +415,13 @@ export default {
       }
       this.showSubmitToast = true
       let params = []
+      let date = new Date()
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = '0' + month
+      }
+      date = date.toString().split(' ')
+      date = date[3] + '-' + month + '-' + date[2] + ' ' + date[4]
       _.each(tempArray2, function(item, key) {
         const temp = {}
         temp.id = item.id
@@ -418,6 +430,7 @@ export default {
         temp.badNumber = item.numberVotes - item.goodCommentNumber
         temp.badNumber = 0
         temp.badReview = item.badCommentText || '无评价'
+        temp.evaluationTime = date
         params.push(temp)
       })
       params = JSON.stringify(params)

@@ -150,6 +150,13 @@ export default {
       this.showSubmitToast = true
       var that = this
       let params = []
+      let date = new Date()
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = '0' + month
+      }
+      date = date.toString().split(' ')
+      date = date[3] + '-' + month + '-' + date[2] + ' ' + date[4]
       _.each(that.serveList, function(item, key) {
         const temp = {}
         temp.id = item.id
@@ -157,6 +164,7 @@ export default {
         temp.praiseNumber = item.goodCommentNumber
         temp.badNumber = item.badCommentNumber
         temp.badReview = item.badCommentText
+        temp.evaluationTime = date
         params.push(temp)
       })
       params = JSON.stringify(params)

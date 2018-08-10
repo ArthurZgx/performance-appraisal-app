@@ -120,7 +120,7 @@
         showScrollerLoading: true,
         pageNo: 1,
         onFacting: false,
-        pageSize: 5,
+        pageSize: 5000,
         showErrorDateToast: false,
         year: 2018,
         month: 8,
@@ -161,7 +161,7 @@
         switch (type) {
           // 如果是已提交
           case 'alreadySubmit':
-            this.getDatas("'2'", "'2'")
+            this.getDatas("[2,4]", "[2,4]",'in')
             break
             // 如果是已过期
           case 'pastSubmit':
@@ -169,7 +169,7 @@
             break
             // 如果是未提交
           case 'inSubmit':
-            this.getDatas("'3'", "'3'", 'lessThan')
+            this.getDatas("'2'", "'2'", 'lessThan')
             break
         }
       },
@@ -191,17 +191,23 @@
       },
       // 类型筛选
       evaluationType() {
-        this.showScrollerLoading = true
         this.list = []
-        this.pageSize = 5
-        this.pageNo = 1
-        this.initData()
+        // this.pageSize = 5
+        // this.pageNo = 1
+        // this.initData()
+        if (this.r1 === '服务质量评价') {
+          this.list = this.serviceDataList
+        } else if (this.r1 === '工作完成评价') {
+          this.list = this.jobDataList
+        } else if (this.r1 === '全部类型') {
+          this.list = this.serviceDataList.concat(this.jobDataList)
+        }
       },
       // 是否查看筛选
       watchEvaluationType() {
         this.showScrollerLoading = true
         this.list = []
-        this.pageSize = 5
+        this.pageSize = 5000
         this.pageNo = 1
         this.initData()
       },
@@ -220,7 +226,7 @@
         this.closeRadioWindow()
         this.showScrollerLoading = true
         this.list = []
-        this.pageSize = 5
+        this.pageSize = 5000
         this.pageNo = 1
         this.initData()
       },
@@ -240,7 +246,7 @@
           this.closeRadioWindow()
           this.showScrollerLoading = true
           this.list = []
-          this.pageSize = 5
+          this.pageSize = 5000
           this.pageNo = 1
           this.year = year
           this.month = month
@@ -264,26 +270,26 @@
           type = 'equalTo'
         }
         // 判断选择类型
-        if (this.r1 === '全部类型') {
-          this.pageSize = 5
-        } else if (this.r1 === '服务质量评价') {
-          this.pageSize = 10
-        } else if (this.r1 === '工作完成评价') {
-          this.pageSize = 0
-        }
+        // if (this.r1 === '全部类型') {
+        //   this.pageSize = 5
+        // } else if (this.r1 === '服务质量评价') {
+        //   this.pageSize = 10
+        // } else if (this.r1 === '工作完成评价') {
+        //   this.pageSize = 0
+        // }
         // 判断是否查看
         if (this.r2 === '已查看通知') {
           type = 'in'
-          param1 = param2 = '[1,2]'
+          param1 = param2 = '[1]'
         } else if (this.r2 === '未查看通知') {
           type = 'equalTo'
           param1 = 0
           param2 = 0
-        } 
+        }
         // 设置过滤器
-        var filter = "{'main_service_detail':{'status':{" + type + ":" + param1 + "},'user_id':{equalTo:'" + userId + "'}}}"
+        var filter = '{"main_service_detail":{"status":{' + type + ' : ' + param1 + '},"user_id":{equalTo:"' + userId + '"}}}'
         if (this.isSelectedDate) {
-          filter = "{'main_service_detail':{'status':{" + type + ":" + param1 + "},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+          filter = '{"main_service_detail":{"status":{' + type + ':' + param1 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
         }
         var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
         // 请求数据
@@ -317,15 +323,15 @@
           }
           // 获取数据
           this.serviceDataList = tempArray
-          if (this.pageSize === '全部类型') {
-            this.pageSize = 10 - this.serviceDataList.length
-          } else {
-            this.pageSize = 10 - this.pageSize
-          }
+          // if (this.pageSize === '全部类型') {
+          //   this.pageSize = 10 - this.serviceDataList.length
+          // } else {
+          //   this.pageSize = 10 - this.pageSize
+          // }
           // 更改过滤条件
-          filter = "{'main_job_detail':{'status':{" + type + ":" + param2 + "},'user_id':{equalTo:'" + userId + "'}}}"
+          filter = '{"main_job_detail":{"status":{' + type + ' : ' + param2 + '},"user_id":{equalTo:"' + userId + '"}}}'
           if (this.isSelectedDate) {
-            filter = "{'main_job_detail':{'status':{" + type + ":" + param2 + "},'user_id':{equalTo:'" + userId + "'},'year':{equalTo:'" + this.year + "'},'month':{equalTo:'" + this.month + "'}}}"
+            filter = '{"main_job_detail":{"status":{' + type + ':' + param2 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
           }
           // 再次请求数据
           request('main_job_details', {
@@ -354,32 +360,32 @@
               }
             }
             // 去除重复数据
-            for (var a = 0; a < tempArray.length - 1; a++) {
+            for (var a = 0; a < tempArray.length; a++) {
               for (var c = 1; c < tempArray.length; c++) {
-                if (tempArray[a].title === tempArray[c].title && tempArray[a].id === tempArray[c].id) {
+                if (tempArray[a].id === tempArray[c].id) {
                   tempArray.splice(c, 1)
                 }
               }
             }
             this.jobDataList = tempArray
             // 根据获取的数据条数判断下次应该加载多少条数据
-            if (this.jobDataList.length < this.pageSize && this.serviceDataList.length < this.pageSize) {
-              this.pageSize = 0
-            } else if (this.jobDataList.length < this.pageSize || this.serviceDataList.length < this.pageSize) {
-              this.pageSize = 10
-            }
+            // if (res.data.length < this.pageSize && this.serviceDataList.length < this.pageSize) {
+            //   this.pageSize = 0
+            // } else if (res.data.length < this.pageSize || this.serviceDataList.length < this.pageSize) {
+            //   this.pageSize = 10
+            // }
             // 如果获取的总数据小于10条就关闭加载显示
-            if (this.serviceDataList.length + this.jobDataList.length < 10) {
+            if (this.serviceDataList.length + res.data.length < 10000) {
               this.showScrollerLoading = false
             }
             // 拼接数据
             this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
             console.log(347, this.list)
-            if (this.list.length === 0) {
-              this.noData = true
-            } else {
-              this.noData = false
-            }
+            // if (this.list.length === 0) {
+            //   this.noData = true
+            // } else {
+            //   this.noData = false
+            // }
           })
         })
       },
