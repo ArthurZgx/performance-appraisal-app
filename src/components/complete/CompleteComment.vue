@@ -71,7 +71,7 @@
   import { XHeader, Toast, Icon, XTable, Flexbox, FlexboxItem, XButton, Cell, Group, Confirm } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  import { paramEncode, isEmptyObject } from '@/utils'
+  import { paramEncode } from '@/utils'
   export default {
     name: 'completeComment',
     components: {
@@ -234,103 +234,121 @@
         const self = this
         if (self.taskList.length < 1) return
         console.log('点了提交', self.taskList)
-        // 判断是否有为打分的任务
+        // 判断是否有未打分的任务
         if (!self.judgeAllTask()) {
           self.toastWidth = '11em'
           self.toastText = '请完成所有任务打分'
           self.showToast = true
           return
         }
+
+        // 修改各个任务明细表状态
+        self.editStatus()
+        // 提交成功 提示
+        self.toastWidth = '7em'
+        self.toastText = '提交成功'
+        self.showToast = true
+
+        const resultDetail = {
+          totalCompleteRatio: self.totalCompleteRatio,
+          userName: self.userName,
+          month: self.month
+        }
+
+        // 存储
+        localStorage.setItem('taskList', JSON.stringify(self.taskList))
+        localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+
         // 先查询结果表中有没有数据 如果没有则新建 如果有则修改
         // 根据被评价人及年度、月度字段查询 bug 还应加计划id
-        const year = self.year + ''
-        console.log(self.userId, self.year, self.totalCompleteRatio)
-        console.log(typeof self.userId, typeof year, typeof self.totalCompleteRatio)
-        let filters = {
-          'main_job_service_evaluation_result': {
-            'user_id': { equalTo: self.userId },
-            'year': { equalTo: year },
-            'month': { equalTo: self.month }
-            // 'planAssessmentPlanId': { equalTo: self.planAssessmentPlanId }
-          }
-        }
-        filters = JSON.stringify(filters)
-        request('main_job_service_evaluation_results', {
-          params: { filters: filters }
-        }).then(res1 => {
-          console.log('结果表', res1.data)
-          const curResult = res1.data
-          // 如果已存在结果表则修改
-          if (curResult.length) {
-            const data = {
-              workCoefficient: self.totalCompleteRatio
-            }
-            request('main_job_service_evaluation_results/' + curResult[0].id + '/edit', {
-              method: 'POST',
-              params: data,
-              headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
-              transformRequest: paramEncode
-            }).then(res2 => {
-              console.log('编辑成功', res2, res2.data)
-              if (!isEmptyObject(res2.data)) {
-                // 编辑成功 修改各个任务明细表状态
-                self.editStatus()
-                self.resultTable = res2.data
-                // 修改完 页面跳转到结果页 totalCompleteRatio
-                const resultDetail = {
-                  totalCompleteRatio: self.totalCompleteRatio,
-                  userName: self.userName,
-                  month: self.month
-                }
-                // 提交成功 提示
-                self.toastWidth = '7em'
-                self.toastText = '提交成功'
-                self.showToast = true
-
-                localStorage.setItem('taskList', JSON.stringify(self.taskList))
-                localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
-                localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
-                // self.$router.push({ name: 'completeCommentResult' })
-              }
-            })
-          } else { // main_job_detail
-            const data = {
-              planAssessmentPlanId: self.planAssessmentPlanId,
-              userId: self.userId,
-              year: year,
-              month: self.month,
-              workCoefficient: self.totalCompleteRatio
-            }
-            // 如果不存在则新建
-            request('main_job_service_evaluation_results/new', {
-              method: 'POST',
-              headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
-              params: data,
-              transformRequest: paramEncode
-            }).then(res2 => {
-              console.log('新建成功', res2.data)
-              if (!isEmptyObject(res2.data)) {
-                // 新建成功 修改各个任务明细表状态
-                self.editStatus()
-                self.resultTable = res2.data
-                // 提交成功 提示
-                self.toastWidth = '7em'
-                self.toastText = '提交成功'
-                self.showToast = true
-                // 修改完 页面跳转到结果页
-                const resultDetail = {
-                  totalCompleteRatio: self.totalCompleteRatio,
-                  userName: self.userName,
-                  month: self.month
-                }
-                localStorage.setItem('taskList', JSON.stringify(self.taskList))
-                localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
-                localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
-                // self.$router.push({ name: 'completeCommentResult' })
-              }
-            })
-          }
-        })
+        // const year = self.year + ''
+        // console.log(self.userId, self.year, self.totalCompleteRatio)
+        // console.log(typeof self.userId, typeof year, typeof self.totalCompleteRatio)
+        // let filters = {
+        //   'main_job_service_evaluation_result': {
+        //     'user_id': { equalTo: self.userId },
+        //     'year': { equalTo: year },
+        //     'month': { equalTo: self.month }
+        //     // 'planAssessmentPlanId': { equalTo: self.planAssessmentPlanId }
+        //   }
+        // }
+        // filters = JSON.stringify(filters)
+        // request('main_job_service_evaluation_results', {
+        //   params: { filters: filters }
+        // }).then(res1 => {
+        //   console.log('结果表', res1.data)
+        //   const curResult = res1.data
+        //   // 如果已存在结果表则修改
+        //   if (curResult.length) {
+        //     const data = {
+        //       workCoefficient: self.totalCompleteRatio
+        //     }
+        //     request('main_job_service_evaluation_results/' + curResult[0].id + '/edit', {
+        //       method: 'POST',
+        //       params: data,
+        //       headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
+        //       transformRequest: paramEncode
+        //     }).then(res2 => {
+        //       console.log('编辑成功', res2, res2.data)
+        //       if (!isEmptyObject(res2.data)) {
+        //         // 编辑成功 修改各个任务明细表状态
+        //         self.editStatus()
+        //         self.resultTable = res2.data
+        //         // 修改完 页面跳转到结果页 totalCompleteRatio
+        //         const resultDetail = {
+        //           totalCompleteRatio: self.totalCompleteRatio,
+        //           userName: self.userName,
+        //           month: self.month
+        //         }
+        //         // 提交成功 提示
+        //         self.toastWidth = '7em'
+        //         self.toastText = '提交成功'
+        //         self.showToast = true
+        //
+        //         localStorage.setItem('taskList', JSON.stringify(self.taskList))
+        //         localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
+        //         localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+        //         // self.$router.push({ name: 'completeCommentResult' })
+        //       }
+        //     })
+        //   } else { // main_job_detail
+        //     const data = {
+        //       planAssessmentPlanId: self.planAssessmentPlanId,
+        //       userId: self.userId,
+        //       year: year,
+        //       month: self.month,
+        //       workCoefficient: self.totalCompleteRatio
+        //     }
+        //     // 如果不存在则新建
+        //     request('main_job_service_evaluation_results/new', {
+        //       method: 'POST',
+        //       headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
+        //       params: data,
+        //       transformRequest: paramEncode
+        //     }).then(res2 => {
+        //       console.log('新建成功', res2.data)
+        //       if (!isEmptyObject(res2.data)) {
+        //         // 新建成功 修改各个任务明细表状态
+        //         self.editStatus()
+        //         self.resultTable = res2.data
+        //         // 提交成功 提示
+        //         self.toastWidth = '7em'
+        //         self.toastText = '提交成功'
+        //         self.showToast = true
+        //         // 修改完 页面跳转到结果页
+        //         const resultDetail = {
+        //           totalCompleteRatio: self.totalCompleteRatio,
+        //           userName: self.userName,
+        //           month: self.month
+        //         }
+        //         localStorage.setItem('taskList', JSON.stringify(self.taskList))
+        //         localStorage.setItem('resultTable', JSON.stringify(self.resultTable))
+        //         localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+        //         // self.$router.push({ name: 'completeCommentResult' })
+        //       }
+        //     })
+        //   }
+        // })
       },
       // 提交之前 判断是否有没打分的任务 如果有 禁止提交
       judgeAllTask() {
