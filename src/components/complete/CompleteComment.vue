@@ -56,6 +56,7 @@
       </toast>
       <!-- 点击未完成时的弹出框-->
       <confirm v-model="showConfirm"
+               :close-on-confirm="false"
                show-input
                title="请打分（0~100的整数）"
                :input-attrs="{type: 'number',value: ''}"
@@ -71,7 +72,7 @@
   import { XHeader, Toast, Icon, XTable, Flexbox, FlexboxItem, XButton, Cell, Group, Confirm } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
-  import { paramEncode, parseTime } from '@/utils'
+  import { paramEncode, parseTime, isEmptyObject } from '@/utils'
   export default {
     name: 'completeComment',
     components: {
@@ -111,6 +112,7 @@
     created() {
       this.editTitle = localStorage.getItem('serveList')
       this.getCurrentTask()
+      this.getTime()
       // var json = localStorage.getItem('jsonTemp')
       // json = JSON.parse(json)
       // console.log(json)
@@ -187,11 +189,16 @@
       },
       // 弹出框点击确定时
       confirm(value) {
-        console.log('点击确定', value)
+        console.log('点击确定', typeof value)
+        // 数字必须0-100之间
+        if (parseInt(value) > 100 || parseInt(value) < 0) {
+          return
+        }
         if (value) {
           this.currentTask.completionRatio = value
           this.currentTask.clickNoCompleted = true
         }
+        this.showConfirm = false
         console.log(this.currentTask)
       },
       // 弹出框点击取消时
@@ -214,6 +221,16 @@
         if (this.toastText === '提交成功') {
           this.$router.push({ name: 'completeCommentResult' })
         }
+      },
+      getTime() {
+        const self = this
+        request('extends/getDate').then(res => {
+          if (!isEmptyObject(res)) {
+            self.evaluateTime = res.data
+          }
+          self.editStatus()
+          console.log('时间', res)
+        })
       },
       // 取消
       cancleEvent() {
@@ -242,9 +259,10 @@
           self.showToast = true
           return
         }
-
         // 修改各个任务明细表状态
-        self.editStatus()
+        // self.editStatus()
+        // 先获取服务器时间  再修改状态
+        self.getTime()
         // 提交成功 提示
         self.toastWidth = '7em'
         self.toastText = '提交成功'
@@ -365,15 +383,14 @@
       editStatus() {
         const self = this
         let params = []
-        debugger
         // 状态修改为2 计算得分
         _.each(self.taskList, function(item, key) {
           const temp = {}
           temp.id = item.id
           temp.status = 2
+          temp.evaluationTime = self.evaluateTime
           temp.completionRatio = item.completionRatio
           temp.scoreScore = parseInt(item.weights) * parseInt(item.completionRatio) / 100
-          debugger
           params.push(temp)
         })
 
