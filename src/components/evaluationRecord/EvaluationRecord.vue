@@ -60,7 +60,7 @@
     <group>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-92">
       <div>
-      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="'评价日期:'+item.date" 
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间'+item.date:'评价日期'+item.date" 
       @click.native="goTo(item.id,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
@@ -305,9 +305,9 @@
           var tempArray = []
           for (var i = 0, len = res.data.length; i < len; i++) {
             // 如果数据格式错误就分配一个参数
-            if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
-              res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
-            }
+            // if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+            //   res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+            // }
             if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
               console.log('格式有错误')
             } else {
@@ -315,7 +315,7 @@
               console.log(res.data)
               tempArray.push({
                 title: res.data[i].includes.main_job_service_evaluation.title,
-                date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+                date: res.data[i].superior.createTime.split(' ')[0],
                 type: res.data[i].includes.main_job_service_evaluation.type,
                 status: res.data[i].superior.status,
                 id: res.data[i].includes.main_job_service_evaluation.id,
