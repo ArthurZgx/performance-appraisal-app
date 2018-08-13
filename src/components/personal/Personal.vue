@@ -117,8 +117,13 @@
     methods: {
       init() {
         this.userName = localStorage.getItem('userName')
-        this.avatar = localStorage.getItem('avatar')
-        // console.log('init')
+        // this.avatar = localStorage.getItem('avatar')
+        if (localStorage.getItem('avatar') && localStorage.getItem('avatar') !== null && localStorage.getItem('avatar') !== 'undefined') {
+          this.avatar = localStorage.getItem('avatar')
+        } else {
+          this.avatar = ''
+        }
+        console.log('init', this.avatar)
         // const a = [1, 2, 3, 4, 5]
         // _.each(a, function(i, j) {
         //   console.log(i, j)
