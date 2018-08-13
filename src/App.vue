@@ -14,7 +14,6 @@ export default {
 @import '~vux/src/styles/reset.less';
 #app {
   width: 100%;
-  padding-bottom: 5px;
   overflow: hidden;
 }
 body {

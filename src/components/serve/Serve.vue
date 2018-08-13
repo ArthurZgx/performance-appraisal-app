@@ -4,6 +4,7 @@
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
+    <div class="clearfix">
     <search @result-click="resultClick"
             @on-change="searchChange"
             :results="results"
@@ -17,6 +18,7 @@
             @on-submit="searchSubmit"
             ref="search">
     </search>
+    </div>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-145">
@@ -644,5 +646,9 @@ export default {
   position: absolute;
   top: 2px;
   left: 1px;
+}
+.clearfix {
+   *zoom: 1;
+   height: 44px;
 }
 </style>
