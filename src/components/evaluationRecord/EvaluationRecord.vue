@@ -79,7 +79,7 @@
 <script>
   import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore, DatetimeView, XButton, Toast } from 'vux'
   import request from '../../../src/utils/request.js'
-
+  // import _ from 'lodash'
   export default {
     name: 'personal',
     components: {
@@ -362,11 +362,16 @@
             // 去除重复数据
             for (var a = 0; a < tempArray.length; a++) {
               for (var c = 1; c < tempArray.length; c++) {
-                if (tempArray[a].id === tempArray[c].id) {
+                if (tempArray[a].id === tempArray[c].id && a !== c) {
                   tempArray.splice(c, 1)
                 }
               }
             }
+          //  _.uniqWith(tempArray, function(newValue, oldValue) {
+          //    console.log(newValue.id === oldValue.id)
+          //      return newValue.id === oldValue.id
+          //   })
+
             this.jobDataList = tempArray
             // 根据获取的数据条数判断下次应该加载多少条数据
             // if (res.data.length < this.pageSize && this.serviceDataList.length < this.pageSize) {
@@ -381,11 +386,11 @@
             // 拼接数据
             this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
             console.log(347, this.list)
-            // if (this.list.length === 0) {
-            //   this.noData = true
-            // } else {
-            //   this.noData = false
-            // }
+            if (this.list.length === 0) {
+              this.noData = true
+            } else {
+              this.noData = false
+            }
           })
         })
       },
