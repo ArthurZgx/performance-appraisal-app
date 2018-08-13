@@ -36,15 +36,15 @@
       <thead>
         <tr>
           <td>任务</td>
-          <td>权重</td>
-          <td>实际完成度</td>
+          <td style="width:59px;">权重</td>
+          <td style="width:59px;">实际完成度</td>
         </tr>
       </thead>
       <tbody>
       <tr v-for="(item,index) in jobCompleteList" :key="index">
-        <td style="width:30%;">{{item.superior.taskName}}</td>
-        <td>{{item.superior.weights}}%</td>
-        <td>{{item.superior.completionRatio}}%</td>
+        <td>{{item.superior.taskName}}</td>
+        <td style="width:59px;">{{item.superior.weights}}%</td>
+        <td style="width:59px;">{{item.superior.completionRatio}}%</td>
       </tr>
       </tbody>
       <tfoot>
