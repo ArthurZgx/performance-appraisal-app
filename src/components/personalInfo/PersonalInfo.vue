@@ -6,7 +6,7 @@
                 @on-click-more="showMenus = true">
                 我的信息
       </x-header>
-      <img v-if="userInfo.avatar==null" class="logo" src="../../assets/top.png">
+      <img v-if="!userInfo.avatar" class="logo" src="../../assets/top.png">
       <img v-if="userInfo.avatar" class="logo" :src="userInfo.avatar">
       <!--<h3>个人信息页</h3>-->
     </div>
@@ -84,10 +84,11 @@
       }
     },
     created() {
-      this.userInfo.avatar = localStorage.getItem('avatar')
+      this.getAvatar()
       this.getUserInfo()
     },
     methods: {
+      // 获取用户信息
       getUserInfo() {
         const userId = localStorage.getItem('userId')
         const self = this
@@ -111,6 +112,15 @@
               console.log('用户信息2', self.userInfo)
             }
           })
+        }
+      },
+      // 获取用户微信头像
+      getAvatar() {
+        this.userInfo.avatar = localStorage.getItem('avatar')
+        if (localStorage.getItem('avatar') && localStorage.getItem('avatar') !== null && localStorage.getItem('avatar') !== 'undefined') {
+          this.userInfo.avatar = localStorage.getItem('avatar')
+        } else {
+          this.userInfo.avatar = ''
         }
       },
       onCancelEditNameConfirm(msg) {
