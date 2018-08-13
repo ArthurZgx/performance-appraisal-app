@@ -1,5 +1,5 @@
 <template>
-  <div class="evaluationRecord">
+  <div class="evaluationRecord" :style="{height: screenHeight + 'px'}">
 
     <div class="vux-demo">
       <x-header :right-options="{showMore: false}"
@@ -34,11 +34,6 @@
           :border-intent="false"
           :arrow-direction="riqi ? 'up' : 'down'"
           @click.native="riqi = !riqi,kaoping = false,chakan = false" ></cell>
-        <!-- <template v-if="riqi">
-          <cell-box :border-intent="false" class="sub-item">2018年6月</cell-box>
-          <cell-box :border-intent="false" class="sub-item">2018年5月</cell-box>
-          <cell-box :border-intent="false" class="sub-item">2018年4月</cell-box>
-        </template> -->
       </div></flexbox-item>
     </flexbox>
     <!-- 判断点击菜单类型,显示选择栏 -->
@@ -124,10 +119,14 @@
         showErrorDateToast: false,
         year: 2018,
         month: 8,
-        noData: false
+        noData: false,
+        screenHeight: 600
       }
     },
     mounted() {
+      console.log(window.screen.height)
+      console.log(window.screen.availHeight)
+      this.screenHeight = window.screen.availHeight
       // 初始化数据
       this.initData()
       var date = new Date()
@@ -197,10 +196,25 @@
         // this.initData()
         if (this.r1 === '服务质量评价') {
           this.list = this.serviceDataList
+          if (this.list.length === 0) {
+            this.noData = true
+          } else {
+            this.noData = false
+          }
         } else if (this.r1 === '工作完成评价') {
           this.list = this.jobDataList
+          if (this.list.length === 0) {
+            this.noData = true
+          } else {
+            this.noData = false
+          }
         } else if (this.r1 === '全部类型') {
           this.list = this.serviceDataList.concat(this.jobDataList)
+          if (this.list.length === 0) {
+            this.noData = true
+          } else {
+            this.noData = false
+          }
         }
       },
       // 是否查看筛选
@@ -269,14 +283,6 @@
         if (type === undefined) {
           type = 'equalTo'
         }
-        // 判断选择类型
-        // if (this.r1 === '全部类型') {
-        //   this.pageSize = 5
-        // } else if (this.r1 === '服务质量评价') {
-        //   this.pageSize = 10
-        // } else if (this.r1 === '工作完成评价') {
-        //   this.pageSize = 0
-        // }
         // 判断是否查看
         if (this.r2 === '已查看通知') {
           type = 'in'
@@ -323,11 +329,6 @@
           }
           // 获取数据
           this.serviceDataList = tempArray
-          // if (this.pageSize === '全部类型') {
-          //   this.pageSize = 10 - this.serviceDataList.length
-          // } else {
-          //   this.pageSize = 10 - this.pageSize
-          // }
           // 更改过滤条件
           filter = '{"main_job_detail":{"status":{' + type + ' : ' + param2 + '},"user_id":{equalTo:"' + userId + '"}}}'
           if (this.isSelectedDate) {
@@ -364,6 +365,9 @@
               for (var c = 1; c < tempArray.length; c++) {
                 if (tempArray[a].id === tempArray[c].id && a !== c) {
                   tempArray.splice(c, 1)
+                  if (a >= tempArray.length) {
+                    break
+                  }
                 }
               }
             }
@@ -383,8 +387,14 @@
             if (this.serviceDataList.length + res.data.length < 10000) {
               this.showScrollerLoading = false
             }
-            // 拼接数据
-            this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+            if (this.r1 === '全部类型') {
+              // 拼接数据
+              this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+            } else if (this.r1 === '服务质量评价') {
+              this.list = this.serviceDataList
+            } else if (this.r1 === '工作完成评价') {
+              this.list = this.jobDataList
+            }
             console.log(347, this.list)
             if (this.list.length === 0) {
               this.noData = true
@@ -446,6 +456,9 @@
 <!-- Add "scoped" attribute to limit CSS to this component o
 nly -->
 <style>
+.evaluationRecord {
+  overflow: hidden;
+}
 .evaluationRecord .vux-no-group-title{
  margin-top: 0px;
 }
