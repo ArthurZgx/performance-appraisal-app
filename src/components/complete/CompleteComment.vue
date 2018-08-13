@@ -189,6 +189,10 @@
       // 弹出框点击确定时
       confirm(value) {
         console.log('点击确定', typeof value)
+        // 如果存在小数点 禁止提交
+        if (value.indexOf('.') > 0) {
+          return
+        }
         // 数字必须0-100之间
         if (parseInt(value) > 100 || parseInt(value) < 0) {
           return
