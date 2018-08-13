@@ -112,7 +112,6 @@
     created() {
       this.editTitle = localStorage.getItem('serveList')
       this.getCurrentTask()
-      this.getTime()
       // var json = localStorage.getItem('jsonTemp')
       // json = JSON.parse(json)
       // console.log(json)
