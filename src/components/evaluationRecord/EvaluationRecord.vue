@@ -161,7 +161,7 @@
         switch (type) {
           // 如果是已提交
           case 'alreadySubmit':
-            this.getDatas("[2,4]", "[2,4]",'in')
+            this.getDatas('[2,4]', '[2,4]', 'in')
             break
             // 如果是已过期
           case 'pastSubmit':
