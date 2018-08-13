@@ -63,7 +63,7 @@
 
     </div>
 
-    <tabbar>
+    <tabbar style="position: fixed;">
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
       <!--</tabbar-item>-->

@@ -18,7 +18,7 @@
       </cell>
     </group>
     <!-- style="position: fixed !important;z-index: 500"-->
-    <tabbar>
+    <tabbar style="position: fixed;">
       <!--<tabbar-item>-->
       <!--<span slot="label" @click="show1=true">个人中心</span>-->
       <!--</tabbar-item>-->
