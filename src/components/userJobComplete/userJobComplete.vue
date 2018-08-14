@@ -42,19 +42,19 @@ export default {
   },
   methods: {
     getDatas() {
-      var date = new Date()
-      var year = date.getFullYear()
-      var month = date.getMonth() + 1
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
       if (this.month < 10) {
         this.month = '0' + this.month
       }
       console.log(month)
       //   获取数据
-      var userId = localStorage.getItem('userId')
+      const userId = localStorage.getItem('userId')
       if (userId === null) {
         return false
       }
-      var filter = "{'main_job_detail':{'hmPersonnelId':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'},'status':{lessThan:'3'}}}"
+      const filter = "{'main_job_detail':{'hmPersonnelId':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
       request('main_job_details', {
         params: {
           filters: filter
