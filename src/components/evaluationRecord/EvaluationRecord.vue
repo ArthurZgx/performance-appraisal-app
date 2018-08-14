@@ -323,7 +323,7 @@
                 createTime: res.data[i].superior.createTime.split(' ')[0],
                 type: res.data[i].includes.main_job_service_evaluation.type,
                 status: res.data[i].superior.status,
-                id: res.data[i].includes.main_job_service_evaluation.id,
+                id: res.data[i].superior.id,
                 year: res.data[i].superior.year,
                 month: res.data[i].superior.month,
                 numberVotes: res.data[i].superior.numberVotes,
@@ -359,7 +359,7 @@
                   createTime: res.data[i].superior.createTime.split(' ')[0],
                   type: res.data[i].includes.main_job_service_evaluation.type,
                   status: res.data[i].superior.status,
-                  id: res.data[i].includes.main_job_service_evaluation.id,
+                  id: res.data[i].superior.id,
                   year: res.data[i].superior.year,
                   month: res.data[i].superior.month,
                   userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
