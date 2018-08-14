@@ -164,12 +164,14 @@ export default {
     },
     searchFocus() {},
     searchCancel() {
-      this.serveList = []
-      this.searching = false
-      this.searchPageNo = 1
-      this.pageNo = 1
-      this.getDatas()
-      return false
+      if (this.searching) {
+        this.serveList = []
+        this.searching = false
+        this.searchPageNo = 1
+        this.pageNo = 1
+        this.getDatas()
+        return false
+      }
     },
     resultClick() {},
     searchSubmit() {

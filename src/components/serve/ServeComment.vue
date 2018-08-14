@@ -192,6 +192,7 @@ export default {
 <style>
 .serveComment {
   background: #fff;
+  padding-bottom: 60px;
 }
 .serveComment .serveTitle {
   padding: 5px 0 5px;
