@@ -126,7 +126,11 @@
     mounted() {
       console.log(window.screen.height)
       console.log(window.screen.availHeight)
-      this.screenHeight = window.screen.availHeight
+      console.log(document.body.clientHeight)
+      console.log(document.body.offsetHeight)
+      console.log(document.body.scrollHeight)
+      console.log(document.documentElement.clientHeight)
+      this.screenHeight = document.documentElement.clientHeight
       // 初始化数据
       this.initData()
       var date = new Date()

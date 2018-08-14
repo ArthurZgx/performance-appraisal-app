@@ -647,4 +647,8 @@ export default {
   top: 2px;
   left: 1px;
 }
+.clearfix {
+   *zoom: 1;
+   height: 44px;
+}
 </style>
