@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <x-header :right-options="{showMore: false}"
+              :left-options="{showBack: false}"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
