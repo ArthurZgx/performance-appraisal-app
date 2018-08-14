@@ -454,8 +454,16 @@ export default {
         this.$router.push({ name: 'serveComment' })
       } else {
         // 如果全部好评 刷新当前列表
-        this.serveList = []
-        this.getDatas()
+        if (this.searching) {
+          this.serveList = []
+          this.searchPageNo = 1
+          this.getSearchDatas(false)
+        } else {
+          this.serveList = []
+          this.pageNo = 1
+          this.pageSize = 10
+          this.getDatas()
+        }
       }
     },
     // 全选
