@@ -61,7 +61,7 @@
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-92">
       <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间 '+item.createTime:'评价日期 '+item.date" 
-      @click.native="goTo(item.id,item.type,item.status,item)"></cell>
+      @click.native="goTo(item.fid,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
       <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
@@ -324,6 +324,7 @@
                 type: res.data[i].includes.main_job_service_evaluation.type,
                 status: res.data[i].superior.status,
                 id: res.data[i].superior.id,
+                fid: res.data[i].includes.main_job_service_evaluation.id,
                 year: res.data[i].superior.year,
                 month: res.data[i].superior.month,
                 numberVotes: res.data[i].superior.numberVotes,
@@ -360,6 +361,7 @@
                   type: res.data[i].includes.main_job_service_evaluation.type,
                   status: res.data[i].superior.status,
                   id: res.data[i].superior.id,
+                  fid: res.data[i].includes.main_job_service_evaluation.id,
                   year: res.data[i].superior.year,
                   month: res.data[i].superior.month,
                   userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
@@ -369,7 +371,7 @@
             // 去除重复数据
             for (var a = 0; a < tempArray.length; a++) {
               for (var c = 1; c < tempArray.length; c++) {
-                if (tempArray[a].id === tempArray[c].id && a !== c) {
+                if (tempArray[a].fid === tempArray[c].fid && a !== c) {
                   tempArray.splice(c, 1)
                   if (a >= tempArray.length) {
                     break
@@ -428,6 +430,7 @@
         if (type === 0 && status === 0) {
           // 如果是工作完成度且状态是未读就跳转到工作完成度评价页
           console.log(list)
+          list.id = list.fid
           localStorage.setItem('currentTask', JSON.stringify(list))
           this.$router.push({
             name: 'completeComment',
