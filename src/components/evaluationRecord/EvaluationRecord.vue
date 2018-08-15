@@ -348,15 +348,15 @@
             tempArray = []
             for (var i = 0, len = res.data.length; i < len; i++) {
               // 如果数据格式错误就分配一个参数
-              if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
-                res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+              if (res.data[i].superior.evaluationTime === null) {
+                res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
               }
               if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
                 console.log('格式有错误')
               } else {
                 tempArray.push({
                   title: res.data[i].includes.main_job_service_evaluation.title,
-                  date: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+                  date: res.data[i].superior.evaluationTime.split(' ')[0],
                   createTime: res.data[i].superior.createTime.split(' ')[0],
                   type: res.data[i].includes.main_job_service_evaluation.type,
                   status: res.data[i].superior.status,
