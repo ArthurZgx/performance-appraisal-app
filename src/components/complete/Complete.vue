@@ -293,7 +293,10 @@
       goTocompleteComment(list) {
         localStorage.setItem('currentTask', JSON.stringify(list))
         console.log('list', list)
-        this.$router.push({ name: 'completeComment' })
+        this.$router.push({
+          name: 'completeComment',
+          params: { state: true }
+        })
       },
       // 选中当前数据
       // listCheckClick(list) {

@@ -435,7 +435,8 @@
           this.$router.push({
             name: 'completeComment',
             params: {
-              id: id
+              id: id,
+              state: true
             }})
           return false
         }

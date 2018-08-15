@@ -130,7 +130,8 @@ export default {
         transformRequest: paramEncode
       })
       setTimeout(function() {
-        that.$router.push({ name: 'serve' })
+        // that.$router.push({ name: 'serve' })
+        that.$router.go(-1)
       }, 500)
     },
     numberChange(index, type, e) {
@@ -182,7 +183,8 @@ export default {
         transformRequest: paramEncode
       })
       setTimeout(function() {
-        that.$router.push({ name: 'serve' })
+        // that.$router.push({ name: 'serve' })
+        that.$router.go(-1)
       }, 500)
     }
   }

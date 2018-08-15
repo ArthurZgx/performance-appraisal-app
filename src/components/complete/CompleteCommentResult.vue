@@ -83,7 +83,8 @@ export default {
     },
     // 跳转至任务列表
     gotToTaskList() {
-      this.$router.push({ name: 'complete' })
+      // this.$router.push({ name: 'complete' })
+      this.$router.go(-1)
     }
   }
 }

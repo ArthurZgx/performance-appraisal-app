@@ -119,6 +119,12 @@
       // this.badCommentNum = json.badCommentNum
       // this.badCommentText = json.badCommentText
     },
+    mounted() {
+      console.log(this.$route.params.state)
+      if (this.$route.params.state === undefined) {
+        this.$router.go(-1)
+      }
+    },
     computed: {
       totalCompleteRatio: function() {
         let temp = 0
@@ -280,7 +286,6 @@
         // 存储
         localStorage.setItem('taskList', JSON.stringify(self.taskList))
         localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
-
         // 先查询结果表中有没有数据 如果没有则新建 如果有则修改
         // 根据被评价人及年度、月度字段查询 bug 还应加计划id
         // const year = self.year + ''
