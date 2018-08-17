@@ -410,7 +410,6 @@ export default {
     // 确认一键提交按钮被点击
     affirmSubmit() {
       this.showSubmitDialog = false
-      this.showSubmitToast = true
       var tempArray = [] // 有差评的数据
       var tempArray2 = [] // 全部好评的数据
       for (var i = 0, len = this.checklist1.length; i < len; i++) {
@@ -421,7 +420,7 @@ export default {
           tempArray2.push(this.checklist1[i])
         }
       }
-      this.showSubmitToast = true
+      // this.showSubmitToast = true
       let params = []
       let date = new Date()
       let month = date.getMonth() + 1
@@ -453,6 +452,8 @@ export default {
           'LoginType': 'web'
         },
         transformRequest: paramEncode
+      }).then(res => {
+        this.showSubmitToast = true
       })
       // 如果有差评的  跳转至差评列表页
       localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
@@ -526,6 +527,14 @@ export default {
 }
 .serve .groupList {
   padding-bottom: 50px;
+  position: fixed;
+  top: 90px;
+  left: 0;
+  height: 100%;
+  width: 96%;
+}
+.serve .weui-cells{
+  margin-top: 0px;
 }
 .serve .aListData {
   display: flex;
