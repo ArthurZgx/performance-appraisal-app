@@ -312,6 +312,9 @@
             if (res.data[i].superior.evaluationTime === null) {
               res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
             }
+            if (res.data[i].superior.praiseNumber === null) {
+              res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
+            }
             if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
               console.log('格式有错误')
             } else {
