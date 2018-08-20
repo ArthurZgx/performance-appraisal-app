@@ -108,7 +108,7 @@
       getServiceData() {
         if (this.$route.params.id !== undefined) {
           // console.log(this.$route.params.id)
-          var filter = "{'main_service_detail':{'main_job_service_evaluation_id':{equalTo:'" + this.$route.params.id + "'},'user_id':{equalTo:'" + this.userId + "'}}}"
+          var filter = "{'main_service_detail':{'id':{equalTo:'" + this.$route.params.cid + "'},'user_id':{equalTo:'" + this.userId + "'}}}"
           var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
           request('main_service_details', {
             params: { filters: filter, includes }

@@ -319,7 +319,6 @@
               console.log('格式有错误')
             } else {
               // 压入数据
-              console.log(res.data)
               tempArray.push({
                 title: res.data[i].includes.main_job_service_evaluation.title,
                 date: res.data[i].superior.evaluationTime.split(' ')[0],
@@ -332,7 +331,8 @@
                 month: res.data[i].superior.month,
                 numberVotes: res.data[i].superior.numberVotes,
                 goodCommentNumber: res.data[i].superior.praiseNumber,
-                badCommentText: res.data[i].superior.badReview
+                badCommentText: res.data[i].superior.badReview,
+                badCommentNumber: res.data[i].superior.numberVotes - res.data[i].superior.praiseNumber
               })
             }
           }
@@ -448,7 +448,8 @@
           name: 'evaluationRecordDetail',
           params: {
             id: id,
-            type: type
+            type: type,
+            cid: list.id
           }
         })
       }
