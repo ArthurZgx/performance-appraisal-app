@@ -165,6 +165,7 @@ export default {
     searchFocus() {},
     searchCancel() {
       if (this.searching) {
+        this.showScrollerLoading = true
         this.serveList = []
         this.searching = false
         this.searchPageNo = 1
