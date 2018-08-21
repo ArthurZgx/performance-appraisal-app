@@ -21,7 +21,7 @@
     </div>
     <!-- v-if="list.status === '2'"-->
     <group class="home_group groupList">
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-145">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
         <div class="serveClassifyTitle">{{item.title}}</div>
@@ -133,7 +133,8 @@ export default {
       onFacting: false,
       searchPageNo: 1,
       searching: false,
-      tempSearchValue: ''
+      tempSearchValue: '',
+      scrollHeight: '0'
     }
   },
   created() {
@@ -509,6 +510,8 @@ export default {
     }
   },
   mounted() {
+    this.scrollHeight = document.documentElement.clientHeight - 145
+    console.log('设置滚动区域高度为' + this.scrollHeight)
   }
 }
 </script>
