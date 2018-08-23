@@ -87,6 +87,7 @@ export default {
     }
   },
   created() {
+    // localStorage.setItem('serve', 'true')
     this.serveList = JSON.parse(localStorage.getItem('needBadCommentPeopleList'))
     for (var i = 0, len = this.serveList.length; i < len; i++) {
       this.serveList[i].badCommentNumber = this.serveList[i].numberVotes - this.serveList[i].goodCommentNumber

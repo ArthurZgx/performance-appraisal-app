@@ -511,7 +511,18 @@ export default {
   },
   mounted() {
     this.scrollHeight = document.documentElement.clientHeight - 145
+    const self = this
     console.log('设置滚动区域高度为' + this.scrollHeight)
+    setTimeout(function() {
+      console.log(document.documentElement.clientHeight)
+      self.scrollHeight = document.documentElement.clientHeight - 145
+    }, 1000)
+    // if (localStorage.getItem('serve') === 'true') {
+    //   console.log('刷新一次')
+    //   location.reload()
+    //   localStorage.removeItem('serve')
+    // } else {
+    // }
   }
 }
 </script>

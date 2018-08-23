@@ -67,6 +67,7 @@ export default {
   created() {
     this.init()
     this.getUserInfo()
+    // localStorage.setItem('serve', 'true')
   },
   methods: {
     init() {
