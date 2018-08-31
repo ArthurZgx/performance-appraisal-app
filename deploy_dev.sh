@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 npm run build
-rsync -avz -e "ssh -p39109" dist/*  bril@110.249.155.61:/var/www/html/yinxin/
+rsync -avz -e "ssh -p43221" dist/*  root@tentop.com.cn:/data/yinxinapp/
