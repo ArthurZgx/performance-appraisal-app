@@ -9,7 +9,8 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/html/',
+    // assetsPublicPath: '/html/',
+    assetsPublicPath: '/',
     proxyTable: {
       '/api': {
         target: 'http://yinxin.tentop.com.cn/api', // 博士林服务器
