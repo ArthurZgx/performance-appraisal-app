@@ -276,6 +276,8 @@ export default {
       }
       var userId = localStorage.getItem('userId')
       if (localStorage.getItem('userId') === null) {
+        console.log(localStorage.getItem('userId'))
+        this.showScrollerLoading = false
         this.noData = true
         return false
       }
