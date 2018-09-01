@@ -518,7 +518,7 @@ export default {
     setTimeout(function() {
       console.log(document.documentElement.clientHeight)
       self.scrollHeight = document.documentElement.clientHeight - 145
-    }, 1000)
+    }, 500)
     // if (localStorage.getItem('serve') === 'true') {
     //   console.log('刷新一次')
     //   location.reload()
