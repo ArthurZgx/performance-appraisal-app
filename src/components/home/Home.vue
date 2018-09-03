@@ -35,6 +35,7 @@
         <span slot="label">我的</span>
       </tabbar-item>
     </tabbar>
+    <alert v-model="showNotLogin" title="信息错误" @on-hide="onHideNotLoginAlert">{{ msg }}</alert>
   </div>
 </template>
 
@@ -43,7 +44,7 @@
 // import moment from 'moment'
 import request from '@/utils/request'
 import { isEmptyObject } from '@/utils'
-import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon } from 'vux'
+import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Alert } from 'vux'
 
 export default {
   name: 'home',
@@ -53,7 +54,8 @@ export default {
     Tabbar,
     XHeader,
     TabbarItem,
-    Icon
+    Icon,
+    Alert
   },
   data() {
     return {
@@ -61,7 +63,8 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initial state.
-      msg: 'Hello World!'
+      msg: '没有找到该用户信息!',
+      showNotLogin: false
     }
   },
   created() {
@@ -82,6 +85,7 @@ export default {
     },
     // 获取用户信息
     getUserInfo() {
+      console.log('获取用户信息')
       let code = ''
       // 获取URL中参数code
       let url = window.location.href // 线上部署用此处
@@ -103,14 +107,31 @@ export default {
             localStorage.setItem('userId', userId)
             localStorage.setItem('userName', name)
             // console.log('获取缓存', localStorage.getItem('userId'))
+          } else if (res.data.code !== 0) {
+            console.log('没有发现该用户信息')
+            this.msg = '用户信息不存在!'
+            this.showNotLogin = true
           }
+        }).catch(err => {
+          console.log('出错了', err)
         })
+      } else {
+        this.msg = '请检查访问地址是否正确!'
+        this.showNotLogin = true
       }
       // else {
       //   localStorage.setItem('userId', '-1062673909925590171')
       //   localStorage.setItem('userName', '刘婧')
       // }
       // console.log('code', code)
+    },
+    onHideNotLoginAlert() {
+      console.log('关闭窗口')
+      window.opener = null
+      // JS重写当前页面
+      window.open('', '_self', '')
+      window.close()
+      this.showNotLogin = true
     }
   }
 }
