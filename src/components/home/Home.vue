@@ -116,7 +116,7 @@ export default {
           console.log('出错了', err)
         })
       } else {
-        this.msg = '请检查访问地址是否正确!'
+        this.msg = '没有用户信息!'
         this.showNotLogin = true
       }
       // else {
