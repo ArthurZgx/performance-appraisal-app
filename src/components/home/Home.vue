@@ -89,7 +89,7 @@
         let code = ''
         // 获取URL中参数code
         let url = window.location.href // 线上部署用此处
-        // let url = 'http://yinxin.tentop.com.cn/?code=AgU2V3pO6OJtMpOflXKEuvI-Y9G8SR8Kphg9wDo3WjA&state=1234556#/home' // 本地测试用此处
+        // let url = 'http://kaoping.trustfar.cn/app/?code=qlpJcZ_uLxDsdhJbVZN2ynsYfkWyw8DlVX0xIM6d9ZI&state=1#/home' // 本地测试用此处
         if (url.indexOf('code') > 0) {
           url = url.split('?')[1]
           url = url.split('&')[0]
@@ -97,6 +97,7 @@
           request('extends/wechartLogin', {
             params: { code: code }
           }).then(res => {
+            debugger
             console.log('用户信息', res)
             if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
               const userId = res.data.fields.id
@@ -110,14 +111,14 @@
             } else if (res.data.code !== 0) {
               console.log('没有发现该用户信息')
               this.msg = res
-              this.showNotLogin = true
+              // this.showNotLogin = true
             }
           }).catch(err => {
             console.log('出错了', err)
           })
         } else {
           this.msg = '没有用户信息!'
-          this.showNotLogin = true
+          // this.showNotLogin = true
         }
         // else {
         //   localStorage.setItem('userId', '-1062673909925590171')
