@@ -10,7 +10,7 @@
       <!-- 任务列表 -->
       <group v-for="(task,index) in taskList" label-width="100%" :title="'任务' + (index+1)" :key="index">
         <!--<cell primary="content" title="default" value="long "></cell>-->
-        <cell :title="task.taskName" value-align="right">
+        <cell :title="task.planContent" value-align="right">
           <div slot="inline-desc" style="margin-top: 6px;">
             <div style="margin-bottom: 17px;">
               <span style="margin-right: 5px;">权重</span> <span>{{task.weights}}%</span>
