@@ -107,6 +107,8 @@
               // 将用户信息存入localStorage
               localStorage.setItem('userId', userId)
               localStorage.setItem('userName', name)
+              this.msg = userId + ':' + name
+              this.showNotLogin = true
               // console.log('获取缓存', localStorage.getItem('userId'))
             } else if (res.data.code !== 0) {
               console.log('没有发现该用户信息')
