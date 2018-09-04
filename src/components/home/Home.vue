@@ -68,6 +68,7 @@
       }
     },
     created() {
+      console.log('缓存判别之第1次部署')
       this.init()
       this.getUserInfo()
       // localStorage.setItem('serve', 'true')
