@@ -164,15 +164,15 @@
         switch (type) {
           // 如果是已提交
           case 'alreadySubmit':
-            this.getDatas('[2,4]', '[2,4]', 'in')
+            this.getDatas([2, 4], [2, 4], 'in')
             break
             // 如果是已过期
           case 'pastSubmit':
-            this.getDatas("'3'", "'3'")
+            this.getDatas('3', '3')
             break
             // 如果是未提交
           case 'inSubmit':
-            this.getDatas("'2'", "'2'", 'lessThan')
+            this.getDatas('2', '2', 'lessThan')
             break
         }
       },
@@ -292,20 +292,34 @@
         // 判断是否查看
         if (this.r2 === '已查看通知') {
           type = 'in'
-          param1 = param2 = '[1]'
+          param1 = param2 = [1]
         } else if (this.r2 === '未查看通知') {
           type = 'equalTo'
           param1 = 0
           param2 = 0
         }
         // 设置过滤器
-        var filter = '{"main_service_detail":{"status":{' + type + ' : ' + param1 + '},"user_id":{equalTo:"' + userId + '"}}}'
+        var filter = {
+          'main_service_detail': {
+            'status': {}, 'user_id': { equalTo: userId }
+          }
+        }
+        filter.main_service_detail.status[type] = param1
         console.log(filter)
         // console.log(JSON.parse(filter))
         if (this.isSelectedDate) {
-          filter = '{"main_service_detail":{"status":{' + type + ':' + param1 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
+          filter = {
+            'main_service_detail': {
+              'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+            }
+          }
+          filter.main_service_detail.status[type] = param1
         }
-        var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+        var includes = {
+          'main_job_service_evaluation': {
+            includes: ['main_job_service_evaluation_id']
+          }
+        }
         // 请求数据
         request('main_service_details', {
           params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
@@ -343,9 +357,25 @@
           // 获取数据
           this.serviceDataList = tempArray
           // 更改过滤条件
-          filter = '{"main_job_detail":{"status":{' + type + ' : ' + param2 + '},"user_id":{equalTo:"' + userId + '"}}}'
+          // filter = '{"main_job_detail":{"status":{' + type + ' : ' + param2 + '},"user_id":{equalTo:"' + userId + '"}}}'
+          // if (this.isSelectedDate) {
+            // filter = '{"main_job_detail":{"status":{' + type + ':' + param2 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
+          // }
+          filter = {
+            'main_job_detail': {
+              'status': {}, 'user_id': { equalTo: userId }
+            }
+          }
+          filter.main_job_detail.status[type] = param2
+          console.log(filter)
+          // console.log(JSON.parse(filter))
           if (this.isSelectedDate) {
-            filter = '{"main_job_detail":{"status":{' + type + ':' + param2 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
+            filter = {
+              'main_job_detail': {
+                'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+              }
+            }
+            filter.main_job_detail.status[type] = param2
           }
           // 再次请求数据
           request('main_job_details', {

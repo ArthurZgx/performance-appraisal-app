@@ -204,8 +204,8 @@ export default {
         return false
       }
       var filter = {
-        'main_job_service_evaluation':{
-          'title':{like:'%' + this.searchValue + '%'}
+        'main_job_service_evaluation': {
+          'title': { like: '%' + this.searchValue + '%' }
         }
       }
       request('main_job_service_evaluations', {
@@ -347,8 +347,8 @@ export default {
         return false
       }
       filter = {
-        'hm_personnel':{
-          'id':{in: userIdTempArray }
+        'hm_personnel': {
+          'id': { in: userIdTempArray }
         }
       }
       request('hm_personnels', {
