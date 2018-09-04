@@ -203,7 +203,11 @@ export default {
         this.getDatas()
         return false
       }
-      var filter = "{'main_job_service_evaluation':{'title':{like:'%" + this.searchValue + "%'}}}"
+      var filter = {
+        'main_job_service_evaluation':{
+          'title':{like:'%' + this.searchValue + '%'}
+        }
+      }
       request('main_job_service_evaluations', {
         params: { filters: filter }
       }).then(res => {
@@ -283,8 +287,16 @@ export default {
         return false
       }
       // 设置过滤器
-      var filter = "{'main_service_detail':{'status':{lessThan:'2'},'user_id':{equalTo:'" + userId + "'}}}"
-      var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
+      var filter = {
+        'main_service_detail': {
+          'status': { lessThan: '2' }, 'user_id': { equalTo: userId }
+        }
+      }
+      var includes = {
+        'main_job_service_evaluation': {
+          includes: ['main_job_service_evaluation_id']
+        }
+      }
       // 请求数据
       request('main_service_details', {
         params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 10 }
@@ -334,7 +346,11 @@ export default {
         this.noData = true
         return false
       }
-      filter = '{"hm_personnel":{"id":{in:[' + userIdTempArray + ']}}}'
+      filter = {
+        'hm_personnel':{
+          'id':{in: userIdTempArray }
+        }
+      }
       request('hm_personnels', {
         params: { filters: filter }
       }).then(res => {

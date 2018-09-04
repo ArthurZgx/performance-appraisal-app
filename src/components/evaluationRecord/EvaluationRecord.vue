@@ -300,6 +300,8 @@
         }
         // 设置过滤器
         var filter = '{"main_service_detail":{"status":{' + type + ' : ' + param1 + '},"user_id":{equalTo:"' + userId + '"}}}'
+        console.log(filter)
+        // console.log(JSON.parse(filter))
         if (this.isSelectedDate) {
           filter = '{"main_service_detail":{"status":{' + type + ':' + param1 + '},"user_id":{equalTo:"' + userId + '"},"year":{equalTo:"' + this.year + '"},"month":{equalTo:"' + this.month + '"}}}'
         }
