@@ -290,6 +290,10 @@ export default {
         params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 10 }
       }).then(res => {
         this.formatData(res)
+      }).catch(err => {
+        console.log('请求出错', err)
+        this.showScrollerLoading = false
+        this.noData = true
       })
     },
     // 格式化获取的数据
