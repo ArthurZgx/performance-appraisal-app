@@ -416,6 +416,10 @@
               this.noData = false
             }
           })
+        }).catch(err => {
+          console.log('请求出错', err)
+          this.showScrollerLoading = false
+          this.noData = true
         })
       },
       // 跳转页面方法
