@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import _ from 'lodash'
 
 // 创造一个axios实例
 const service = axios.create({
@@ -19,7 +20,16 @@ service.interceptors.request.use(config => {
   console.log(error) // for debug
   Promise.reject(error)
 })
-
+service.defaults.paramsSerializer = function(params) {
+  console.log('调用序列化方法')
+  return _.join(_.map(_.keys(params), key => {
+    if (params[key]) {
+      return key + '=' + encodeURIComponent(typeof params[key] === 'string' ? params[key] : JSON.stringify(params[key]))
+    } else {
+      return key + '=' + encodeURIComponent(JSON.stringify({}))
+    }
+  }), '&')
+}
 // respone interceptor
 service.interceptors.response.use(
   response => response,
