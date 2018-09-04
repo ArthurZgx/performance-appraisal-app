@@ -88,8 +88,8 @@
         console.log('获取用户信息')
         let code = ''
         // 获取URL中参数code
-        let url = window.location.href // 线上部署用此处
-        // let url = 'http://kaoping.trustfar.cn/app/?code=qlpJcZ_uLxDsdhJbVZN2ynsYfkWyw8DlVX0xIM6d9ZI&state=1#/home' // 本地测试用此处
+        let url = window.location.href // 线上部署
+        // let url = 'http://kaoping.trustfar.cn/app/?code=qlpJcZ_uLxDsdhJbVZN2ynsYfkWyw8DlVX0xIM6d9ZI&state=1#/home' // 本地测试用
         if (url.indexOf('code') > 0) {
           url = url.split('?')[1]
           url = url.split('&')[0]
@@ -107,8 +107,8 @@
               // 将用户信息存入localStorage
               localStorage.setItem('userId', userId)
               localStorage.setItem('userName', name)
-              this.msg = userId + ':' + name
-              this.showNotLogin = true
+              // this.msg = userId + ':' + name
+              // this.showNotLogin = true
               // console.log('获取缓存', localStorage.getItem('userId'))
             } else if (res.data.code !== 0) {
               console.log('没有发现该用户信息')
