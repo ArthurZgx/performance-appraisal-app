@@ -281,6 +281,8 @@
           return false
         }
         if (this.pageSize === 0) {
+          this.noData = true
+          this.showScrollerLoading = false
           return false
         }
         var userId = localStorage.getItem('userId')
@@ -409,6 +411,7 @@
             console.log(347, this.list)
             if (this.list.length === 0) {
               this.noData = true
+              this.showScrollerLoading = false
             } else {
               this.noData = false
             }

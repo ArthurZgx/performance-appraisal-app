@@ -147,6 +147,7 @@ export default {
     serveList() {
       console.log(this.serveList.length)
       if (this.serveList.length === 0) {
+        this.showScrollerLoading = false
         this.noData = true
       } else {
         this.noData = false
