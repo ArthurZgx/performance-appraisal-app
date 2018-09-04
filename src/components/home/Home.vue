@@ -97,7 +97,6 @@
           request('extends/wechartLogin', {
             params: { code: code }
           }).then(res => {
-            debugger
             console.log('用户信息', res)
             if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
               const userId = res.data.fields.id
