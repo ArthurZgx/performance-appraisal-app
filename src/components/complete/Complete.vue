@@ -178,7 +178,7 @@
         })
       },
       getMainData(detailIds) {
-        if (detailIds.length === 0) return
+        // if (detailIds.length === 0) return
         const self = this
         // 用明细表中的字段过滤主表带用户表
         const filters2 = {
