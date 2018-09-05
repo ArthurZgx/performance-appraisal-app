@@ -381,6 +381,8 @@ export default {
             if (tempArray2[i].title === tempArray2[j].title && i !== j && i < j) {
               tempArray2[i].list = tempArray2[i].list.concat(tempArray2[j].list)
               tempArray2.splice(j, 1)
+              i = 0
+              j = 0
             }
           }
         }
