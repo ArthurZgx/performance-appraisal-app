@@ -308,7 +308,7 @@
           temp.status = 2
           temp.evaluationTime = self.evaluateTime
           temp.completionRatio = item.completionRatio
-          temp.scoreScore = parseInt(item.weights) * parseInt(item.completionRatio) / 100
+          temp.scoreScore = parseInt(parseInt(item.weights) * parseInt(item.completionRatio) / 100)
           params.push(temp)
         })
 
