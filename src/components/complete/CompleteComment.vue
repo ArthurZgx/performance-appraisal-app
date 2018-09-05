@@ -130,10 +130,11 @@
         let temp = 0
         _.each(this.taskList, function(item, key) {
           if (item.completionRatio) {
-            temp += parseInt(item.completionRatio) * parseInt(item.weights) / 100
+            temp += parseInt(item.completionRatio) * parseInt(item.weights)
           }
         })
-        return temp
+        temp = temp / 100
+        return temp.toFixed(1)
       }
     },
     methods: {
