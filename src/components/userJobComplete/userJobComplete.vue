@@ -10,11 +10,12 @@
         <x-table full-bordered style="width:90%;margin:20px auto">
           <thead>
             <tr><td colspan="2" style="font-weight:bold;">工作任务</td></tr>
-            <tr><td style="min-width:100px;">任务名称</td><td style="min-width:100px;">任务内容</td></tr>
+            <tr><td style="width:50px;">序号</td>
+            <td style="min-width:100px;">任务内容</td></tr>
           </thead>
           <tbody>
             <tr v-for="(alist,index) in list" :key="index">
-              <td>{{alist.taskName}}</td>
+              <td>{{index + 1}}</td>
               <td>{{alist.planContent}}</td>
             </tr>
             <tr><td colspan="2" v-if="list.length == '0'">暂无数据</td></tr>
@@ -57,6 +58,7 @@ export default {
       const filter = "{'main_job_detail':{'hmPersonnelId':{equalTo:'" + userId + "'},'year':{equalTo:'" + year + "'},'month':{equalTo:'" + month + "'}}}"
       request('main_job_details', {
         params: {
+          sortItem: 'create_time',
           filters: filter
         }
       }).then(res => {
