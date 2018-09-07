@@ -209,7 +209,10 @@ export default {
         }
       }
       request('main_job_service_evaluations', {
-        params: { filters: filter }
+        params: {
+          filters: filter,
+          pageSize: 2000
+        }
       }).then(res => {
         var serviceIds = []
         // 压缩查询到的id
