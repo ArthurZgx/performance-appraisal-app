@@ -7,9 +7,9 @@
                 考评记录
       </x-header>
       <group>
-      <cell title="已提交评价" is-link :link="{name:'evaluationRecord',params:{type:'alreadySubmit'}}"></cell>
-      <cell title="已过期评价" is-link :link="{name:'evaluationRecord',params:{type:'pastSubmit'}}"></cell>
-      <cell title="还在考评周期内" is-link :link="{name:'evaluationRecord',params:{type:'inSubmit'}}"></cell>
+      <cell title="已评价" is-link :link="{name:'evaluationRecord',params:{type:'alreadySubmit'}}"></cell>
+      <cell title="已过期" is-link :link="{name:'evaluationRecord',params:{type:'pastSubmit'}}"></cell>
+      <cell title="待评价" is-link :link="{name:'evaluationRecord',params:{type:'inSubmit'}}"></cell>
     </group>
   </div>
 </template>
