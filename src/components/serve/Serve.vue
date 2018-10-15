@@ -484,24 +484,24 @@ export default {
         transformRequest: paramEncode
       }).then(res => {
         this.showSubmitToast = true
-      })
-      // 如果有差评的  跳转至差评列表页
-      localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
-      if (tempArray.length) {
-        this.$router.push({ name: 'serveComment' })
-      } else {
-        // 如果全部好评 刷新当前列表
-        if (this.searching) {
-          this.serveList = []
-          this.searchPageNo = 1
-          this.getSearchDatas(false)
+        // 如果有差评的  跳转至差评列表页
+        localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
+        if (tempArray.length) {
+          this.$router.push({ name: 'serveComment' })
         } else {
-          this.serveList = []
-          this.pageNo = 1
-          this.pageSize = 10
-          this.getDatas()
+          // 如果全部好评 刷新当前列表
+          if (this.searching) {
+            this.serveList = []
+            this.searchPageNo = 1
+            this.getSearchDatas(false)
+          } else {
+            this.serveList = []
+            this.pageNo = 1
+            this.pageSize = 10
+            this.getDatas()
+          }
         }
-      }
+      })
     },
     // 全选
     checkAll() {
