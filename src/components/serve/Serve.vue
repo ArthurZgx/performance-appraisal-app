@@ -465,7 +465,7 @@ export default {
         temp.status = 2
         temp.praiseNumber = item.goodCommentNumber
         temp.badNumber = item.numberVotes - item.goodCommentNumber
-        temp.badNumber = 0
+        // temp.badNumber = 0
         temp.badReview = item.badCommentText || '无评价'
         temp.evaluationTime = date
         params.push(temp)
