@@ -319,9 +319,9 @@ export default {
       var filter = ''
       console.log(res)
       for (var i = 0, len = res.data.length; i < len; i++) {
-        if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
-          res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
-        }
+        // if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+        //   res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+        // }
         if (res.data[i].superior.praiseNumber === null) {
           res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
         }
@@ -331,7 +331,7 @@ export default {
           res.data[i].includes.main_job_service_evaluation.title = res.data[i].includes.main_job_service_evaluation.title.split('—')[0]
           tempArray.push({
             name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
-            time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
+            // time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
             type: res.data[i].includes.main_job_service_evaluation.type,
             status: res.data[i].superior.status,
             id: res.data[i].superior.id,
@@ -484,24 +484,24 @@ export default {
         transformRequest: paramEncode
       }).then(res => {
         this.showSubmitToast = true
-      })
-      // 如果有差评的  跳转至差评列表页
-      localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
-      if (tempArray.length) {
-        this.$router.push({ name: 'serveComment' })
-      } else {
-        // 如果全部好评 刷新当前列表
-        if (this.searching) {
-          this.serveList = []
-          this.searchPageNo = 1
-          this.getSearchDatas(false)
+        // 如果有差评的  跳转至差评列表页
+        localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
+        if (tempArray.length) {
+          this.$router.push({ name: 'serveComment' })
         } else {
-          this.serveList = []
-          this.pageNo = 1
-          this.pageSize = 10
-          this.getDatas()
+          // 如果全部好评 刷新当前列表
+          if (this.searching) {
+            this.serveList = []
+            this.searchPageNo = 1
+            this.getSearchDatas(false)
+          } else {
+            this.serveList = []
+            this.pageNo = 1
+            this.pageSize = 10
+            this.getDatas()
+          }
         }
-      }
+      })
     },
     // 全选
     checkAll() {
