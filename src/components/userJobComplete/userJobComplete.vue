@@ -28,6 +28,7 @@
 <script>
 import { Group, Cell, XHeader, XTable } from 'vux'
 import request from '../../../src/utils/request.js'
+import _ from 'lodash'
 export default {
   data() {
     return {
@@ -59,10 +60,13 @@ export default {
       request('main_job_details', {
         params: {
           sortItem: 'create_time',
-          filters: filter
+          filters: filter,
+          pageNo: 1,
+          pageSize: 1000
         }
       }).then(res => {
         this.list = res.data
+        this.list = _.uniqBy(this.list, 'mainAnnualWorkTaskId')
         this.msg = '接受数据' + res.data.length
         console.log(this.list)
       }).catch(err => {
