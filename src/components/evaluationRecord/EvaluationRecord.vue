@@ -46,7 +46,7 @@
       <radio v-model="r2" :options="radio002" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
     <group v-show="riqi" style="margin-top:-0em;">
-  <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM"></datetime-view>
+  <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM-DD"></datetime-view>
   <flexbox>
     <flexbox-item><x-button @click.native="clearSelectedDate">清空</x-button></flexbox-item>
     <flexbox-item><x-button @click.native="selectedDateChange" type="primary">确认</x-button></flexbox-item>
@@ -60,7 +60,7 @@
     <group>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-92">
       <div>
-      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间 '+item.createTime:'评价日期 '+item.date" 
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间 '+item.createTime:'评价日期 '+item.date"
       @click.native="goTo(item.fid,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
@@ -104,7 +104,7 @@
         radio001: ['全部类型', '服务质量评价', '工作完成评价'],
         radio002: ['全部', '已查看通知', '未查看通知'],
         type: '2',
-        selectedDate: '2018-08',
+        selectedDate: '2018-08-01',
         isSelectedDate: false,
         list: [],
         serviceDataList: [],
@@ -119,26 +119,28 @@
         showErrorDateToast: false,
         year: 2018,
         month: 8,
+        day: 1,
         noData: false,
         screenHeight: 600
       }
     },
-    mounted() {
-      console.log(window.screen.height)
-      console.log(window.screen.availHeight)
-      console.log(document.body.clientHeight)
-      console.log(document.body.offsetHeight)
-      console.log(document.body.scrollHeight)
-      console.log(document.documentElement.clientHeight)
-      this.screenHeight = document.documentElement.clientHeight
-      // 初始化数据
-      this.initData()
+    created() {
       var date = new Date()
       this.year = date.getFullYear()
       this.month = date.getMonth() + 1
+      this.day = date.getDate()
       if (this.month < 10) {
         this.month = '0' + this.month
       }
+      if (this.day < 10) {
+        this.day = '0' + this.day
+      }
+      this.selectedDate = this.year + '-' + this.month + '-' + this.day
+    },
+    mounted() {
+      this.screenHeight = document.documentElement.clientHeight
+      // 初始化数据
+      this.initData()
     },
     methods: {
       onScrollBottom() {
@@ -234,10 +236,14 @@
         var date = new Date()
         this.year = date.getFullYear()
         this.month = date.getMonth() + 1
+        this.day = date.getDate()
         if (this.month < 10) {
           this.month = '0' + this.month
         }
-        this.selectedDate = this.year + '-' + this.month
+        if (this.day < 10) {
+          this.day = '0' + this.day
+        }
+        this.selectedDate = this.year + '-' + this.month + '-' + this.day
         this.$refs.datetime.render()
         console.log(this.selectedDate)
         this.isSelectedDate = false
@@ -253,11 +259,17 @@
         console.log(this.selectedDate)
         var year = this.selectedDate.split('-')[0]
         var month = this.selectedDate.split('-')[1]
+        var day = this.selectedDate.split('-')[2]
         var date = new Date()
         var year1 = date.getFullYear()
         var month1 = date.getMonth() + 1
+        var day1 = date.getDate()
         if (month1 < 10) {
           month1 = '0' + month1
+        }
+        if (year1 - year === 0 && month1 - month === 0 && day1 < day) {
+          this.showErrorDateToast = true
+          return
         }
         if ((year1 - year === 1 && month > month1) || (year1 - year === 0 && month1 >= month)) {
           this.isSelectedDate = true
@@ -308,11 +320,25 @@
         console.log(filter)
         // console.log(JSON.parse(filter))
         if (this.isSelectedDate) {
-          filter = {
-            'main_service_detail': {
-              'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+          // 如果选择日期搜索
+          if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
+            filter = {
+              'main_service_detail': {
+                'status': {}, 'user_id': { equalTo: userId }, 'last_update_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+              }
+            }
+          } else if (this.pageType === 'inSubmit') {
+            filter = {
+              'main_service_detail': {
+                'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+              }
             }
           }
+          // filter = {
+          //   'main_service_detail': {
+          //     'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+          //   }
+          // }
           filter.main_service_detail.status[type] = param1
         }
         var includes = {
@@ -370,11 +396,25 @@
           console.log(filter)
           // console.log(JSON.parse(filter))
           if (this.isSelectedDate) {
-            filter = {
-              'main_job_detail': {
-                'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+            // 如果选择日期搜索
+            if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
+              filter = {
+                'main_job_detail': {
+                  'status': {}, 'user_id': { equalTo: userId }, 'last_update_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                }
+              }
+            } else if (this.pageType === 'inSubmit') {
+              filter = {
+                'main_job_detail': {
+                  'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                }
               }
             }
+            // filter = {
+            //   'main_job_detail': {
+            //     'status': {}, 'user_id': { equalTo: userId }, 'year': { equalTo: this.year }, 'month': { equalTo: this.month }
+            //   }
+            // }
             filter.main_job_detail.status[type] = param2
           }
           // 再次请求数据
