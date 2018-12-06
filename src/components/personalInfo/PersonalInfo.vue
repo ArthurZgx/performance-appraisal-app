@@ -13,7 +13,7 @@
     <div>
       <group title="" label-width="5.5em" label-margin-right="2em">
         <cell title="姓名"  :value="userInfo.userName" value-align="left"></cell>
-        <cell title="性别"  :value="userInfo.gender" value-align="left" ></cell>
+        <!--<cell title="性别"  :value="userInfo.gender" value-align="left" ></cell>-->
         <cell title="职位"  :value="userInfo.postName" value-align="left" ></cell>
         <cell title="部门"  :value="userInfo.departmentName" value-align="left" ></cell>
         <!--<x-input title="上报人" v-model="value1"></x-input>-->
