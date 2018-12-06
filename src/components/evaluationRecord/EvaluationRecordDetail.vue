@@ -135,7 +135,7 @@
             for (var i = 0, len = res.data.length; i < len; i++) {
               result = result + (this.jobCompleteList[i].superior.weights * this.jobCompleteList[i].superior.completionRatio) / 100
             }
-            this.result = result
+            this.result = Math.floor(result * 1000) / 1000
           })
         }
       }
