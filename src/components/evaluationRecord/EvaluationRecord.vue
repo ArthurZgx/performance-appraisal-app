@@ -7,6 +7,19 @@
                 @on-click-more="showMenus = true">
                 考评记录
       </x-header>
+      <div class="clearfix">
+        <search @on-change="searchChange"
+                :results="results"
+                v-model="searchValue"
+                position="absolute"
+                auto-scroll-to-top
+                cancel-text="取消"
+                top="46px"
+                @on-cancel="searchCancel"
+                @on-submit="searchSubmit"
+                ref="search">
+        </search >
+      </div>
     </div>
 
     <flexbox style="background:#F0EFF5;font-size:13px;">
@@ -72,7 +85,7 @@
 </template>
 
 <script>
-  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore, DatetimeView, XButton, Toast } from 'vux'
+  import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore, DatetimeView, XButton, Toast, Search } from 'vux'
   import request from '../../../src/utils/request.js'
   // import _ from 'lodash'
   export default {
@@ -91,7 +104,8 @@
       LoadMore,
       DatetimeView,
       XButton,
-      Toast
+      Toast,
+      Search
     },
     data() {
       return {
@@ -121,7 +135,9 @@
         month: 8,
         day: 1,
         noData: false,
-        screenHeight: 600
+        screenHeight: 600,
+        searchValue: '',
+        results: []
       }
     },
     created() {
@@ -143,6 +159,34 @@
       this.initData()
     },
     methods: {
+      searchChange() {},
+      searchCancel() {
+        this.list = this.tempDataList.concat()
+        if (this.list.length === 0) {
+          this.noData = true
+        } else {
+          this.noData = false
+        }
+      },
+      searchSubmit(val) {
+        const self = this
+        console.log(self.tempDataList)
+        const searchName = val.trim()
+        const list = self.tempDataList
+        this.noData = false
+        if (searchName === '') {
+          self.list = self.tempDataList.concat()
+          return false
+        }
+        self.list = list.filter(item => {
+          if (item.title.includes(searchName)) {
+            return true
+          }
+        })
+        if (self.list.length === 0) {
+          this.noData = true
+        }
+      },
       onScrollBottom() {
         // 滑动触底
         // if (this.list.length >= 1) {
@@ -202,6 +246,7 @@
         // this.initData()
         if (this.r1 === '服务质量评价') {
           this.list = this.serviceDataList
+          this.tempDataList = this.list.concat()
           if (this.list.length === 0) {
             this.noData = true
           } else {
@@ -209,6 +254,7 @@
           }
         } else if (this.r1 === '工作完成评价') {
           this.list = this.jobDataList
+          this.tempDataList = this.list.concat()
           if (this.list.length === 0) {
             this.noData = true
           } else {
@@ -216,6 +262,7 @@
           }
         } else if (this.r1 === '全部类型') {
           this.list = this.serviceDataList.concat(this.jobDataList)
+          this.tempDataList = this.list.concat()
           if (this.list.length === 0) {
             this.noData = true
           } else {
@@ -475,10 +522,13 @@
             if (this.r1 === '全部类型') {
               // 拼接数据
               this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+              this.tempDataList = this.list.concat()
             } else if (this.r1 === '服务质量评价') {
               this.list = this.serviceDataList
+              this.tempDataList = this.list.concat()
             } else if (this.r1 === '工作完成评价') {
               this.list = this.jobDataList
+              this.tempDataList = this.list.concat()
             }
             console.log(347, this.list)
             if (this.list.length === 0) {
@@ -607,5 +657,9 @@ nly -->
 }
 .evaluationRecord .weui-toast.weui-toast_text {
   border-radius: 20px;
+}
+.clearfix {
+  *zoom: 1;
+  height: 44px;
 }
 </style>
