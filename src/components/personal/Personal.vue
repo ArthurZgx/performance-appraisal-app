@@ -2,7 +2,6 @@
   <div>
     <div class="vux-demo">
       <x-header :right-options="{showMore: false}"
-                style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
                 :left-options="{showBack: false}"
                 @on-click-more="showMenus = true">
         绩效考评

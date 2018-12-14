@@ -13,8 +13,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://yinxin.tentop.com.cn/api', // 博士林服务器
+        // target: 'http://yinxin.tentop.com.cn/api', // 博士林服务器
         // target: 'http://tentop.com.cn:8082/api',
+        target: 'http://kaoping.trustfar.cn/api',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

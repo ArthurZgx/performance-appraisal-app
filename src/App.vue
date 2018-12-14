@@ -24,7 +24,7 @@ body {
   z-index: 1000;
 }
 .vux-header {
-  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.1);*/
 }
 /* 客户最新样式更改 */
 /*更改标题栏*/
@@ -32,8 +32,16 @@ body {
   font-size: 24px !important;
   font-weight: bold !important;
 }
-/*搜索框默认取消按钮  */
-.weui-search-bar__cancel-btn{
-  display: none;
+/*隐藏返回文字*/
+.vux-header-back{
+  width: 0;
+  overflow: hidden;
+}
+/*返回按钮*/
+.vux-header .vux-header-left .left-arrow:before{
+  width: 15px !important;
+  height: 15px !important;
+  border: 1px solid #5177aa !important;
+  border-width: 4px 0 0 4px !important;
 }
 </style>
