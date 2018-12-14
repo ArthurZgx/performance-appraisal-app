@@ -561,7 +561,7 @@ export default {
   border-radius: 25px;
 }
 .serve .weui-search-bar__cancel-btn {
-  display: block;
+  display: none;
 }
 .serve .vux-sticky-box {
   position: fixed;
@@ -716,5 +716,32 @@ export default {
 .clearfix {
    *zoom: 1;
    height: 44px;
+}
+  /* 关于客户最新需求的样式更改 */
+.weui-search-bar{
+  background-color: white !important;
+}
+.vux-header-title-area, .vux-header .vux-header-title{
+  font-size: 24px !important;
+  font-weight: bold !important;
+}
+.vux-header-back{
+  width: 0;
+  overflow: hidden;
+}
+.weui-search-bar:before{
+  display: none;
+}
+.weui-search-bar:after{
+  display: none;
+}
+.weui-search-bar__label{
+  background: rgba(142,143,143,0.12) !important;
+}
+.vux-header .vux-header-left .left-arrow:before{
+  width: 15px !important;
+  height: 15px !important;
+  border: 1px solid #5177aa !important;
+  border-width: 4px 0 0 4px !important;
 }
 </style>

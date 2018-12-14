@@ -9,12 +9,12 @@
       <cell title="服务质量评价通知"
             is-link link="serve">
         <!-- <icon slot="icon" type="info"></icon> -->
-        <img src="../../assets/shop.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
+        <img src="../../assets/serviceEvaluation.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
       </cell>
       <cell title="工作完成度评价通知"
             is-link link="complete">
         <!-- <icon slot="icon" type="info"></icon> -->
-        <img src="../../assets/computer.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
+        <img src="../../assets/jobEvaluation.png" slot="icon" style="height:40px;padding-right:10px;margin-top:5px;">
 
       </cell>
     </group>

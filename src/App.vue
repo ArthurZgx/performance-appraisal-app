@@ -26,4 +26,14 @@ body {
 .vux-header {
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.1);
 }
+/* 客户最新样式更改 */
+/*更改标题栏*/
+.vux-header-title-area, .vux-header .vux-header-title{
+  font-size: 24px !important;
+  font-weight: bold !important;
+}
+/*搜索框默认取消按钮  */
+.weui-search-bar__cancel-btn{
+  display: none;
+}
 </style>

@@ -17,6 +17,32 @@
           <h3 text-align="center">{{userName}}</h3>
         </div>
       </router-link>
+      <flexbox class="personal-nav-list">
+        <flexbox-item>
+          <router-link to="/evaluationType">
+            <div class="a-nav-href">
+              <img src="../../assets/commentRecord.png" alt="">
+              <div>考评记录</div>
+            </div>
+          </router-link>
+        </flexbox-item>
+        <flexbox-item>
+          <router-link to="/evaluationResult">
+            <div class="a-nav-href">
+              <img src="../../assets/commentResults.png" alt="">
+              <div>我的考评结果</div>
+            </div>
+          </router-link>
+        </flexbox-item>
+        <flexbox-item>
+          <router-link to="/userJobComplete">
+            <div class="a-nav-href">
+              <img src="../../assets/myJobTask.png" alt="">
+              <div>我的工作任务</div>
+            </div>
+          </router-link>
+        </flexbox-item>
+      </flexbox>
     </div>
     <!-- <group>
       <cell title="考评记录" is-link link="evaluationRecord"></cell>
@@ -24,32 +50,7 @@
       <cell title="身份绑定" is-link link="personalInfo"></cell>
     </group> -->
     <div class="personal-center-content">
-    <flexbox class="personal-nav-list">
-      <flexbox-item>
-        <router-link to="/evaluationType">
-        <div class="a-nav-href">
-          <img src="../../assets/AssessmentRecords.png" alt="">
-          <div>考评记录</div>
-        </div>
-        </router-link>
-      </flexbox-item>
-      <flexbox-item>
-        <router-link to="/evaluationResult">
-        <div class="a-nav-href">
-          <img src="../../assets/MyAssessmentResults.png" alt="">
-          <div>我的考评结果</div>
-        </div>
-        </router-link>
-      </flexbox-item>
-      <flexbox-item>
-        <router-link to="/userJobComplete">
-          <div class="a-nav-href">
-            <img src="../../assets/job.png" alt="">
-            <div>我的工作任务</div>
-          </div>
-        </router-link>
-      </flexbox-item>
-    </flexbox>
+
     <!--<flexbox class="personal-nav-list">-->
       <!---->
       <!--<flexbox-item>-->
@@ -142,29 +143,37 @@
   position: fixed;
   width: 100%;
   height: 100%;
-  background: #fafafa;
+  background: #fefefe;
 }
 .vux-demo {
   text-align: center;
   padding-bottom: 12px;
-  background: #fafafa;
+  background: #fefefe;
 }
 .logo {
-  width: 100px;
-  height: 100px;
+  width: 94px;
+  height: 94px;
   border-radius: 50%;
+  position: absolute;
+  left: 25px;
+  top: -47px;
 }
-.personal-center-content {
-  width: 94%;
-  margin: 10px auto;
-  margin-top: 0;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px 25px #fafafa;
-}
+/*.personal-center-content {*/
+  /*width: 94%;*/
+  /*margin: 10px auto;*/
+  /*margin-top: 0px;*/
+  /*border-radius: 5px;*/
+  /*box-shadow: 2px 2px 5px 25px #fefefe;*/
+/*}*/
 .personal-nav-list {
-  padding: 20px 0px;
+  padding: 14px 0px;
   box-sizing: border-box;
   text-align: center;
+  position: relative;
+  width: 82%;
+  margin: 0 auto;
+  margin-top: -54px;
+  align-items: flex-start;
 }
 a {
   color: black;
@@ -172,18 +181,25 @@ a {
 .a-nav-href {
   width: 100%;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
+  color: #030303;
 }
 .a-nav-href img {
-  width: 25%;
+  width: 64%;
   max-width: 60px;
   margin: 0 auto;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10);
 }
 .personal-top-content {
-  width: 94%;
+  width: 88%;
+  height: 110px;
   margin: 10px auto;
-  border-radius: 12px;
+  margin-top: 47px;
   background: white;
-  padding: 20px 0;
+  position: relative;
+  box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10);
+  border-radius: 4px;
 }
 </style>
