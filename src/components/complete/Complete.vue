@@ -27,7 +27,9 @@
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-108">
       <div>
       <div class="aGroupList" v-for="(item,index) in completeList" :key="index">
-        <div class="completeClassifyTitle">{{item.department}}</div>
+        <div class="completeClassifyTitleBg">
+          <div class="completeClassifyTitle">{{item.department}}</div>
+        </div>
         <div>
           <div v-for="(list,index) in item.list" :key="index" class="aListData">
             <div class="listInfo" @click="goTocompleteComment(list)">
@@ -519,10 +521,10 @@
 }
 /*返回按钮*/
 .vux-header .vux-header-left .left-arrow:before{
-  width: 15px !important;
-  height: 15px !important;
+  width: 12px !important;
+  height: 12px !important;
   border: 1px solid #5177aa !important;
-  border-width: 4px 0 0 4px !important;
+  border-width: 3px 0 0 3px !important;
 }
 .weui-search-bar__label .weui-icon-search{
   display: none;
@@ -549,13 +551,25 @@
   border-top: 1px solid white !important;
 }
 .weui-search-bar__label{
-  border-radius: 16px !important;
+  border-radius: 10px !important;
 }
 .weui-search-bar__form{
   background: white !important;
 }
 .weui-search-bar__form:after{
   /*border: none !important;*/
-  border-radius: 38px !important;
+  border-radius: 20px !important;
+  height: 199%;
+  border: 1px solid 1px solid rgba(143,143,143,0.12);
+}
+
+.completeClassifyTitleBg{
+  padding: 10px 0;
+  border-bottom: 1px solid #F4F4F4;
+}
+.completeClassifyTitle{
+  padding: 0 10px;
+  border-bottom: none;
+  border-left: 5px solid #5177AA;
 }
 </style>

@@ -24,7 +24,9 @@
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
       <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
+        <div class="serveClassifyTitleBg">
         <div class="serveClassifyTitle">{{item.title}}</div>
+        </div>
         <div>
            <div v-for="(list,index) in item.list" :key="index" class="aListData">
             <div>
@@ -54,15 +56,15 @@
             :offset="100"
             :check-sticky-support="false"
             disabled="disabled">
-      <flexbox style="background:white;">
-        <flexbox-item :span="3.5">
+      <flexbox style="background:white;border-top:1px solid #eee">
+        <flexbox-item :span="6" style="text-align:center;">
           <div @click="clickAll" class="home_div">
             <!-- <check-icon :value.sync="checkedAll"></check-icon>全选 -->
               <span @click="checkedAll = !checkedAll" :class="checkedAll?'my-check-icon-clicked':'my-check-icon'"></span>全选
           </div>
         </flexbox-item>
         <flexbox-item>
-          <x-button style="background:#3891f0;color:white;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>
+          <x-button style="background:#5177AA;color:white;border-radius:0;" @click.native="checklist1.length > 0?showSubmitDialog = true:showSubmitErrorToast = true">一键提交</x-button>
         </flexbox-item>
       </flexbox>
     </sticky>
@@ -390,14 +392,18 @@ export default {
           }
         }
         // 根据部门首字母进行排序
-        for (i = 0; i < tempArray2.length; i++) {
-          tempArray2[i].list.sort(function(param1, param2) {
-            console.log(name)
-            return param1.name.localeCompare(param2.name)
-          })
-          tempArray2.sort(function(param1, param2) {
-            return param1.title.localeCompare(param2.title)
-          })
+        try {
+          for (i = 0; i < tempArray2.length; i++) {
+            tempArray2[i].list.sort(function(param1, param2) {
+              console.log(name)
+              return param1.name.localeCompare(param2.name)
+            })
+            tempArray2.sort(function(param1, param2) {
+              return param1.title.localeCompare(param2.title)
+            })
+          }
+        } catch (e) {
+          console.log('排序出错')
         }
         console.log(tempArray2)
         if (tempArray2.length < this.pageSize) {
@@ -733,10 +739,10 @@ export default {
 }
 /*返回按钮*/
 .vux-header .vux-header-left .left-arrow:before{
-  width: 15px !important;
-  height: 15px !important;
+  width: 12px !important;
+  height: 12px !important;
   border: 1px solid #5177aa !important;
-  border-width: 4px 0 0 4px !important;
+  border-width: 3px 0 0 3px !important;
 }
 /*搜索框上下线*/
 .weui-search-bar:before{
@@ -774,13 +780,29 @@ export default {
   border-top: 1px solid white !important;
 }
 .weui-search-bar__label{
-  border-radius: 16px !important;
+  border-radius: 10px !important;
 }
 .weui-search-bar__form{
   background: white !important;
 }
 .weui-search-bar__form:after{
   /*border: none !important;*/
-  border-radius: 38px !important;
+  border-radius: 20px !important;
+}
+/* 部门名字展示 */
+.serveClassifyTitleBg{
+  padding: 10px 0;
+  border-bottom: 1px solid #F4F4F4;
+}
+.serve .serveClassifyTitle{
+  padding: 0 10px;
+  border-bottom: none;
+  border-left: 5px solid #5177AA;
+}
+.serve .weui-cells{
+  padding: 0 10px;
+}
+.serve .weui-cells:after{
+  display: none;
 }
 </style>

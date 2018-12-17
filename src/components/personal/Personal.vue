@@ -13,7 +13,7 @@
         <div class="personal-top-content">
           <img v-if="!avatar" class="logo" src="../../assets/top.png">
           <img v-if="avatar" class="logo" :src="avatar">
-          <h3 text-align="center">{{userName}}</h3>
+          <h3 text-align="center" style="padding-top:9px;font-weight:normal;">{{userName}}</h3>
         </div>
       </router-link>
       <flexbox class="personal-nav-list">
@@ -72,11 +72,11 @@
       <!--<span slot="label">技能测试</span>-->
       <!--</tabbar-item>-->
       <tabbar-item link="home">
-        <img slot="icon" src="../../assets/index_onclick.png">
+        <img slot="icon" src="../../assets/index1.png">
         <span slot="label">首页</span>
       </tabbar-item>
       <tabbar-item link="personal">
-        <img slot="icon" src="../../assets/user_clicked.png">
+        <img slot="icon" src="../../assets/myself_hover.png">
         <span slot="label" style="color:#3891F0;">我的</span>
       </tabbar-item>
     </tabbar>
@@ -187,7 +187,7 @@ a {
   width: 64%;
   max-width: 60px;
   margin: 0 auto;
-  border: 3px solid white;
+  border: 2px solid white;
   border-radius: 50%;
   box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10);
 }

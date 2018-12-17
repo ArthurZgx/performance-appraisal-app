@@ -1,13 +1,13 @@
 <template>
   <div class="completeComment">
     <x-header :right-options="{showMore: false}"
-              style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
               @on-click-more="showMenus = true">
       绩效考评
     </x-header>
     <div class="content">
-      <div class="completeComment_div" style="text-align: center;">{{userName}}{{month}}月工作完成度评价</div>
+      <div class="completeComment_div" style="text-align: left;">{{userName}}{{month}}月工作完成度评价</div>
       <!-- 任务列表 -->
+      <div class="taskList">
       <group v-for="(task,index) in taskList" label-width="100%" :title="'任务' + (index+1)" :key="index">
         <!--<cell primary="content" title="default" value="long "></cell>-->
         <cell :title="task.planContent" value-align="right">
@@ -16,7 +16,7 @@
               <span style="margin-right: 5px;">权重</span> <span>{{task.weights}}%</span>
               <span style="margin-left: 10px;margin-right: 5px;">实际完成度</span> <span>{{task.completionRatio}}%</span>
             </div>
-            <flexbox justify="flex-end" :gutter="20" style="margin-bottom: 20px;">
+            <flexbox justify="flex-end" :gutter="20" style="margin-bottom: 0px;">
               <flexbox-item :span="2">
                 <x-button style="width: 64px;font-size: 12px;"
                           :class="task.clickCompleted?'btn_hasCompleted':'btn_default'"
@@ -33,6 +33,7 @@
           </div>
         </cell>
       </group>
+      </div>
       <p  v-if="taskList.length" style="text-align: right;margin-bottom: 50px;margin-top: 17px;">最终系数 <span>{{totalCompleteRatio}}%</span></p>
       <!-- 保存提交按钮 -->
       <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;padding:5px 0 5px">
@@ -350,14 +351,15 @@
 
 <style>
 .completeComment_div {
-  text-align: center;
-  padding: 10px 0;
-  /*border: 1px solid #eee;*/
+  text-align: left;
+  padding: 3px 10px;
+  border-left: 3px solid #5177aa;
   margin-top: 19px;
   margin-bottom: 21px;
+  line-height: 1;
 }
 .content {
-  padding: 0 10px;
+  padding: 0 20px;
 }
 .completeComment .btn_hasCompleted {
   background-color: #3891f0;
@@ -374,6 +376,14 @@
 }
 /*56,145,240, 0.5*/
 .completeComment .weui-cells:after {
-  border-bottom: 1px solid rgba(56, 145, 240, 0.5);
+  border-bottom: 0px solid rgba(56, 145, 240, 0.5);
+}
+
+.completeComment .content .taskList > div {
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10);
+  border-radius: 4px;
+  padding: 7px 5px;
+  margin-bottom: 16px;
 }
 </style>

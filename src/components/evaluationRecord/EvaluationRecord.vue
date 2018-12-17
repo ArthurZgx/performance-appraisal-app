@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <flexbox style="background:#F0EFF5;font-size:13px;">
+    <flexbox style="background:#F0EFF5;font-size:13px;margin-top:20px;">
       <flexbox-item><div class="flex-demo">
         <cell
           :title="('考评类型')"

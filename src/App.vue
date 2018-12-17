@@ -39,9 +39,61 @@ body {
 }
 /*返回按钮*/
 .vux-header .vux-header-left .left-arrow:before{
-  width: 15px !important;
-  height: 15px !important;
+  width: 12px !important;
+  height: 12px !important;
   border: 1px solid #5177aa !important;
-  border-width: 4px 0 0 4px !important;
+  border-width: 3px 0 0 3px !important;
+}
+.weui-search-bar{
+  background-color: white !important;
+}
+/*搜索框上下线*/
+.weui-search-bar:before{
+  display: none;
+}
+.weui-search-bar:after{
+  display: none;
+}
+/*搜索框背景*/
+.weui-search-bar__label{
+  background: rgba(142,143,143,0.12) !important;
+}
+.weui-search-bar__label .weui-icon-search{
+  display: none;
+}
+.weui-search-bar__label span{
+  float: left;
+  margin-left: 30px;
+  margin-top: 6px;
+}
+.weui-search-bar__box .weui-search-bar__input{
+  width: 100% !important;
+  height: 29px !important;
+}
+.weui-search-bar__box .weui-icon-search{
+  top: 5px !important;
+}
+.weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
+  margin-top: 5px;
+}
+.weui-icon-clear:before{
+  margin-top: 5px;
+}
+.weui-cells:before{
+  border-top: 1px solid white !important;
+}
+.weui-search-bar__label{
+  border-radius: 10px !important;
+}
+.weui-search-bar__form{
+  background: white !important;
+}
+.weui-search-bar__form:after{
+  /*border: none !important;*/
+  border-radius: 20px !important;
+  left: 1px !important;
+  top: 1px !important;
+  width: 199% !important;
+  height: 189% !important;
 }
 </style>

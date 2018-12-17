@@ -1,7 +1,7 @@
 <template>
   <div class="serveComment">
     <x-header :right-options="{showMore: false}"
-              style="box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);margin-bottom: 15px;"
+              style="margin-bottom: 15px;"
               @on-click-more="showMenus = true">绩效考评
     </x-header>
     <div class="serveComment_div">
@@ -209,7 +209,7 @@ export default {
 }
 .serveComment_div {
   background: #fff;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10);;
   border-radius: 4px;
   margin: 0 15px;
   padding: 10px;
