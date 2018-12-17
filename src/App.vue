@@ -18,6 +18,7 @@ export default {
 }
 body {
   background-color: #fff;
+  font-size: 18px;
 }
 .vux-demo {
   text-align: center;
@@ -64,7 +65,7 @@ body {
 .weui-search-bar__label span{
   float: left;
   margin-left: 30px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .weui-search-bar__box .weui-search-bar__input{
   width: 100% !important;

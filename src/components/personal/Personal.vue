@@ -4,14 +4,14 @@
       <x-header :right-options="{showMore: false}"
                 :left-options="{showBack: false}"
                 @on-click-more="showMenus = true">
-        绩效考评
+        我的
       </x-header>
 
       <!--<img class="logo" src="../../assets/vux_logo.png">-->
       <!--<h3>用户名</h3>-->
       <router-link to="/personalInfo">
         <div class="personal-top-content">
-          <img v-if="!avatar" class="logo" src="../../assets/top.png">
+          <img v-if="!avatar" class="logo" src="../../assets/svg/top.svg">
           <img v-if="avatar" class="logo" :src="avatar">
           <h3 text-align="center" style="padding-top:9px;font-weight:normal;">{{userName}}</h3>
         </div>
@@ -20,7 +20,7 @@
         <flexbox-item>
           <router-link to="/evaluationType">
             <div class="a-nav-href">
-              <img src="../../assets/commentRecord.png" alt="">
+              <img src="../../assets/svg/commentRecord.svg" alt="">
               <div>考评记录</div>
             </div>
           </router-link>
@@ -28,7 +28,7 @@
         <flexbox-item>
           <router-link to="/evaluationResult">
             <div class="a-nav-href">
-              <img src="../../assets/commentResults.png" alt="">
+              <img src="../../assets/svg/commentResults.svg" alt="">
               <div>我的考评结果</div>
             </div>
           </router-link>
@@ -36,7 +36,7 @@
         <flexbox-item>
           <router-link to="/userJobComplete">
             <div class="a-nav-href">
-              <img src="../../assets/myJobTask.png" alt="">
+              <img src="../../assets/svg/myJobTask.svg" alt="">
               <div>我的工作任务</div>
             </div>
           </router-link>
@@ -77,7 +77,7 @@
       </tabbar-item>
       <tabbar-item link="personal">
         <img slot="icon" src="../../assets/myself_hover.png">
-        <span slot="label" style="color:#3891F0;">我的</span>
+        <span slot="label" style="color:#5177aa;">我的</span>
       </tabbar-item>
     </tabbar>
     <div class="bg"></div>
@@ -180,7 +180,7 @@ a {
 .a-nav-href {
   width: 100%;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
   color: #030303;
 }
 .a-nav-href img {

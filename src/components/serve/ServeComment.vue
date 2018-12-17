@@ -41,16 +41,18 @@
            position="bottom" style="">
     </toast>
           <!-- 保存提交按钮 -->
-      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;padding:10px 0;border-top:1px solid #eee;">
-        <flexbox-item>
-          <x-button style="background: #f8f8f8;color: #333;width:80%;"
+      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;border-top:1px solid #eee;">
+        <flexbox-item style="margin-left: 0px;">
+          <!-- <x-button style="background: #f8f8f8;color: #333;width:80%;"
                     @click.native="saveEvent">保存
-          </x-button>
+          </x-button> -->
+          <div @click="saveEvent" style="text-align:center;background: #f8f8f8;color: #333;padding:10px 0;margin-left: 0px;">保存</div>
         </flexbox-item>
-        <flexbox-item>
-          <x-button style="background: #3891F0;color: #fff;width:80%;"
+        <flexbox-item style="margin-left: 0px;">
+          <!-- <x-button style="background: #3891F0;color: #fff;width:80%;"
                     @click.native="submitEvent">提交
-          </x-button>
+          </x-button> -->
+          <div @click="submitEvent" style="text-align:center;background: #5177aa;color: #fff;padding:10px 0;margin-left: 0px;">提交</div>
         </flexbox-item>
       </flexbox>
   </div>
@@ -200,7 +202,8 @@ export default {
 .serveComment .serveTitle {
   padding: 5px 0 5px;
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: bold;
   color: #333;
   border-bottom: 1px solid rgba(56, 145, 240, 0.5);
 }

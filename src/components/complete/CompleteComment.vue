@@ -12,7 +12,7 @@
         <!--<cell primary="content" title="default" value="long "></cell>-->
         <cell :title="task.planContent" value-align="right">
           <div slot="inline-desc" style="margin-top: 6px;">
-            <div style="margin-bottom: 17px;">
+            <div style="margin-bottom: 17px;font-size:18px">
               <span style="margin-right: 5px;">权重</span> <span>{{task.weights}}%</span>
               <span style="margin-left: 10px;margin-right: 5px;">实际完成度</span> <span>{{task.completionRatio}}%</span>
             </div>
@@ -36,8 +36,8 @@
       </div>
       <p  v-if="taskList.length" style="text-align: right;margin-bottom: 50px;margin-top: 17px;">最终系数 <span>{{totalCompleteRatio}}%</span></p>
       <!-- 保存提交按钮 -->
-      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;padding:5px 0 5px">
-        <flexbox-item>
+      <flexbox style="margin-bottom: 0;position:fixed;bottom:0;left:0;background:white;width:100%;">
+        <!-- <flexbox-item>
           <x-button style="background: #f8f8f8;color: #333;width:80%"
                     @click.native="cancleEvent">取消
           </x-button>
@@ -46,6 +46,12 @@
           <x-button style="background: #3891F0;color: #fff;width:80%"
                     @click.native="submitEvent">提交
           </x-button>
+        </flexbox-item> -->
+        <flexbox-item style="margin-left: 0px;">
+          <div @click="cancleEvent" style="text-align:center;background: #F4F4F4;color: #666;padding:10px 0;margin-left: 0px;">取消</div>
+        </flexbox-item>
+        <flexbox-item style="margin-left: 0px;">
+          <div @click="submitEvent" style="text-align:center;background: #5177aa;color: #fff;padding:10px 0;margin-left: 0px;">提交</div>
         </flexbox-item>
       </flexbox>
       <!-- 取消提示 -->
@@ -149,7 +155,7 @@
         self.userId = self.currentTask.userId // 被评价人id
         self.year = self.currentTask.year
         self.month = self.currentTask.month + ''
-        self.month = self.currentTask.month.length > 1 ? self.month : '0' + self.currentTask.month
+        // self.month = self.currentTask.month.length > 1 ? self.month : '0' + self.currentTask.month
         self.getTasks()
       },
       // 获取当前评价人的所有任务

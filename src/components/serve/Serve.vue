@@ -568,6 +568,7 @@ export default {
 }
 .serve .weui-search-bar__cancel-btn {
   display: none;
+  color: #666;
 }
 .serve .vux-sticky-box {
   position: fixed;
@@ -612,7 +613,7 @@ export default {
   flex-direction: row;
 }
 .serve .listInfoName {
-  font-size: 16px;
+  font-size: 18px;
   color: #333;
   display: inline-block;
   width: 130px;
@@ -761,7 +762,7 @@ export default {
 .weui-search-bar__label span{
   float: left;
   margin-left: 30px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .weui-search-bar__box .weui-search-bar__input{
   width: 100% !important;
@@ -804,5 +805,11 @@ export default {
 }
 .serve .weui-cells:after{
   display: none;
+}
+.vux-label{
+  font-size: 18px;
+}
+.groupList{
+  padding: 0 12px;
 }
 </style>

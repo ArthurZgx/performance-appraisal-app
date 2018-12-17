@@ -374,7 +374,7 @@
 }
 .groupList {
   /*padding-bottom: 50px;*/
-  padding: 0 10px;
+  padding: 0 12px;
 }
 .aListData {
   display: flex;
@@ -391,17 +391,20 @@
   height: 50px;
   line-height: 50px;
 }
-.listInfo {
-  height: 50px;
+.complete .listInfo {
+  width: 100%;
+  padding: 10px 0;
   margin-left: 10px;
   line-height: 25px;
 }
-.listInfoName {
-  font-size: 16px;
+.complete .listInfoName {
+  font-size: 18px;
   color: #333;
+  float: left;
 }
-.listInfoTime {
-  font-size: 13px;
+.complete .listInfoTime {
+  float: right;
+  font-size: 18px;
   color: #888;
 }
 .aListData {
@@ -532,7 +535,7 @@
 .weui-search-bar__label span{
   float: left;
   margin-left: 30px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .weui-search-bar__box .weui-search-bar__input{
   width: 100% !important;
@@ -543,6 +546,7 @@
 }
 .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
   margin-top: 5px;
+  color: #666;
 }
 .weui-icon-clear:before{
   margin-top: 5px;
@@ -571,5 +575,8 @@
   padding: 0 10px;
   border-bottom: none;
   border-left: 5px solid #5177AA;
+}
+.groupList > .weui-cells:after {
+  display: none;
 }
 </style>

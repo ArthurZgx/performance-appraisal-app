@@ -71,7 +71,7 @@
     <!-- 显示考评信息 -->
     <!-- <panel :header="('')" :list="list" :type="type" @on-img-error="onImgError"></panel> -->
     <group>
-      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-92">
+      <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-139">
       <div>
       <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间 '+item.createTime:'评价日期 '+item.date"
       @click.native="goTo(item.fid,item.type,item.status,item)"></cell>
@@ -488,7 +488,7 @@
                   fid: res.data[i].includes.main_job_service_evaluation.id,
                   year: res.data[i].superior.year,
                   month: res.data[i].superior.month,
-                  userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0]
+                  userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0].split('—')[0]
                 })
               }
             }
@@ -549,7 +549,7 @@
         // 判断类型是服务质量还是工作完成度
         if (type === 1 && status < 2) {
           // 如果是服务质量且状态是未读就跳转到服务质量评价页
-          list.name = list.title
+          list.name = list.title.split('—')[0]
           localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
           console.log(list)
           this.$router.push({

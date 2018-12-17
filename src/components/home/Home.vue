@@ -9,12 +9,12 @@
       <cell title="服务质量评价通知"
             is-link link="serve">
         <!-- <icon slot="icon" type="info"></icon> -->
-        <img src="../../assets/serviceEvaluation.png" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
+        <img src="../../assets/svg/serviceEvaluation.svg" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
       </cell>
       <cell title="工作完成度评价通知"
             is-link link="complete">
         <!-- <icon slot="icon" type="info"></icon> -->
-        <img src="../../assets/jobEvaluation.png" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
+        <img src="../../assets/svg/jobEvaluation.svg" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
 
       </cell>
     </group>
@@ -28,7 +28,7 @@
       <!--</tabbar-item>-->
       <tabbar-item link="home">
         <img slot="icon" src="../../assets/index1_hover.png">
-        <span slot="label" style="color:#3891F0;">首页</span>
+        <span slot="label" style="color:#5177aa;">首页</span>
       </tabbar-item>
       <tabbar-item link="personal">
         <img slot="icon" src="../../assets/myself.png">
@@ -150,4 +150,7 @@
   .home .vux-header .vux-header-title {
     /*color: #333;*/
   }
+  .vux-label{
+  font-size: 18px;
+}
 </style>
