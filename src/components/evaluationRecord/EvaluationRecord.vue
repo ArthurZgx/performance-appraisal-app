@@ -87,7 +87,7 @@
 <script>
   import { Group, Flexbox, FlexboxItem, CellBox, Cell, Panel, XHeader, Radio, InlineCalendar, Scroller, LoadMore, DatetimeView, XButton, Toast, Search } from 'vux'
   import request from '../../../src/utils/request.js'
-  // import _ from 'lodash'
+  import _ from 'lodash'
   export default {
     name: 'personal',
     components: {
@@ -406,7 +406,7 @@
             if (res.data[i].superior.praiseNumber === null) {
               res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
             }
-            if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
+            if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
               console.log('格式有错误')
             } else {
               // 压入数据
@@ -475,7 +475,7 @@
               if (res.data[i].superior.evaluationTime === null) {
                 res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
               }
-              if (res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
+              if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
                 console.log('格式有错误')
               } else {
                 tempArray.push({
@@ -493,20 +493,17 @@
               }
             }
             // 去除重复数据
-            for (var a = 0; a < tempArray.length; a++) {
-              for (var c = 1; c < tempArray.length; c++) {
-                if (tempArray[a].fid === tempArray[c].fid && a !== c) {
-                  tempArray.splice(c, 1)
-                  if (a >= tempArray.length) {
-                    break
-                  }
-                }
-              }
-            }
-          //  _.uniqWith(tempArray, function(newValue, oldValue) {
-          //    console.log(newValue.id === oldValue.id)
-          //      return newValue.id === oldValue.id
-          //   })
+            // for (var a = 0; a < tempArray.length; a++) {
+            //   for (var c = 1; c < tempArray.length; c++) {
+            //     if (tempArray[a].fid === tempArray[c].fid && a !== c) {
+            //       tempArray.splice(c, 1)
+            //       if (a >= tempArray.length) {
+            //         break
+            //       }
+            //     }
+            //   }
+            // }
+            tempArray = _.uniqBy(tempArray, 'fid')
 
             this.jobDataList = tempArray
             // 根据获取的数据条数判断下次应该加载多少条数据
