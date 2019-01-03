@@ -60,6 +60,7 @@
 <script>
   import { Group, Cell, XHeader, XTable, LoadMore, Flexbox, FlexboxItem, Toast } from 'vux'
   import _ from 'lodash'
+  import moment from 'moment'
   import request from '@/utils/request'
 
   export default {
@@ -127,7 +128,9 @@
                 that.isSure = true
                 that.notSureIds.push(item.id)
               }
-              console.log(key)
+              if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') > 3000000) {
+                that.isSure = false
+              }
             })
             console.log('isSure', that.notSureIds)
           }
