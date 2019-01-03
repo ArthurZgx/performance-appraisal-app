@@ -50,11 +50,15 @@
       <flexbox-item style="max-width:47px;">考勤系数</flexbox-item>
       <flexbox-item style="max-width:47px;">最终系数</flexbox-item>
     </flexbox> -->
+    <div class="confirmEvaluaionResult" @click="confirmEvaluaionResult" v-if="isSure">
+      确认考评结果
+    </div>
+    <toast v-model="showToast" type="text" :time="800" is-show-mask position="bottom">{{msg}}</toast>
     </div>
 </template>
 
 <script>
-  import { Group, Cell, XHeader, XTable, LoadMore, Flexbox, FlexboxItem } from 'vux'
+  import { Group, Cell, XHeader, XTable, LoadMore, Flexbox, FlexboxItem, Toast } from 'vux'
   import _ from 'lodash'
   import request from '@/utils/request'
 
@@ -67,14 +71,18 @@
       XTable,
       LoadMore,
       Flexbox,
-      FlexboxItem
+      FlexboxItem,
+      Toast
     },
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App',
+        msg: '确认成功',
         resultList: [], // 结果列表
         year: 0,
-        month: 0
+        month: 0,
+        isSure: false,
+        notSureIds: [],
+        showToast: false
       }
     },
     created() {
@@ -115,8 +123,58 @@
               } else {
                 self.resultList.splice(key, 1)
               }
+              if (item.isSure === 0 || item.isSure === null) {
+                that.isSure = true
+                that.notSureIds.push(item.id)
+              }
               console.log(key)
             })
+            console.log('isSure', that.notSureIds)
+          }
+        })
+      },
+      confirmEvaluaionResult() {
+        const params = {
+          isSure: 1
+        }
+        const q = []
+        _.each(this.notSureIds, item => {
+          q.push(new Promise((resolve, reject) => {
+            request('main_job_service_evaluation_results/' + item + '/edit', {
+              params: params,
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
+                'LoginType': 'app'
+              }
+            }).then(res => {
+              resolve('success')
+            }).catch(err => {
+              console.log(err)
+              resolve('error')
+            })
+          }))
+        })
+        Promise.all(q).then(res => {
+          let errNum = 0
+          let successNum = 0
+          _.each(res, item => {
+            if (item === 'success') {
+              successNum++
+            } else if (item === 'error') {
+              errNum++
+            }
+          })
+          if (successNum === res.length) {
+            console.log('全部成功')
+            this.msg = '提交成功'
+            this.showToast = true
+            this.isSure = true
+          } else {
+            console.log('失败了', errNum)
+            this.msg = '提交失败'
+            this.showToast = true
           }
         })
       }
@@ -162,5 +220,17 @@ a {
 }
 .vux-table:after {
   border-color: #3891f0;
+}
+.confirmEvaluaionResult{
+  margin: 100px auto;
+  padding: 10px 0;
+  text-align: center;
+  width: 99%;
+  border:1px solid #3891f0;
+  box-sizing: border-box;
+}
+.confirmEvaluaionResult:hover{
+  background: #3891f0;
+  color: white;
 }
 </style>
