@@ -128,7 +128,8 @@
                 that.isSure = true
                 that.notSureIds.push(item.id)
               }
-              if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') > 3000000) {
+              if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') > 3000000 && item.isSure === 0) {
+                console.debug('what')
                 that.isSure = false
               }
             })
