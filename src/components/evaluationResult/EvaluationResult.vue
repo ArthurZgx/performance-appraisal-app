@@ -174,7 +174,7 @@
             console.log('全部成功')
             this.msg = '提交成功'
             this.showToast = true
-            this.isSure = true
+            this.isSure = false
           } else {
             console.log('失败了', errNum)
             this.msg = '提交失败'
