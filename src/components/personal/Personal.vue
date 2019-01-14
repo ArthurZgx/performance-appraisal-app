@@ -33,11 +33,21 @@
             </div>
           </router-link>
         </flexbox-item>
+      </flexbox>
+      <flexbox class="personal-nav-list-two">
         <flexbox-item>
           <router-link to="/userJobComplete">
             <div class="a-nav-href">
               <img src="../../assets/svg/myJobTask.svg" alt="">
               <div>我的工作任务</div>
+            </div>
+          </router-link>
+        </flexbox-item>
+        <flexbox-item>
+          <router-link to="/addidenctGrade">
+            <div class="a-nav-href-crade" style="margin-top:-2px;">
+              <img src="../../assets/svg/AccidentGrade.svg" alt="">
+              <div style="margin-top:-10px;">事故等级</div>
             </div>
           </router-link>
         </flexbox-item>
@@ -171,11 +181,35 @@
   position: relative;
   width: 82%;
   margin: 0 auto;
-  margin-top: -54px;
+  margin-top: -254px;
+  align-items: flex-start;
+}
+.personal-nav-list-two{
+  padding: 14px 0px;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  width: 82%;
+  margin: 0 auto;
+  margin-top: -14px;
   align-items: flex-start;
 }
 a {
   color: black;
+}
+.a-nav-href-crade {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  color: #030303;
+}
+.a-nav-href-crade img {
+  width: 64%;
+  max-width: 75px;
+  margin: 0 auto;
+  border: 2px solid white;
+  border-radius: 50%;
+  /* box-shadow: 0 2px 4px 2px rgba(0,0,0,0.10); */
 }
 .a-nav-href {
   width: 100%;
@@ -193,7 +227,7 @@ a {
 }
 .personal-top-content {
   width: 88%;
-  height: 110px;
+  height: 310px;
   margin: 10px auto;
   margin-top: 47px;
   background: white;

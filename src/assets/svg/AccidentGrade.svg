@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="82px" height="82px" viewBox="0 0 82 82" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>分组 5</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="35" cy="35" r="35"></circle>
+        <filter x="-14.3%" y="-11.4%" width="128.6%" height="128.6%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="我的" transform="translate(-215.000000, -366.000000)">
+            <g id="分组-5" transform="translate(221.000000, 370.000000)">
+                <g id="Oval-2-Copy-2" fill-rule="nonzero">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" xlink:href="#path-1"></use>
+                </g>
+                <circle id="Oval-3-Copy-2" fill="#5177AA" fill-rule="nonzero" cx="34.7777778" cy="34.7777778" r="32.7777778"></circle>
+                <path d="M27.5,33 L42.5,33 L46.5,41 L23.5,41 L27.5,33 Z M28,32 L33.7478019,20.5043961 C34.0935869,19.8128262 34.9345291,19.5325122 35.626099,19.8782971 C35.8970374,20.0137663 36.1167289,20.2334578 36.2521981,20.5043961 L42,32 L28,32 Z M47,42 L49.9869505,47.973901 C50.3327354,48.6654709 50.0524213,49.5064131 49.3608514,49.8521981 C49.1664538,49.9493969 48.9520955,50 48.7347524,50 L21.2652476,50 C20.4920489,50 19.8652476,49.3731986 19.8652476,48.6 C19.8652476,48.3826569 19.9158507,48.1682986 20.0130495,47.973901 L23,42 L47,42 Z" id="合并形状" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

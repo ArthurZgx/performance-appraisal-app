@@ -143,6 +143,11 @@ export default new Router({
       name: 'userJobCompleteResult',
       component: _import('userJobComplete/userJobCompleteResult')
     },
+    {
+      path: '/addidenctGrade',
+      name: 'addidenctGrade',
+      component: _import('addidenctGrade/addidenctGrade')
+    },
     // {
     //   path: '/home',
     //   name: 'Home',
