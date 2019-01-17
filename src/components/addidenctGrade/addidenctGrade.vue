@@ -9,8 +9,8 @@
           <img :style="{width:imgWidth + '%'}" :src="'http://kaoping.trustfar.cn' + list.level" />
       </div>
       <div style="position:fixed;bottom:0;left:0;background:#5177aa;height:50px;width:100%;">
-          <div style="color:white;float:left;width:50%;text-align:center;line-height:50px;border-right:1px solid #335599;box-sizing:boder-box;" @click="big">放大</div>
-          <div style="color:white;float:right;width:49%;text-align:center;line-height:50px;" @click="small">缩小</div>
+          <div style="color:white;float:left;width:50%;text-align:center;line-height:50px;border-right:1px solid #335599;box-sizing:boder-box;font-size:25px;" @click="big">放大</div>
+          <div style="color:white;float:right;width:49%;text-align:center;line-height:50px;font-size:25px;" @click="small">缩小</div>
       </div>
     </div>
 </template>
