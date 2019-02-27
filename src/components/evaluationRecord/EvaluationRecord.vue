@@ -427,7 +427,8 @@
                 numberVotes: res.data[i].superior.numberVotes,
                 goodCommentNumber: res.data[i].superior.praiseNumber,
                 badCommentText: res.data[i].superior.badReview,
-                badCommentNumber: res.data[i].superior.numberVotes - res.data[i].superior.praiseNumber
+                badCommentNumber: res.data[i].superior.numberVotes - res.data[i].superior.praiseNumber,
+                AppraisedUserId: res.data[i].includes.main_job_service_evaluation.userId
               })
             }
           }
@@ -523,6 +524,8 @@
             if (this.r1 === '全部类型') {
               // 拼接数据
               this.list = this.list.concat(this.serviceDataList.concat(this.jobDataList))
+              // 获取被评价人部门
+              this.getAllUserDepartment()
               this.tempDataList = this.list.concat()
             } else if (this.r1 === '服务质量评价') {
               this.list = this.serviceDataList
@@ -580,6 +583,51 @@
             id: id,
             type: type,
             cid: list.id
+          }
+        })
+      },
+      // 获取所有被评价人部门Id
+      getAllUserDepartment() {
+        if (this.list.length === 0) {
+          return
+        }
+        let appraisedUserIds = []
+        this.list.forEach(val => {
+          appraisedUserIds.push(val.AppraisedUserId)
+        })
+        if (appraisedUserIds.length === 0) {
+          appraisedUserIds.push('01')
+        }
+        appraisedUserIds = _.uniqBy(appraisedUserIds)
+        console.debug('所有被评价人id--->', appraisedUserIds)
+        request('hm_personnels', {
+          params: {
+            pageSize: 100000,
+            pageNo: 1,
+            filters: {
+              hm_personnel: {
+                id: { in: appraisedUserIds }
+              }
+            }
+          }
+        }).then(res => {
+          console.debug('输出获取的用户数据----->', res)
+          const departmentAndUser = {}
+          // 如果获取到了数据就开始循环
+          if (res.data.length > 0) {
+            res.data.forEach(val => {
+              departmentAndUser[val.id] = {
+                departmentName: val.departmentName
+              }
+            })
+            console.debug('输出获取到的用户id和部门的关系对象---->', departmentAndUser)
+            console.debug('输出列表中的数据---->', this.list)
+            let tempTitleSplit = []
+            // 处理list列表中的数据
+            this.list.forEach(val => {
+              tempTitleSplit = val.title.split('—')
+              val.title = tempTitleSplit[0] + '（' + departmentAndUser[val.AppraisedUserId].departmentName + '）-' + tempTitleSplit[1]
+            })
           }
         })
       }
