@@ -15,7 +15,8 @@ module.exports = {
       '/api': {
         // target: 'http://yinxin.tentop.com.cn/api', // 博士林服务器
         // target: 'http://tentop.com.cn:8082/api',
-        target: 'http://tentop.com.cn:43289/api',
+        // target: 'http://tentop.com.cn:43289/api', // 银信服务
+        target: 'http://kaoping.trustfar.cn/api', // 
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

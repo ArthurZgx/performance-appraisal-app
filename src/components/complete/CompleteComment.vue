@@ -170,7 +170,11 @@
           }
         }
         request('main_job_details', {
-          params: { filters: filters }
+          params: {
+            pageSize: 100000,
+            pageNo: 1,
+            filters: filters
+          }
         }).then(res => {
           console.log(res)
           console.log('所有任务', res.data)

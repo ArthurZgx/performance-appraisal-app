@@ -213,7 +213,7 @@ export default {
       request('main_job_service_evaluations', {
         params: {
           filters: filter,
-          pageSize: 2000
+          pageSize: 20000
         }
       }).then(res => {
         var serviceIds = []
@@ -304,7 +304,7 @@ export default {
       }
       // 请求数据
       request('main_service_details', {
-        params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 10 }
+        params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: 100000 }
       }).then(res => {
         this.formatData(res)
       }).catch(err => {
@@ -503,7 +503,7 @@ export default {
           } else {
             this.serveList = []
             this.pageNo = 1
-            this.pageSize = 10
+            this.pageSize = 100000
             this.getDatas()
           }
         }
