@@ -493,7 +493,8 @@
                   fid: res.data[i].includes.main_job_service_evaluation.id,
                   year: res.data[i].superior.year,
                   month: res.data[i].superior.month,
-                  userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0].split('—')[0]
+                  userName: res.data[i].includes.main_job_service_evaluation.title.split('的')[0].split('—')[0],
+                  AppraisedUserId: res.data[i].includes.main_job_service_evaluation.userId
                 })
               }
             }

@@ -357,7 +357,11 @@ export default {
         }
       }
       request('hm_personnels', {
-        params: { filters: filter }
+        params: {
+          pageNo: 1,
+          pageSize: 1000000,
+          filters: filter
+        }
       }).then(res => {
         for (var i = 0; i < res.data.length; i++) {
           tempArray2[i] = {}

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 npm run build
-rsync -avz -e "ssh -p43221" dist/index.html  root@tentop.com.cn:/data/www/html/app/
-rsync -avz -e "ssh -p43221" dist/static  root@tentop.com.cn:/data/www/html/
+rsync -avz -e "ssh -p3001" dist/index.html  root@lingdao-tech.com:/data/www/html/app/
+rsync -avz -e "ssh -p3001" dist/static  root@lingdao-tech.com:/data/www/html/
