@@ -141,7 +141,7 @@
           }
         })
         temp = temp / 100
-        return temp.toFixed(1)
+        return temp.toFixed(2)
       }
     },
     methods: {

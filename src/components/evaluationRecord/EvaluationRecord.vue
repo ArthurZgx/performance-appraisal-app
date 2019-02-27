@@ -5,7 +5,7 @@
       <x-header :right-options="{showMore: false}"
                 style="box-shadow:none;"
                 @on-click-more="showMenus = true">
-                考评记录
+                {{title}}
       </x-header>
       <div class="clearfix">
         <search @on-change="searchChange"
@@ -137,7 +137,8 @@
         noData: false,
         screenHeight: 600,
         searchValue: '',
-        results: []
+        results: [],
+        title: '加载中'
       }
     },
     created() {
@@ -210,14 +211,17 @@
         switch (type) {
           // 如果是已提交
           case 'alreadySubmit':
+            this.title = '已评价'
             this.getDatas([2, 4], [2, 4], 'in')
             break
             // 如果是已过期
           case 'pastSubmit':
+            this.title = '已过期'
             this.getDatas('3', '3')
             break
             // 如果是未提交
           case 'inSubmit':
+            this.title = '待评价'
             this.getDatas('2', '2', 'lessThan')
             break
         }

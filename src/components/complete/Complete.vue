@@ -251,13 +251,13 @@
         list.sort(function(p1, p2) {
           return p1.department.localeCompare(p2.department)
         })
-        list.forEach(item => {
-          console.debug('what is item --->', item)
-          item.list = _.uniqWith(item.list, (arrVal, othVal) => {
-            // console.debug('what is get--->', arrVal, othVal)
-            return arrVal.userId === othVal.userId && arrVal.planAssessmentPlanId === othVal.planAssessmentPlanId && arrVal.time === othVal.time
-          })
-        })
+        // list.forEach(item => { // 去除主表中的重读数据
+        //   console.debug('what is item --->', item)
+        //   item.list = _.uniqWith(item.list, (arrVal, othVal) => {
+        //     // console.debug('what is get--->', arrVal, othVal)
+        //     return arrVal.userId === othVal.userId && arrVal.planAssessmentPlanId === othVal.planAssessmentPlanId && arrVal.time === othVal.time
+        //   })
+        // })
         self.completeList = list
       },
       searchFocus() {},
