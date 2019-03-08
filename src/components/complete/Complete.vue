@@ -145,7 +145,7 @@
       // 获取所有工作任务明细表数据
       getDetailId() {
         const self = this
-        console.log('获取缓存', localStorage.getItem('userId'))
+        // console.log('获取缓存', localStorage.getItem('userId'))
         const userId = localStorage.getItem('userId')
         if (localStorage.getItem('userId') === null) {
           this.noData = true
@@ -161,7 +161,7 @@
         request('main_job_details', {
           params: { filters: filters1, pageNo: 1, pageSize: 10000 }
         }).then(res => {
-          console.log('工作任务明细表', res.data)
+          // console.log('工作任务明细表', res.data)
           const resAll = res.data
           if (resAll.length === 0) {
             this.noData = true
@@ -173,7 +173,7 @@
             })
             // 根据主表id去重
             detailIds = _.uniq(detailIds)
-            console.log('去重后', detailIds)
+            // console.log('去重后', detailIds)
             // 根据去重后的主表ID过滤出所有主表带用户表数据
             self.getMainData(detailIds)
           }
@@ -197,7 +197,7 @@
               'hm_personnel': { includes: ['user_id'] }}
           }
         }).then(res2 => {
-          console.log('主表+用户表', res2.data)
+          // console.log('主表+用户表', res2.data)
           const res2All = res2.data
           const tempArray = []
           if (res2All.length) {
@@ -215,7 +215,7 @@
             }
             // self.completeList2 = self.completeList2.concat(tempArray) 修改第五处 取消注释 下一行参数改为self.completeList2
             self.dealData(tempArray)
-            console.log('tempArray', tempArray)
+            // console.log('tempArray', tempArray)
           }
         })
       },
@@ -230,7 +230,7 @@
         })
         // 部门去重
         list = _.uniqWith(list, _.isEqual)
-        console.log(236, tempArray)
+        // console.log(236, tempArray)
         // 部门分组
         _.each(tempArray, function(item, key) {
           const curItem1 = item.department
@@ -262,7 +262,7 @@
       },
       searchFocus() {},
       searchCancel() {
-        console.log('cancel')
+        // console.log('cancel')
       },
       searchClear() {
         this.getDetailId()
@@ -277,7 +277,7 @@
           return null
         }
         self.completeList = completeList.filter(item => {
-          console.log('completeList', item)
+          // console.log('completeList', item)
           if (item.list && item.list.length) {
             item.list = item.list.filter(it => {
               if (it.title.includes(searchName)) {
@@ -301,7 +301,7 @@
       // 跳转评价详情
       goTocompleteComment(list) {
         localStorage.setItem('currentTask', JSON.stringify(list))
-        console.log('list', list)
+        // console.log('list', list)
         this.$router.push({
           name: 'completeComment',
           params: { state: true }

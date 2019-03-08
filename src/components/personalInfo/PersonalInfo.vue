@@ -97,7 +97,7 @@
               'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c'
             }
           }).then(res => {
-            console.log('用户信息1', res.data)
+            // console.log('用户信息1', res.data)
             if (!isEmptyObject(res.data)) {
               self.userInfo.userName = res.data.name
               self.userInfo.postName = res.data.postName
@@ -108,7 +108,7 @@
                 self.userInfo.gender = '女'
               }
               self.$forceUpdate()
-              console.log('用户信息2', self.userInfo)
+              // console.log('用户信息2', self.userInfo)
             }
           })
         }

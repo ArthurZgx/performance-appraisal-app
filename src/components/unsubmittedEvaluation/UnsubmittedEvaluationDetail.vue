@@ -80,14 +80,14 @@ export default {
   methods: {
     // 差评说明得焦函数
     onFocus() {
-      console.log('得焦')
+      // console.log('得焦')
     },
     // 差评说明失焦函数
     onBlur() {
-      console.log('失焦')
+      // console.log('失焦')
     },
     saveEvent() {
-      console.log('保存')
+      // console.log('保存')
       this.showToast = true
     },
     submitEvent() {

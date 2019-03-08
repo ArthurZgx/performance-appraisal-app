@@ -21,7 +21,7 @@ service.interceptors.request.use(config => {
   Promise.reject(error)
 })
 service.defaults.paramsSerializer = function(params) {
-  console.log('调用序列化方法')
+  // console.log('调用序列化方法')
   return _.join(_.map(_.keys(params), key => {
     if (params[key]) {
       return key + '=' + encodeURIComponent(typeof params[key] === 'string' ? params[key] : JSON.stringify(params[key]))

@@ -110,7 +110,7 @@
         request('main_job_service_evaluation_results', {
           params: params
         }).then(res => {
-          console.log(106, res)
+          // console.log(106, res)
           if (res.data.length) {
             self.resultList = res.data
             // 增加考评周期字段
@@ -129,11 +129,11 @@
                 that.notSureIds.push(item.id)
               }
               if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') > 3000000 && item.isSure === 0) {
-                console.debug('what')
+                // console.debug('what')
                 that.isSure = false
               }
             })
-            console.log('isSure', that.notSureIds)
+            // console.log('isSure', that.notSureIds)
           }
         })
       },
@@ -171,7 +171,7 @@
             }
           })
           if (successNum === res.length) {
-            console.log('全部成功')
+            // console.log('全部成功')
             this.msg = '提交成功'
             this.showToast = true
             this.isSure = false

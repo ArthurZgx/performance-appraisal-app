@@ -62,13 +62,15 @@ export default {
   },
   methods: {
     getDatas() {
-      // const date = new Date()
-      // const year = date.getFullYear()
-      // const month = date.getMonth() + 1
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
       // if (this.month < 10) {
       //   this.month = '0' + this.month
       // }
       // console.log(month)
+      const time = `${year}${month}00`
+      const time2 = `${year}${month}32`
       //   获取数据
       const userId = localStorage.getItem('userId')
       if (userId === null) {
@@ -97,9 +99,18 @@ export default {
         }
       }).then(res => {
         this.list = res.data
+        this.list.forEach(item => {
+          if (item.extend1) {
+            item.extendTemp = item.extend1.replace(/\./g, '').replace('/\-/g', '')
+          }
+        })
+        this.list = this.list.filter(item => {
+          // console.log('输出', time, time2)
+          return item.extendTemp > time && item.extendTemp < time2
+        })
         // this.list = _.uniqBy(this.list, 'mainAnnualWorkTaskId')
         this.msg = '接受数据' + res.data.length
-        console.log(this.list)
+        // console.log(this.list)
       }).catch(err => {
         this.msg = err
       })

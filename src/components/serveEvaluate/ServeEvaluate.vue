@@ -105,16 +105,16 @@
       },
       // checklist 选中状态改变
       checkChange1(value, label) {
-        console.log('选中状态改变1', value, label)
-        console.log('选择列表', this.checklist1)
+        // console.log('选中状态改变1', value, label)
+        // console.log('选择列表', this.checklist1)
       },
       // checklist 选中状态改变
       checkChange2(value, label) {
-        console.log('选中状态改变2', value, label)
+        // console.log('选中状态改变2', value, label)
       },
       // checklist 选中状态改变
       checkChange3(value, label) {
-        console.log('选中状态改变3', value, label)
+        // console.log('选中状态改变3', value, label)
       },
       // 全选
       checkAll() {
@@ -122,7 +122,7 @@
       },
       // 点击全选
       clickAll() {
-        console.log('点击全选')
+        // console.log('点击全选')
         // const all = _.without.apply(_, [this.commonList].concat(this.checklist1))
         // this.checklist1 = all
         if (this.checklist1.length === 4) {

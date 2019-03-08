@@ -171,7 +171,7 @@
       },
       searchSubmit(val) {
         const self = this
-        console.log(self.tempDataList)
+        // console.log(self.tempDataList)
         const searchName = val.trim()
         const list = self.tempDataList
         this.noData = false
@@ -227,7 +227,7 @@
         }
       },
       onImgError(item, $event) {
-        console.log(item, $event)
+        // console.log(item, $event)
       },
       // 关闭筛选框
       closeRadioWindow() {
@@ -296,7 +296,7 @@
         }
         this.selectedDate = this.year + '-' + this.month + '-' + this.day
         this.$refs.datetime.render()
-        console.log(this.selectedDate)
+        // console.log(this.selectedDate)
         this.isSelectedDate = false
         this.closeRadioWindow()
         this.showScrollerLoading = true
@@ -307,7 +307,7 @@
       },
       // 根据日期筛选
       selectedDateChange() {
-        console.log(this.selectedDate)
+        // console.log(this.selectedDate)
         var year = this.selectedDate.split('-')[0]
         var month = this.selectedDate.split('-')[1]
         var day = this.selectedDate.split('-')[2]
@@ -368,7 +368,7 @@
           }
         }
         filter.main_service_detail.status[type] = param1
-        console.log(filter)
+        // console.log(filter)
         // console.log(JSON.parse(filter))
         if (this.isSelectedDate) {
           // 如果选择日期搜索
@@ -411,7 +411,7 @@
               res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
             }
             if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
-              console.log('格式有错误')
+              // console.log('格式有错误')
             } else {
               // 压入数据
               tempArray.push({
@@ -445,7 +445,7 @@
             }
           }
           filter.main_job_detail.status[type] = param2
-          console.log(filter)
+          // console.log(filter)
           // console.log(JSON.parse(filter))
           if (this.isSelectedDate) {
             // 如果选择日期搜索
@@ -473,7 +473,7 @@
           request('main_job_details', {
             params: { filters: filter, includes: includes, pageNo: this.pageNo, pageSize: this.pageSize }
           }).then(res => {
-            console.log(310, res)
+            // console.log(310, res)
             tempArray = []
             for (var i = 0, len = res.data.length; i < len; i++) {
               // 如果数据格式错误就分配一个参数
@@ -481,7 +481,7 @@
                 res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
               }
               if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
-                console.log('格式有错误')
+                // console.log('格式有错误')
               } else {
                 tempArray.push({
                   title: res.data[i].includes.main_job_service_evaluation.title,
@@ -535,7 +535,7 @@
               this.list = this.jobDataList
               this.tempDataList = this.list.concat()
             }
-            console.log(347, this.list)
+            // console.log(347, this.list)
             if (this.list.length === 0) {
               this.noData = true
               this.showScrollerLoading = false
@@ -556,7 +556,7 @@
           // 如果是服务质量且状态是未读就跳转到服务质量评价页
           list.name = list.title.split('—')[0]
           localStorage.setItem('needBadCommentPeopleList', JSON.stringify([list]))
-          console.log(list)
+          // console.log(list)
           this.$router.push({
             name: 'serveComment',
             params: {
@@ -566,7 +566,7 @@
         }
         if (type === 0 && status === 0) {
           // 如果是工作完成度且状态是未读就跳转到工作完成度评价页
-          console.log(list)
+          // console.log(list)
           list.id = list.fid
           localStorage.setItem('currentTask', JSON.stringify(list))
           this.$router.push({
@@ -600,7 +600,7 @@
           appraisedUserIds.push('01')
         }
         appraisedUserIds = _.uniqBy(appraisedUserIds)
-        console.debug('所有被评价人id--->', appraisedUserIds)
+        // console.debug('所有被评价人id--->', appraisedUserIds)
         request('hm_personnels', {
           params: {
             pageSize: 100000,
@@ -612,7 +612,7 @@
             }
           }
         }).then(res => {
-          console.debug('输出获取的用户数据----->', res)
+          // console.debug('输出获取的用户数据----->', res)
           const departmentAndUser = {}
           // 如果获取到了数据就开始循环
           if (res.data.length > 0) {
@@ -621,8 +621,8 @@
                 departmentName: val.departmentName
               }
             })
-            console.debug('输出获取到的用户id和部门的关系对象---->', departmentAndUser)
-            console.debug('输出列表中的数据---->', this.list)
+            // console.debug('输出获取到的用户id和部门的关系对象---->', departmentAndUser)
+            // console.debug('输出列表中的数据---->', this.list)
             let tempTitleSplit = []
             // 处理list列表中的数据
             this.list.forEach(val => {

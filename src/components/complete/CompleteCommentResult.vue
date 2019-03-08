@@ -79,7 +79,7 @@ export default {
       this.resultDetail = JSON.parse(localStorage.getItem('resultDetail'))
       this.taskList = JSON.parse(localStorage.getItem('taskList'))
       // this.currentName = localStorage.getItem('currentName')
-      console.log(this.taskList)
+      // console.log(this.taskList)
     },
     // 跳转至任务列表
     gotToTaskList() {

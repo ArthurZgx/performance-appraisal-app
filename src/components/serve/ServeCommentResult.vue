@@ -54,7 +54,7 @@ export default {
     this.editTitle = this.editTitle.name
     var json = localStorage.getItem('jsonTemp')
     json = JSON.parse(json)
-    console.log(json)
+    // console.log(json)
     this.goodCommentNum = json.goodCommentNum
     this.badCommentNum = json.badCommentNum
     this.badCommentText = json.badCommentText

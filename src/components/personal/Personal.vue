@@ -134,7 +134,7 @@
         } else {
           this.avatar = ''
         }
-        console.log('init', this.avatar)
+        // console.log('init', this.avatar)
         // const a = [1, 2, 3, 4, 5]
         // _.each(a, function(i, j) {
         //   console.log(i, j)

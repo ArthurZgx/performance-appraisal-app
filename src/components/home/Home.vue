@@ -68,7 +68,7 @@
       }
     },
     created() {
-      console.log('缓存判别之第1次部署')
+      // console.log('缓存判别之第1次部署')
       this.init()
       this.getUserInfo()
       // localStorage.setItem('serve', 'true')
@@ -86,7 +86,7 @@
       },
       // 获取用户信息
       getUserInfo() {
-        console.log('获取用户信息')
+        // console.log('获取用户信息')
         let code = ''
         // 获取URL中参数code
         let url = window.location.href // 线上部署
@@ -98,7 +98,7 @@
           request('extends/wechartLogin', {
             params: { code: code }
           }).then(res => {
-            console.log('用户信息', res)
+            // console.log('用户信息', res)
             if (res.data.code === 0 && !isEmptyObject(res.data.fields)) {
               const userId = res.data.fields.id
               const name = res.data.fields.name
@@ -111,7 +111,7 @@
               // this.showNotLogin = true
               // console.log('获取缓存', localStorage.getItem('userId'))
             } else if (res.data.code !== 0) {
-              console.log('没有发现该用户信息')
+              // console.log('没有发现该用户信息')
               this.msg = res
               // this.showNotLogin = true
             }
@@ -129,7 +129,7 @@
         // console.log('code', code)
       },
       onHideNotLoginAlert() {
-        console.log('关闭窗口')
+        // console.log('关闭窗口')
         window.opener = null
         // JS重写当前页面
         window.open('', '_self', '')

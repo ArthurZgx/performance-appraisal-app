@@ -48,10 +48,10 @@ export default {
   },
   methods: {
     init() {
-      console.log('init')
+      // console.log('init')
       const a = [1, 2, 3, 4, 5]
       _.each(a, function(i, j) {
-        console.log(i, j)
+        // console.log(i, j)
       })
       // const time = moment().format('MMMM Do YYYY, h:mm:ss a'); // 七月 11日 2018, 9:36:25 上午
       const time = moment().format('YYYY-MM-DD hh:mm:ss') // 2018-07-11 09:41:50

@@ -121,13 +121,13 @@
       this.getCurrentTask()
       // var json = localStorage.getItem('jsonTemp')
       // json = JSON.parse(json)
-      // console.log(json)
+      // // console.log(json)
       // this.goodCommentNum = json.goodCommentNum
       // this.badCommentNum = json.badCommentNum
       // this.badCommentText = json.badCommentText
     },
     mounted() {
-      console.log(this.$route.params.state)
+      // // console.log(this.$route.params.state)
       if (this.$route.params.state === undefined) {
         this.$router.go(-1)
       }
@@ -149,7 +149,7 @@
       getCurrentTask() {
         const self = this
         self.currentTask = JSON.parse(localStorage.getItem('currentTask'))
-        console.log('currentTask', this.currentTask)
+        // console.log('currentTask', this.currentTask)
         self.planAssessmentPlanId = self.currentTask.planAssessmentPlanId
         self.userName = self.currentTask.userName // 被评价人姓名
         self.userId = self.currentTask.userId // 被评价人id
@@ -176,8 +176,8 @@
             filters: filters
           }
         }).then(res => {
-          console.log(res)
-          console.log('所有任务', res.data)
+          // console.log(res)
+          // console.log('所有任务', res.data)
           const allTask = res.data
           if (allTask.length) {
             _.each(allTask, function(item, key) {
@@ -206,7 +206,7 @@
       },
       // 弹出框点击确定时
       confirm(value) {
-        console.log('点击确定', typeof value)
+        // console.log('点击确定', typeof value)
         // 如果存在小数点 禁止提交
         if (value.indexOf('.') > 0) {
           return
@@ -220,21 +220,21 @@
           this.currentTask.clickNoCompleted = true
         }
         this.showConfirm = false
-        console.log(this.currentTask)
+        // console.log(this.currentTask)
       },
       // 弹出框点击取消时
       cancelConfirm(value) {
-        console.log('取消', value)
+        // console.log('取消', value)
         this.currentTask.clickNoCompleted = false
         this.currentTask.completionRatio = 0
       },
       // 弹出框显示时
       confirmShow() {
-        console.log('显示')
+        // console.log('显示')
       },
       // 弹出框隐藏时
       confirmHide() {
-        console.log('隐藏')
+        // console.log('隐藏')
         this.currentTask = {}
       },
       // 提示信息隐藏
@@ -250,12 +250,12 @@
             self.evaluateTime = res.data
           }
           self.editStatus()
-          console.log('时间', res)
+          // console.log('时间', res)
         })
       },
       // 取消
       cancleEvent() {
-        console.log('取消')
+        // console.log('取消')
         const self = this
         if (self.taskList.length < 1) return
         _.each(self.taskList, function(item, key) {
@@ -272,7 +272,7 @@
         // const json = list
         const self = this
         if (self.taskList.length < 1) return
-        console.log('点了提交', self.taskList)
+        // console.log('点了提交', self.taskList)
         // 判断是否有未打分的任务
         if (!self.judgeAllTask()) {
           self.toastWidth = '11em'
@@ -325,7 +325,7 @@
         })
 
         params = JSON.stringify(params)
-        console.log(params)
+        // console.log(params)
         // 批量修改明细表
         request('main_job_details/edit/batch', {
           method: 'POST',
@@ -333,8 +333,8 @@
           params: { params: params },
           transformRequest: paramEncode
         }).then(res3 => {
-          console.log('修改状态成功', res3.data)
-          console.log('时间', res3.headers.date)
+          // console.log('修改状态成功', res3.data)
+          // console.log('时间', res3.headers.date)
           // self.editEvaluateTime(res3.headers.date)
 
           // const evaluateYear = res
@@ -345,14 +345,14 @@
         if (!dateString) return
         const date = new Date(dateString)
         const evaluateTime = parseTime(date)
-        console.log(393, evaluateTime)
+        // console.log(393, evaluateTime)
         request('main_job_service_evaluations/' + this.currentTask.id + '/edit', {
           method: 'POST',
           params: { evaluationTime: evaluateTime },
           headers: { 'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c' },
           transformRequest: paramEncode
         }).then(res => {
-          console.log('添加评价时间成功', res)
+          // console.log('添加评价时间成功', res)
         })
       }
     }

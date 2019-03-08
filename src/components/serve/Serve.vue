@@ -147,14 +147,14 @@ export default {
     searchValue() {
     },
     serveList() {
-      console.log(this.serveList.length)
+      // console.log(this.serveList.length)
       if (this.serveList.length === 0) {
         this.showScrollerLoading = false
         this.noData = true
       } else {
         this.noData = false
       }
-      console.log(this.noData)
+      // console.log(this.noData)
     }
   },
   methods: {
@@ -180,7 +180,7 @@ export default {
     },
     resultClick() {},
     searchSubmit() {
-      console.log('提交搜索')
+      // console.log('提交搜索')
       this.getSearchDatas(true)
     },
     searchChange() {},
@@ -193,7 +193,7 @@ export default {
         this.serveList = []
         this.tempSearchValue = this.searchValue
       }
-      console.log(sub)
+      // console.log(sub)
       this.tempSearchValue = this.searchValue
       this.searching = true
       this.showScrollerLoading = true
@@ -223,7 +223,7 @@ export default {
         }
         if (serviceIds.length === 0) {
           this.serveList = []
-          console.log('无数据')
+          // console.log('无数据')
           this.showScrollerLoading = false
           return false
         }
@@ -262,7 +262,7 @@ export default {
       // 滑动触底
       if (this.serveList.length >= 1) {
         if (!this.onFacting) {
-          console.log('运行了')
+          // console.log('运行了')
           this.onFacting = true
           setTimeout(() => {
             if (this.searching) {
@@ -286,7 +286,7 @@ export default {
       }
       var userId = localStorage.getItem('userId')
       if (localStorage.getItem('userId') === null) {
-        console.log(localStorage.getItem('userId'))
+        // console.log(localStorage.getItem('userId'))
         this.showScrollerLoading = false
         this.noData = true
         return false
@@ -319,7 +319,7 @@ export default {
       var userIdTempArray = []
       var tempArray2 = []
       var filter = ''
-      console.log(res)
+      // console.log(res)
       for (var i = 0, len = res.data.length; i < len; i++) {
         // if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
         //   res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
@@ -328,7 +328,7 @@ export default {
           res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
         }
         if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
-          console.log('数据格式有错误')
+          // console.log('数据格式有错误')
         } else {
           res.data[i].includes.main_job_service_evaluation.title = res.data[i].includes.main_job_service_evaluation.title.split('—')[0]
           tempArray.push({
@@ -399,7 +399,7 @@ export default {
         try {
           for (i = 0; i < tempArray2.length; i++) {
             tempArray2[i].list.sort(function(param1, param2) {
-              console.log(name)
+              // console.log(name)
               return param1.name.localeCompare(param2.name)
             })
             tempArray2.sort(function(param1, param2) {
@@ -407,9 +407,9 @@ export default {
             })
           }
         } catch (e) {
-          console.log('排序出错')
+          // console.log('排序出错')
         }
-        console.log(tempArray2)
+        // console.log(tempArray2)
         if (tempArray2.length < this.pageSize) {
           this.pageSize = 0
         }
@@ -417,7 +417,7 @@ export default {
         if (this.serveList.length < 10) {
           this.showScrollerLoading = false
         }
-        console.log(210, this.serveList)
+        // console.log(210, this.serveList)
       })
     },
     // 跳转评价详情
@@ -519,7 +519,7 @@ export default {
     },
     // 点击全选
     clickAll() {
-      console.log('点击全选')
+      // console.log('点击全选')
       // const all = _.without.appy(_, [this.commonList].concat(this.checklist1))
       // this.checklist1 = all
       // if (this.checklist1.length ==== 4) {
@@ -550,9 +550,9 @@ export default {
   mounted() {
     this.scrollHeight = document.documentElement.clientHeight - 145
     const self = this
-    console.log('设置滚动区域高度为' + this.scrollHeight)
+    // console.log('设置滚动区域高度为' + this.scrollHeight)
     setTimeout(function() {
-      console.log(document.documentElement.clientHeight)
+      // console.log(document.documentElement.clientHeight)
       self.scrollHeight = document.documentElement.clientHeight - 145
     }, 500)
     // if (localStorage.getItem('serve') === 'true') {
