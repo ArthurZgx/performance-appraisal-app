@@ -5,26 +5,29 @@
                 @on-click-more="showMenus = true">
                 事故等级
       </x-header>
-      <div style="overflow-x:scroll;">
-          <img :style="{width:imgWidth + '%'}" :src="'http://kaoping.trustfar.cn' + list.level" />
+      <group>
+        <div class="levelCard" v-for="(title, index) in levelArray" :key="index">
+          <div class="levelTitle">{{title}}</div>
+          <div v-for="(item, index2) in accidenctObject[title]" :key="index2">
+            <div class="levelContent">
+              <div class="levelText">{{item.content}}</div>
+              <div class="levelStandard"><span style="color:red;">处罚规定：</span>{{item.standard}}</div>
+            </div>
+          </div>
+        </div>
+      </group>  
       </div>
-      <div style="position:fixed;bottom:0;left:0;background:#5177aa;height:50px;width:100%;">
-          <div style="color:white;float:left;width:50%;text-align:center;line-height:50px;border-right:1px solid #335599;box-sizing:boder-box;font-size:25px;" @click="big">放大</div>
-          <div style="color:white;float:right;width:49%;text-align:center;line-height:50px;font-size:25px;" @click="small">缩小</div>
-      </div>
-    </div>
 </template>
-
 <script>
 import { Group, Cell, XHeader, XTable } from 'vux'
 import request from '../../../src/utils/request.js'
+import _ from 'lodash'
 // import _ from 'lodash'
 export default {
   data() {
     return {
-      list: [],
-      msg: '没有数据',
-      imgWidth: 100
+      levelArray: [],
+      accidenctObject: {}
     }
   },
   components: {
@@ -34,25 +37,72 @@ export default {
     XTable
   },
   methods: {
-    big() {
-      this.imgWidth = this.imgWidth + 15
-    },
-    small() {
-      this.imgWidth = this.imgWidth - 15
-    },
+    // big() {
+    //   this.imgWidth = this.imgWidth + 15
+    // },
+    // small() {
+    //   this.imgWidth = this.imgWidth - 15
+    // },
     getDatas() {
+      const self = this
       request('accident_levels', {
         params: {
           pageNo: 1,
           pageSize: 1000
         }
       }).then(res => {
-        this.list = res.data[0]
+        const tempArray = self.setAddidenctList(res.data)
+        console.debug('输出加入序号的数组', tempArray)
+        const tempObject = {}
+        tempArray.forEach(value => {
+          if (tempObject[value.level]) {
+            tempObject[value.level].push(value)
+          } else {
+            tempObject[value.level] = []
+            tempObject[value.level].push(value)
+          }
+        })
+        Object.keys(tempObject).forEach(key => {
+          tempObject[key] = _.sortBy(tempObject[key], 'content')
+        })
+        self.levelArray = Object.keys(tempObject)
+        self.accidenctObject = tempObject
+        console.debug('排序后的对象', Object.keys(tempObject))
+        // this.list = res.data[0]
       }).catch(err => {
         this.msg = err
       })
+    },
+    setAddidenctList(list) {
+      const self = this
+      let itemNumber = []
+      list.forEach(item => {
+        itemNumber = item.level.split('级')[0]
+        item.levelNum = self.setStringToNumber(itemNumber)
+      })
+      return _.sortBy(list, 'levelNum')
+    },
+    setStringToNumber(stringNum) {
+      let numLever = 0
+      switch (stringNum) {
+        case '一':
+          numLever = 1
+          break
+        case '二':
+          numLever = 2
+          break
+        case '三':
+          numLever = 3
+          break
+        case '四':
+          numLever = 4
+          break
+        case '五':
+          numLever = 5
+          break
+      }
+      return numLever
     }
-
   },
   mounted() {
     this.getDatas()
@@ -130,5 +180,28 @@ td {
   text-align: center;
   margin-top: 150px;
   color: #666;
+}
+.levelCard {
+  margin-top: 20px;
+}
+.levelTitle {
+  margin: 0 auto;
+  width: 94%;
+  box-sizing: border-box;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ddd;
+}
+.levelContent {
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+.levelText {
+
+}
+.levelStandard {
+  margin-top: 5px;
+  margin-left: 26px;
 }
 </style>
