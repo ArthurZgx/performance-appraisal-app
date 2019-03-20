@@ -5,6 +5,7 @@
                 @on-click-more="showMenus = true">
                 事故等级
       </x-header>
+      <div v-if="noData" style="text-align: center;margin-top: 150px;color:rgb(109, 109, 109);">没有数据</div>
       <group>
         <div class="levelCard" v-for="(title, index) in levelArray" :key="index">
           <div class="levelTitle">{{title}}</div>
@@ -27,7 +28,8 @@ export default {
   data() {
     return {
       levelArray: [],
-      accidenctObject: {}
+      accidenctObject: {},
+      noData: false
     }
   },
   components: {
@@ -43,14 +45,25 @@ export default {
     // small() {
     //   this.imgWidth = this.imgWidth - 15
     // },
-    getDatas() {
+    getDatas(departmentId) {
       const self = this
       request('accident_levels', {
         params: {
           pageNo: 1,
-          pageSize: 1000
+          pageSize: 1000,
+          filters: {
+            accident_level: {
+              departmentId: {
+                equalTo: departmentId
+              }
+            }
+          }
         }
       }).then(res => {
+        if (res.data.length === 0) {
+          this.noData = true
+          return
+        }
         const tempArray = self.setAddidenctList(res.data)
         console.debug('输出加入序号的数组', tempArray)
         const tempObject = {}
@@ -71,6 +84,7 @@ export default {
         // this.list = res.data[0]
       }).catch(err => {
         this.msg = err
+        this.noData = true
       })
     },
     setAddidenctList(list) {
@@ -105,7 +119,30 @@ export default {
     }
   },
   mounted() {
-    this.getDatas()
+    // 获取用户id
+    const userId = localStorage.getItem('userId')
+    let departmentId = ''
+    request('hm_personnels', {
+      params: {
+        filters: {
+          hm_personnel: {
+            id: {
+              equalTo: userId
+            }
+          }
+        }
+      }
+    }).then(resp => {
+      if (resp.data.length === 0) {
+        this.noData = true
+      } else {
+        departmentId = resp.data[0].postId
+        this.getDatas(departmentId)
+      }
+      console.debug('输出测试', resp)
+    }).catch(() => {
+      this.noData = true
+    })
   }
 }
 </script>
@@ -202,6 +239,6 @@ td {
 }
 .levelStandard {
   margin-top: 5px;
-  margin-left: 26px;
+  /* margin-left: 6px; */
 }
 </style>
