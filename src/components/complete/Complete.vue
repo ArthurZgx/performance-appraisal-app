@@ -47,10 +47,10 @@
     <div>
       <x-dialog v-model="showSubmitDialog" class="dialog-demo">
         <span class="img-box">
-          <img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/Path%20.png" alt="">
+          <img src="@/assets/gantan.png" alt="">
         </span>
         <div class="box-title">
-          确认使用一键提交说所有人的评价吗</div>
+          确认使用一键提交所有人的评价吗</div>
         <div class="bottomBtn">
           <span class="vux-cancel" @click="showSubmitDialog=false">取消</span>
           <span class="vux-sure" @click="affirmSubmit">确认</span>

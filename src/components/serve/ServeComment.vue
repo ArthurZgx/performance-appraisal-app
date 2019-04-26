@@ -121,9 +121,7 @@ export default {
       params = JSON.stringify(params)
       // console.log(params)
       request('main_service_details/edit/batch/', {
-        params: {
-          params: params
-        },
+        data: params,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
@@ -174,16 +172,13 @@ export default {
       params = JSON.stringify(params)
       // console.log(params)
       request('main_service_details/edit/batch/', {
-        params: {
-          params: params
-        },
+        data: params,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
           'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
           'LoginType': 'web'
-        },
-        transformRequest: paramEncode
+        }
       })
       setTimeout(function() {
         // that.$router.push({ name: 'serve' })

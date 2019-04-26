@@ -10,7 +10,7 @@
         <div class="title-tip">请输入手机号验证身份</div>
           <group v-if="step==1">
               <x-input title="+86" name="mobile" placeholder="请输入您绑定的手机号" keyboard="number" is-type="china-mobile" v-model="phoneNumber"></x-input>
-              <div v-show="hasErrorMsg" class="error-tip"><span class="error-tip-img"><img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/Path%20.png" alt=""></span>您输入的手机号信息不匹配,请检查</div>
+              <div v-show="hasErrorMsg" class="error-tip"><span class="error-tip-img"><img src="@/assets/gantan.png" alt=""></span>您输入的手机号信息不匹配,请检查</div>
           </group>
           <group v-if="step==2">
               <x-input title="发送验证码" class="weui-vcode" v-model="vcode">

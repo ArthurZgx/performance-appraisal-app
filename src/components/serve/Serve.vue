@@ -72,7 +72,7 @@
     <div>
       <x-dialog v-model="showSubmitDialog" class="dialog-demo">
         <span class="img-box">
-          <img src="http://ui.haomo-tech.com/%E9%93%B6%E4%BF%A1%E9%95%BF%E8%BF%9C/assets/Path%20.png" alt="">
+          <img src="@/assets/gantan.png" alt="">
         </span>
         <div class="box-title">
            确认一键提交所选人员的服务质量评价吗</div>
@@ -91,7 +91,6 @@
 import { Group, Cell, Tabbar, TabbarItem, XHeader, Icon, Search, CheckIcon, XButton, Flexbox, FlexboxItem, Sticky, XDialog, Toast, InlineXNumber, Scroller, LoadMore } from 'vux'
 import _ from 'lodash'
 import request from '@/utils/request'
-import { paramEncode } from '@/utils'
 import { setTimeout } from 'timers'
 var i = 0
 var j = 0
@@ -482,16 +481,14 @@ export default {
       })
       params = JSON.stringify(params)
       request('main_service_details/edit/batch/', {
-        params: {
-          params: params
-        },
+        data: params,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
           'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
           'LoginType': 'web'
-        },
-        transformRequest: paramEncode
+        }
+        // transformRequest: paramEncode
       }).then(res => {
         this.showSubmitToast = true
         // 如果有差评的  跳转至差评列表页
