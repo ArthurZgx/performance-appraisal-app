@@ -62,7 +62,6 @@ import { XHeader, Toast, Icon, XNumber, Group, CellBox, Cell, Flexbox, FlexboxIt
 import _ from 'lodash'
 import { setTimeout } from 'timers'
 import request from '@/utils/request'
-import { paramEncode } from '@/utils'
 
 export default {
   name: 'serveComment',
@@ -127,8 +126,7 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8',
           'X-Auth-Token': '7235ba9e71f7493d9d56b29401d9f47c',
           'LoginType': 'web'
-        },
-        transformRequest: paramEncode
+        }
       })
       setTimeout(function() {
         // that.$router.push({ name: 'serve' })
