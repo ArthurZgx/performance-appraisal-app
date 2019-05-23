@@ -29,10 +29,10 @@
       </tr>
       <tr v-for="(result,index) in resultList" :key="index">
         <td>{{result.period}}</td>
-        <td>{{result.serviceCoefficient}}%</td>
-        <td>{{result.workCoefficient}}%</td>
-        <td>{{result.cardCoefficient}}%</td>
-        <td>{{result.endCoefficient}}%</td>
+        <td>{{result.serviceCoefficient}}</td>
+        <td>{{result.workCoefficient}}</td>
+        <td>{{result.cardCoefficient}}</td>
+        <td>{{result.endCoefficient}}</td>
       </tr>
       </tbody>
     </x-table>
@@ -101,6 +101,8 @@
         // 获取当前用户考评结果
         const userId = localStorage.getItem('userId')
         const params = {
+          sortItem: 'create_time',
+          sortOrder: 'desc',
           filters: {
             main_job_service_evaluation_result: {
               user_id: { equalTo: userId }
