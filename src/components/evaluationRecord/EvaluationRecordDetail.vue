@@ -128,7 +128,7 @@
           var filter = "{'main_job_detail':{'main_job_service_evaluation_id':{equalTo:'" + this.$route.params.id + "'},'user_id':{equalTo:'" + this.userId + "'}}}"
           var includes = "{'main_job_service_evaluation':{includes:['main_job_service_evaluation_id']}}"
           request('main_job_details', {
-            params: { filters: filter, includes }
+            params: { pageSize: 100000, filters: filter, includes }
           }).then(res => {
             this.jobCompleteList = res.data
             var result = 0

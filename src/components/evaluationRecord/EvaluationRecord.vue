@@ -375,7 +375,7 @@
           if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
             filter = {
               'main_service_detail': {
-                'status': {}, 'user_id': { equalTo: userId }, 'last_update_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
               }
             }
           } else if (this.pageType === 'inSubmit') {
@@ -452,7 +452,7 @@
             if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
               filter = {
                 'main_job_detail': {
-                  'status': {}, 'user_id': { equalTo: userId }, 'last_update_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                  'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
                 }
               }
             } else if (this.pageType === 'inSubmit') {
