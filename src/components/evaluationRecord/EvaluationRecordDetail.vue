@@ -42,9 +42,9 @@
       </thead>
       <tbody>
       <tr v-for="(item,index) in jobCompleteList" :key="index">
-        <td>{{item.superior.taskName}}</td>
+        <td>{{item.superior.planContent}}</td>
         <td style="width:59px;">{{item.superior.weights}}%</td>
-        <td style="width:59px;">{{item.superior.completionRatio}}%</td>
+        <td style="width:59px;">{{item.superior.completionRatio || 0}}%</td>
       </tr>
       </tbody>
       <tfoot>

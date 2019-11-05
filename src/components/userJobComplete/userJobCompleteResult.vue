@@ -10,7 +10,7 @@
           <tbody>
           <tr>
             <td>任务名称</td>
-            <td>{{result.taskName}}</td>
+            <td>{{result.planContent}}</td>
           </tr>
           <tr>
               <td>任务内容</td>

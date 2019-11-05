@@ -59,7 +59,7 @@
       <radio v-model="r2" :options="radio002" :selected-label-style="{color:'#3891F0'}"></radio>
     </group>
     <group v-show="riqi" style="margin-top:-0em;">
-  <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM-DD"></datetime-view>
+  <datetime-view v-model="selectedDate" ref="datetime" format="YYYY-MM"></datetime-view>
   <flexbox>
     <flexbox-item><x-button @click.native="clearSelectedDate">清空</x-button></flexbox-item>
     <flexbox-item><x-button @click.native="selectedDateChange" type="primary">确认</x-button></flexbox-item>
@@ -152,7 +152,8 @@
       if (this.day < 10) {
         this.day = '0' + this.day
       }
-      this.selectedDate = this.year + '-' + this.month + '-' + this.day
+      // this.selectedDate = this.year + '-' + this.month + '-' + this.day
+      this.selectedDate = this.year + '-' + this.month
     },
     mounted() {
       this.screenHeight = document.documentElement.clientHeight
@@ -294,7 +295,8 @@
         if (this.day < 10) {
           this.day = '0' + this.day
         }
-        this.selectedDate = this.year + '-' + this.month + '-' + this.day
+        // this.selectedDate = this.year + '-' + this.month + '-' + this.day
+        this.selectedDate = this.year + '-' + this.month
         this.$refs.datetime.render()
         // console.log(this.selectedDate)
         this.isSelectedDate = false
@@ -310,15 +312,16 @@
         // console.log(this.selectedDate)
         var year = this.selectedDate.split('-')[0]
         var month = this.selectedDate.split('-')[1]
-        var day = this.selectedDate.split('-')[2]
+        // var day = this.selectedDate.split('-')[2]
         var date = new Date()
         var year1 = date.getFullYear()
         var month1 = date.getMonth() + 1
-        var day1 = date.getDate()
+        // var day1 = date.getDate()
         if (month1 < 10) {
           month1 = '0' + month1
         }
-        if (year1 - year === 0 && month1 - month === 0 && day1 < day) {
+        // if (year1 - year === 0 && month1 - month === 0 && day1 < day) {
+        if (year1 - year === 0 && month1 - month < 0) {
           this.showErrorDateToast = true
           return
         }
@@ -375,13 +378,13 @@
           if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
             filter = {
               'main_service_detail': {
-                'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
               }
             }
           } else if (this.pageType === 'inSubmit') {
             filter = {
               'main_service_detail': {
-                'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
               }
             }
           }
@@ -452,13 +455,13 @@
             if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
               filter = {
                 'main_job_detail': {
-                  'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                  'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
                 }
               }
             } else if (this.pageType === 'inSubmit') {
               filter = {
                 'main_job_detail': {
-                  'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + ' 00:00:00', this.selectedDate + ' 23:59:59'] }
+                  'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
                 }
               }
             }

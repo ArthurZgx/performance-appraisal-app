@@ -18,9 +18,9 @@
       </thead>
       <tbody>
       <tr v-for="(task,index) in taskList" :key="index">
-        <td>{{task.taskName}}</td>
+        <td>{{task.planContent}}</td>
         <td>{{task.weights}}%</td>
-        <td>{{task.completionRatio}}%</td>
+        <td>{{task.completionRatio || 0}}%</td>
       </tr>
 
       <tr>

@@ -113,7 +113,8 @@
           // { taskName: '第十二届全国人民代表大会第一次会议以来的五年，是我国发展进程中极不平凡的五年', weights: '20', order: 2, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
           // { taskName: '五年来，经济实力跃上新台阶。国内生产总值从54万亿元增加到82.7万亿元，年均增长7.1%', weights: '30', order: 3, completionRatio: '', clickCompleted: false, clickNoCompleted: false },
           // { taskName: '五年来，创新驱动发展成果丰硕。全社会研发投入年均增长11%，规模跃居世界第二位', weights: '40', order: 4, completionRatio: '', clickCompleted: false, clickNoCompleted: false }
-        ]
+        ],
+        backStatus: false
       }
     },
     created() {
@@ -298,6 +299,11 @@
         // 存储
         localStorage.setItem('taskList', JSON.stringify(self.taskList))
         localStorage.setItem('resultDetail', JSON.stringify(resultDetail))
+        if (!self.backStatus) {
+          self.backStatus = true
+        } else {
+          self.$router.go(-1)
+        }
       },
       // 提交之前 判断是否有没打分的任务 如果有 禁止提交
       judgeAllTask() {
@@ -336,7 +342,11 @@
           // console.log('修改状态成功', res3.data)
           // console.log('时间', res3.headers.date)
           // self.editEvaluateTime(res3.headers.date)
-
+          if (!self.backStatus) {
+            self.backStatus = true
+          } else {
+            self.$router.go(-1)
+          }
           // const evaluateYear = res
         })
       },
