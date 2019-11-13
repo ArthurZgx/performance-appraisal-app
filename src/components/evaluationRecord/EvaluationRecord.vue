@@ -73,7 +73,7 @@
     <group>
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" height="-139">
       <div>
-      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="pageType == 'inSubmit'?'创建时间 '+item.createTime:'评价日期 '+item.date"
+      <cell v-for="(item,index) in list" :key="index" :title="item.title" :inline-desc="(pageType == 'inSubmit' || pageType == 'pastSubmit')?'创建时间 '+item.createTime:'评价日期 '+item.date"
       @click.native="goTo(item.fid,item.type,item.status,item)"></cell>
       </div>
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
@@ -375,13 +375,13 @@
         // console.log(JSON.parse(filter))
         if (this.isSelectedDate) {
           // 如果选择日期搜索
-          if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
+          if (this.pageType === 'alreadySubmit') {
             filter = {
               'main_service_detail': {
                 'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
               }
             }
-          } else if (this.pageType === 'inSubmit') {
+          } else if (this.pageType === 'inSubmit' || this.pageType === 'pastSubmit') {
             filter = {
               'main_service_detail': {
                 'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
@@ -408,7 +408,7 @@
           for (var i = 0, len = res.data.length; i < len; i++) {
             // 如果数据格式错误就分配一个参数
             if (res.data[i].superior.evaluationTime === null) {
-              res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
+              res.data[i].superior.evaluationTime = res.data[i].superior.createTime
             }
             if (res.data[i].superior.praiseNumber === null) {
               res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
@@ -452,13 +452,13 @@
           // console.log(JSON.parse(filter))
           if (this.isSelectedDate) {
             // 如果选择日期搜索
-            if (this.pageType === 'alreadySubmit' || this.pageType === 'pastSubmit') {
+            if (this.pageType === 'alreadySubmit') {
               filter = {
                 'main_job_detail': {
                   'status': {}, 'user_id': { equalTo: userId }, 'evaluation_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
                 }
               }
-            } else if (this.pageType === 'inSubmit') {
+            } else if (this.pageType === 'inSubmit' || this.pageType === 'pastSubmit') {
               filter = {
                 'main_job_detail': {
                   'status': {}, 'user_id': { equalTo: userId }, 'create_time': { between: [this.selectedDate + '-01 00:00:00', this.selectedDate + '-31 23:59:59'] }
@@ -481,7 +481,7 @@
             for (var i = 0, len = res.data.length; i < len; i++) {
               // 如果数据格式错误就分配一个参数
               if (res.data[i].superior.evaluationTime === null) {
-                res.data[i].superior.evaluationTime = '2018-08-02 12:02:38'
+                res.data[i].superior.evaluationTime = res.data[i].superior.createTime
               }
               if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null || res.data[i].includes.main_job_service_evaluation === undefined) {
                 // console.log('格式有错误')
