@@ -11,7 +11,7 @@
           <div class="levelTitle">{{title}}</div>
           <div v-for="(item, index2) in accidenctObject[title]" :key="index2">
             <div class="levelContent">
-              <div class="levelText">{{item.content}}</div>
+              <div class="levelText" v-html="item.content"></div>
               <div class="levelStandard"><span style="color:red;">处罚规定：</span>{{item.standard}}</div>
             </div>
           </div>
@@ -93,7 +93,9 @@ export default {
       list.forEach(item => {
         itemNumber = item.level.split('级')[0]
         item.levelNum = self.setStringToNumber(itemNumber)
+        item.content = item.content.replace(/\n/g, '<br>')
       })
+      console.debug(list)
       return _.sortBy(list, 'levelNum')
     },
     setStringToNumber(stringNum) {
