@@ -16,12 +16,38 @@
             </div>
           </div>
         </div>
-      </group>  
-      </div>
+      </group>
+      <div>
+        <table class="eventLevelPage" v-for="(tableItem, index) in resultEventData" :key="index" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+              <td class="bg">事故当事人</td><td>{{tableItem.includes.hm_personnel.name}}</td><td class="bg">事故等级</td><td>{{tableItem.includes.accident_level.level}}</td>
+            </tr>
+            <tr><td class="bg">生效月份</td><td>{{getDataWithMonth(tableItem.includes.plan_assessment_plan.endTime)}}</td><td class="bg">发生日期</td><td>{{getDataWithMonth(tableItem.superior.occurDate)}}</td></tr>
+            <tr><td class="bg">情况描述</td><td :colspan="3">{{tableItem.superior.content}}</td></tr>
+            <tr>
+              <td :rowspan="2" class="bg">扣除比例</td>
+              <td :colspan="2" class="bg">事故等级处罚-直属上级及部门经理</td>
+              <td>{{tableItem.includes.accident_level.superiorWeight + '%'}}</td>
+            </tr>
+            <tr>
+              <td :colspan="2" class="bg">事故等级处罚-中心总监</td>
+              <td>{{tableItem.includes.accident_level.majordomoWeight + '%'}}</td>
+            </tr>
+            <tr>
+              <td :colspan="4">
+                <a href="#">确定</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>  
+    </div>
 </template>
 <script>
 import { Group, Cell, XHeader, XTable } from 'vux'
 import request from '../../../src/utils/request.js'
+import moment from 'moment'
 import _ from 'lodash'
 // import _ from 'lodash'
 export default {
@@ -29,7 +55,8 @@ export default {
     return {
       levelArray: [],
       accidenctObject: {},
-      noData: false
+      noData: false,
+      resultEventData: []
     }
   },
   components: {
@@ -53,7 +80,7 @@ export default {
           pageSize: 1000,
           filters: {
             accident_level: {
-              departmentId: {
+              userId: {
                 equalTo: departmentId
               }
             }
@@ -118,33 +145,45 @@ export default {
           break
       }
       return numLever
+    },
+    /**
+     * 获取已经发生的事故
+     */
+    getEventDataList() {
+      const userId = localStorage.getItem('userId')
+      request('accident_punishs', {
+        method: 'post',
+        data: {
+          pageSize: 1000000,
+          includes: {
+            hm_personnel: { includes: ['party_id'] },
+            plan_assessment_plan: { includes: ['plan_assessment_plan_id'] },
+            accident_level: { includes: ['accident_level'] }
+          }
+        }
+      }).then(res => {
+        // 过滤出符合条件的数据
+        let resultEventData = []
+        resultEventData = res.data.filter(item => {
+          return (item.superior.partyId === userId || item.includes.accident_level.superiorId === userId || item.includes.accident_level.majordomoId === userId)
+        })
+        this.resultEventData = resultEventData
+        console.debug(resultEventData)
+      })
+    },
+    /**
+     * 格式化日期
+     */
+    getDataWithMonth(source) {
+      return moment(source).format('YYYY-MM-DD')
     }
   },
   mounted() {
     // 获取用户id
     const userId = localStorage.getItem('userId')
-    let departmentId = ''
-    request('hm_personnels', {
-      params: {
-        filters: {
-          hm_personnel: {
-            id: {
-              equalTo: userId
-            }
-          }
-        }
-      }
-    }).then(resp => {
-      if (resp.data.length === 0) {
-        this.noData = true
-      } else {
-        departmentId = resp.data[0].postId
-        this.getDatas(departmentId)
-      }
-      console.debug('输出测试', resp)
-    }).catch(() => {
-      this.noData = true
-    })
+    // let departmentId = ''
+    this.getDatas(userId)
+    this.getEventDataList()
   }
 }
 </script>
@@ -243,4 +282,22 @@ td {
   margin-top: 5px;
   /* margin-left: 6px; */
 }
+.eventLevelPage {
+  width: 98%;
+  margin: 10px auto;
+  border: none;
+  border-right:1px solid #3891f0;
+  border-bottom:1px solid #3891f0;
+}
+.eventLevelPage td {
+  border: none;
+  border-left:1px solid #3891f0;
+  border-top:1px solid #3891f0;
+  text-align: center;
+  padding: 5px;
+}
+.eventLevelPage .bg {
+  background: yellow;
+}
+
 </style>
