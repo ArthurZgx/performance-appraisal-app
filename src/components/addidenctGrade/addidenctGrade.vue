@@ -5,8 +5,14 @@
                 @on-click-more="showMenus = true">
                 事故等级
       </x-header>
-      <div v-if="noData" style="text-align: center;margin-top: 150px;color:rgb(109, 109, 109);">没有数据</div>
-      <group>
+      <div style="padding: 15px;">
+        <button-tab v-model="viewTabIndex">
+          <button-tab-item>事故等级查看</button-tab-item>
+          <button-tab-item>事故惩罚列表</button-tab-item>
+        </button-tab>
+      </div>
+      <div v-if="(noData && viewTabIndex == 0) || (resultEventData.length == 0 && viewTabIndex == 1)" style="text-align: center;color:rgb(109, 109, 109);margin-top: 150px;">没有数据</div>
+      <group v-if="viewTabIndex == 0">
         <div class="levelCard" v-for="(title, index) in levelArray" :key="index">
           <div class="levelTitle">{{title}}</div>
           <div v-for="(item, index2) in accidenctObject[title]" :key="index2">
@@ -17,13 +23,14 @@
           </div>
         </div>
       </group>
-      <div>
+      <div v-if="viewTabIndex == 1">
         <table class="eventLevelPage" v-for="(tableItem, index) in resultEventData" :key="index" border="0" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
               <td class="bg">事故当事人</td><td>{{tableItem.includes.hm_personnel.name}}</td><td class="bg">事故等级</td><td>{{tableItem.includes.accident_level.level}}</td>
             </tr>
             <tr><td class="bg">生效月份</td><td>{{getDataWithMonth(tableItem.includes.plan_assessment_plan.endTime)}}</td><td class="bg">发生日期</td><td>{{getDataWithMonth(tableItem.superior.occurDate)}}</td></tr>
+            <tr><td class="bg">事故内容</td><td :colspan="3">{{tableItem.includes.accident_level.content}}</td></tr>
             <tr><td class="bg">情况描述</td><td :colspan="3">{{tableItem.superior.content}}</td></tr>
             <tr>
               <td :rowspan="2" class="bg">扣除比例</td>
@@ -34,18 +41,24 @@
               <td :colspan="2" class="bg">事故等级处罚-中心总监</td>
               <td>{{tableItem.includes.accident_level.majordomoWeight + '%'}}</td>
             </tr>
-            <tr>
-              <td :colspan="4">
-                <a href="#">确定</a>
+            <tr v-if="!tableItem.superior.affirm && tableItem.superior.partyId == userId">
+            <!-- <tr v-if="true"> -->
+              <td :colspan="4" style="background: #3891f0;color: white;">
+                <a href="#" style="color: white;" @click="confirmEvent(tableItem)">确认</a>
               </td>
+            </tr>
+            <tr v-else>
+              <td>状态</td>
+              <td :colspan="3">{{ tableItem.superior.affirm ? '已确认' : '未确认'}}</td>
             </tr>
           </tbody>
         </table>
       </div>  
+      <toast v-model="showToast" type="text" :time="800" is-show-mask :text="toastText" position="middle"></toast>
     </div>
 </template>
 <script>
-import { Group, Cell, XHeader, XTable } from 'vux'
+import { Group, Cell, XHeader, XTable, ButtonTab, ButtonTabItem, Toast } from 'vux'
 import request from '../../../src/utils/request.js'
 import moment from 'moment'
 import _ from 'lodash'
@@ -56,14 +69,21 @@ export default {
       levelArray: [],
       accidenctObject: {},
       noData: false,
-      resultEventData: []
+      resultEventData: [],
+      viewTabIndex: 0,
+      showToast: false,
+      toastText: '确认成功',
+      userId: localStorage.getItem('userId')
     }
   },
   components: {
     Group,
     Cell,
     XHeader,
-    XTable
+    XTable,
+    ButtonTab,
+    ButtonTabItem,
+    Toast
   },
   methods: {
     // big() {
@@ -167,7 +187,13 @@ export default {
         resultEventData = res.data.filter(item => {
           return (item.superior.partyId === userId || item.includes.accident_level.superiorId === userId || item.includes.accident_level.majordomoId === userId)
         })
-        this.resultEventData = resultEventData
+        let sortResultData = resultEventData.filter(item => {
+          return item.superior.affirm === false
+        })
+        sortResultData = sortResultData.concat(resultEventData.filter(item => {
+          return item.superior.affirm === true
+        }))
+        this.resultEventData = sortResultData
         console.debug(resultEventData)
       })
     },
@@ -176,6 +202,28 @@ export default {
      */
     getDataWithMonth(source) {
       return moment(source).format('YYYY-MM-DD')
+    },
+    /**
+     * 确定事故类型
+     */
+    confirmEvent(row) {
+      console.debug(row)
+      request('accident_punishs/edit', {
+        method: 'post',
+        data: {
+          id: row.superior.id,
+          affirm: true
+        }
+      })
+      .then(res => {
+        row.superior.affirm = true
+        this.toastText = '确认成功'
+        this.showToast = true
+      })
+      .catch(e => {
+        this.toastText = '确认失败'
+        this.showToast = true
+      })
     }
   },
   mounted() {
@@ -260,7 +308,7 @@ td {
   color: #666;
 }
 .levelCard {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .levelTitle {
   margin: 0 auto;
@@ -297,7 +345,13 @@ td {
   padding: 5px;
 }
 .eventLevelPage .bg {
-  background: yellow;
+  /* background: yellow; */
+}
+.vux-button-group > a.vux-button-group-current {
+  background: #5177aa;
+}
+.vux-button-group > a.vux-button-tab-item-last:after, .vux-button-group > a.vux-button-tab-item-first:after {
+  border: 1px solid #5177aa;
 }
 
 </style>
