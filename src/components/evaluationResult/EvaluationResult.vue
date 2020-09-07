@@ -100,6 +100,9 @@
         const self = this
         // 获取当前用户考评结果
         const userId = localStorage.getItem('userId')
+        if (!userId) {
+          return
+        }
         const params = {
           sortItem: 'create_time',
           sortOrder: 'desc',

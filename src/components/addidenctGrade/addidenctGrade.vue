@@ -94,6 +94,10 @@ export default {
     // },
     getDatas(departmentId) {
       const self = this
+      if (!departmentId) {
+        this.noData = true
+        return
+      }
       request('accident_levels', {
         params: {
           pageNo: 1,
@@ -171,6 +175,9 @@ export default {
      */
     getEventDataList() {
       const userId = localStorage.getItem('userId')
+      if (!userId) {
+        return
+      }
       request('accident_punishs', {
         method: 'post',
         data: {
