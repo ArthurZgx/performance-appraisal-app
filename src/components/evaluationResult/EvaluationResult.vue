@@ -130,12 +130,10 @@
                 self.resultList.splice(key, 1)
               }
               if (item.isSure === 0 || item.isSure === null) {
-                that.isSure = true
-                that.notSureIds.push(item.id)
-              }
-              if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') > 3000000 && item.isSure === 0) {
-                // console.debug('what')
-                that.isSure = false
+                if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') < 3000000) {
+                  that.isSure = true
+                  that.notSureIds.push(item.id)
+                }
               }
             })
             // console.log('isSure', that.notSureIds)
