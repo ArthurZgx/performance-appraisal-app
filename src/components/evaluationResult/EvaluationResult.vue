@@ -130,7 +130,7 @@
                 self.resultList.splice(key, 1)
               }
               if (item.isSure === 0 || item.isSure === null) {
-                if (moment(new Date()).format('YYYYMMDDHHmmss') - moment(item.createTime).format('YYYYMMDDHHmmss') < 3000000) {
+                if (new Date().getTime() - new Date(item.createTime).getTime() < 259200000 ) {
                   that.isSure = true
                   that.notSureIds.push(item.id)
                 }
