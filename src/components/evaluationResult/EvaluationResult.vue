@@ -60,7 +60,6 @@
 <script>
   import { Group, Cell, XHeader, XTable, LoadMore, Flexbox, FlexboxItem, Toast } from 'vux'
   import _ from 'lodash'
-  import moment from 'moment'
   import request from '@/utils/request'
 
   export default {
@@ -130,7 +129,7 @@
                 self.resultList.splice(key, 1)
               }
               if (item.isSure === 0 || item.isSure === null) {
-                if (new Date().getTime() - new Date(item.createTime).getTime() < 259200000 ) {
+                if (new Date().getTime() - new Date(item.createTime).getTime() < 259200000) {
                   that.isSure = true
                   that.notSureIds.push(item.id)
                 }

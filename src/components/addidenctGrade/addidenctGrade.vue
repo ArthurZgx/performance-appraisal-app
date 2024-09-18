@@ -33,13 +33,21 @@
             <tr><td class="bg">事故内容</td><td :colspan="3">{{tableItem.includes.accident_level.content}}</td></tr>
             <tr><td class="bg">情况描述</td><td :colspan="3">{{tableItem.superior.content}}</td></tr>
             <tr>
-              <td :rowspan="2" class="bg">扣除比例</td>
-              <td :colspan="2" class="bg">事故等级处罚-直属上级及部门经理</td>
-              <td>{{tableItem.includes.accident_level.superiorWeight + '%'}}</td>
+              <td :rowspan="4" class="bg">处罚详情</td>
+              <td :colspan="2" class="bg">本人</td>
+              <td>{{tableItem.includes.accident_level.standard}}</td>
             </tr>
             <tr>
-              <td :colspan="2" class="bg">事故等级处罚-中心总监</td>
-              <td>{{tableItem.includes.accident_level.majordomoWeight + '%'}}</td>
+              <td :colspan="2" class="bg">直线上级</td>
+              <td>{{levelMapManager[tableItem.includes.accident_level.level]}}</td>
+            </tr>
+            <tr>
+              <td :colspan="2" class="bg">间接上级</td>
+              <td>{{levelMapStandard[tableItem.includes.accident_level.level]}}</td>
+            </tr>
+            <tr>
+              <td :colspan="2" class="bg">再间接上级</td>
+              <td>{{levelMapMajordomo[tableItem.includes.accident_level.level]}}</td>
             </tr>
             <tr v-if="!tableItem.superior.affirm && tableItem.superior.partyId == userId">
             <!-- <tr v-if="true"> -->
@@ -73,7 +81,28 @@ export default {
       viewTabIndex: 0,
       showToast: false,
       toastText: '确认成功',
-      userId: localStorage.getItem('userId')
+      userId: localStorage.getItem('userId'),
+      levelMapStandard: {
+        '一级': '下降工作任务完成度13%（自事故确认起3个月）',
+        '二级': '下降工作任务完成度10%（自事故确认起3个月）',
+        '三级': '下降工作任务完成度6.6%（自事故确认起3个月）',
+        '四级': '下降工作任务完成度3.3%（（当月））',
+        '五级': '下降工作任务完成度1.6%（当月）'
+      },
+      levelMapManager: {
+        '一级': '下降工作任务完成度20%（自事故确认起3个月）',
+        '二级': '下降工作任务完成度15%（自事故确认起3个月）',
+        '三级': '下降工作任务完成度10%（自事故确认起2个月）',
+        '四级': '下降工作任务完成度5%（（当月））',
+        '五级': '下降工作任务完成度2.5%（当月）'
+      },
+      levelMapMajordomo: {
+        '一级': '下降工作任务完成度10%（自事故确认起3个月）',
+        '二级': '下降工作任务完成度7.5%（自事故确认起3个月）',
+        '三级': '下降工作任务完成度5%（自事故确认起3个月）',
+        '四级': '下降工作任务完成度2.5%（（当月））',
+        '五级': ''
+      }
     }
   },
   components: {
