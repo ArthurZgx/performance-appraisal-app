@@ -20,6 +20,7 @@
     </search>
     </div>
     <!-- v-if="list.status === '2'"-->
+     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;" v-if="praiseSetting.praiseNumber">剩余好评票 {{praiseSetting.residualPraiseNumber}}</div>
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
@@ -36,11 +37,18 @@
             </div>
             <!-- 列表信息 -->
             <div class="listInfo">
+              <div>
                 <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
-                <div class="good-comment-number">好评数
-                  <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="list.numberVotes" width="50px" button-style="round"></inline-x-number>
+                <div style="color: rgb(41 155 232);margin-top: 5px;">选票数：{{ list.veryGoodCommentNumber + list.goodCommentNumber }}</div>
+              </div>
+                <div>
+                  <div class="good-comment-number">好评数
+                    <inline-x-number v-model="list.veryGoodCommentNumber" @on-change="handleChangePraiseSetting"  style="display:block;" :min="0" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
+                  </div>
+                  <div class="middle-comment-number">中评数
+                    <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="list.numberVotes" width="50px" button-style="round"></inline-x-number>
+                  </div>
                 </div>
-
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
             </div>
            </div>
@@ -135,12 +143,17 @@ export default {
       searchPageNo: 1,
       searching: false,
       tempSearchValue: '',
-      scrollHeight: '0'
+      scrollHeight: '0',
+      praiseSetting: {
+        praiseNumber: 0,
+        residualPraiseNumber: 0
+      }
     }
   },
-  created() {
+  async created() {
+    await this.getSysConfig()
     this.getTotalLength()
-    this.getDatas()
+    this.getDataList()
   },
   watch: {
     searchValue() {
@@ -157,6 +170,20 @@ export default {
     }
   },
   methods: {
+    getSysConfig() {
+      var userId = localStorage.getItem('userId')
+      return request('getMyEvaluatePraiseNumber', {
+        method: 'POST',
+        params: {
+          userId: userId
+        }
+      }).then(res => {
+        this.praiseSetting.praiseNumber = res.data.praiseNumber || 0
+        this.praiseSetting.residualPraiseNumber = res.data.residualPraiseNumber || res.data.praiseNumber || 0
+      }).catch(err => {
+        console.log('请求出错', err)
+      })
+    },
     // 获取总评价数量
     getTotalLength() {
       for (i = 0; i < this.serveList.length; i++) {
@@ -173,18 +200,18 @@ export default {
         this.searching = false
         this.searchPageNo = 1
         this.pageNo = 1
-        this.getDatas()
+        this.getDataList()
         return false
       }
     },
     resultClick() {},
     searchSubmit() {
       // console.log('提交搜索')
-      this.getSearchDatas(true)
+      this.getSearchData(true)
     },
     searchChange() {},
     clickList() {},
-    getSearchDatas(sub) {
+    getSearchData(sub) {
       if (this.searchValue === this.tempSearchValue && sub) {
         return false
       }
@@ -201,7 +228,7 @@ export default {
         this.searching = false
         this.searchPageNo = 1
         this.pageNo = 1
-        this.getDatas()
+        this.getDataList()
         return false
       }
       var filter = {
@@ -266,10 +293,10 @@ export default {
           setTimeout(() => {
             if (this.searching) {
               this.searchPageNo = this.searchPageNo + 1
-              this.getSearchDatas(false)
+              this.getSearchData(false)
             } else {
               this.pageNo = this.pageNo + 1
-              this.getDatas()
+              this.getDataList()
             }
             this.onFacting = false
           }, 1000)
@@ -277,7 +304,7 @@ export default {
       }
     },
     // 获取服务质量明细表数据
-    getDatas() {
+    getDataList() {
       if (this.pageSize === 0) {
         this.showScrollerLoading = false
         this.noData = true
@@ -326,22 +353,28 @@ export default {
         if (res.data[i].superior.praiseNumber === null) {
           res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
         }
+        if (res.data[i].superior.badNumber === null) {
+          res.data[i].superior.badNumber = 0
+        }
         if (res.data[i].includes.main_job_service_evaluation === null || res.data[i].includes.main_job_service_evaluation.title === null || res.data[i].includes.main_job_service_evaluation.type === null || res.data[i].superior.status === null || res.data[i].includes.main_job_service_evaluation.id === null) {
           // console.log('数据格式有错误')
         } else {
           res.data[i].includes.main_job_service_evaluation.title = res.data[i].includes.main_job_service_evaluation.title.split('—')[0]
-          tempArray.push({
+          const voteInfo = {
             name: res.data[i].includes.main_job_service_evaluation.title.split('的')[0],
-            // time: res.data[i].includes.main_job_service_evaluation.evaluationTime.split(' ')[0],
             type: res.data[i].includes.main_job_service_evaluation.type,
             status: res.data[i].superior.status,
             id: res.data[i].superior.id,
             userId: res.data[i].includes.main_job_service_evaluation.userId,
-            goodCommentNumber: res.data[i].superior.praiseNumber,
             numberVotes: res.data[i].superior.numberVotes,
+            badNumber: res.data[i].superior.badNumber,
             badCommentText: res.data[i].superior.badReview,
             checked: false
-          })
+          }
+          voteInfo.goodCommentNumber = voteInfo.numberVotes - voteInfo.badNumber
+          voteInfo.veryGoodCommentNumber = res.data[i].superior.praiseNumber - voteInfo.goodCommentNumber
+          // console.log('info', voteInfo.veryGoodCommentNumber, res.data[i].superior.praiseNumber, voteInfo.goodCommentNumber)
+          tempArray.push(voteInfo)
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
       }
@@ -416,6 +449,7 @@ export default {
         if (this.serveList.length < 10) {
           this.showScrollerLoading = false
         }
+        this.handleChangePraiseSetting()
         // console.log(210, this.serveList)
       })
     },
@@ -459,7 +493,6 @@ export default {
           tempArray2.push(this.checklist1[i])
         }
       }
-      // this.showSubmitToast = true
       let params = []
       let date = new Date()
       let month = date.getMonth() + 1
@@ -472,7 +505,7 @@ export default {
         const temp = {}
         temp.id = item.id
         temp.status = 2
-        temp.praiseNumber = item.goodCommentNumber
+        temp.praiseNumber = item.veryGoodCommentNumber + item.goodCommentNumber
         temp.badNumber = item.numberVotes - item.goodCommentNumber
         // temp.badNumber = 0
         temp.badReview = item.badCommentText || '无评价'
@@ -500,12 +533,12 @@ export default {
           if (this.searching) {
             this.serveList = []
             this.searchPageNo = 1
-            this.getSearchDatas(false)
+            this.getSearchData(false)
           } else {
             this.serveList = []
             this.pageNo = 1
             this.pageSize = 100000
-            this.getDatas()
+            this.getDataList()
           }
         }
       })
@@ -542,15 +575,32 @@ export default {
           }
         }
       }
+    },
+    getUserScore(voteInfo) {
+      return voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber
+    },
+    handleChangePraiseSetting() {
+      // 计算剩余的好评票数
+      let totalPraiseVoteNumber = 0
+      this.serveList.forEach(item => {
+        item.list.forEach(child => {
+          totalPraiseVoteNumber += (child.veryGoodCommentNumber || 0)
+        })
+      })
+      this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
+    },
+    getMaxVeryGood(list) {
+      if (this.praiseSetting.residualPraiseNumber < 0) return list.veryGoodCommentNumber
+      return this.praiseSetting.residualPraiseNumber + list.veryGoodCommentNumber
     }
   },
   mounted() {
-    this.scrollHeight = document.documentElement.clientHeight - 145
+    this.scrollHeight = document.documentElement.clientHeight - 135
     const self = this
     // console.log('设置滚动区域高度为' + this.scrollHeight)
     setTimeout(function() {
       // console.log(document.documentElement.clientHeight)
-      self.scrollHeight = document.documentElement.clientHeight - 145
+      self.scrollHeight = document.documentElement.clientHeight - 135
     }, 500)
     // if (localStorage.getItem('serve') === 'true') {
     //   console.log('刷新一次')
@@ -579,7 +629,7 @@ export default {
 .serve .groupList {
   padding-bottom: 50px;
   position: fixed;
-  top: 90px;
+  top: 120px;
   left: 0;
   height: 100%;
   width: 96%;
@@ -603,11 +653,11 @@ export default {
   line-height: 30px;
 }
 .serve .aListData {
-  height: 30px;
+  height: 60px;
   position: relative;
 }
 .serve .listInfo {
-  height: 30px;
+  height: 60px;
   margin-left: 10px;
   line-height: 30px;
   display: flex;
@@ -623,7 +673,13 @@ export default {
   margin-left: 0px;
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 5px;
+}
+.serve .middle-comment-number {
+  margin-left: 0px;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
 }
 .serve .listInfo .vux-inline-x-number {
   float: right;
@@ -723,7 +779,7 @@ export default {
 }
 .clearfix {
    *zoom: 1;
-   height: 44px;
+   height: 50px;
 }
   /* 关于客户最新需求的样式更改 */
 .weui-search-bar{
