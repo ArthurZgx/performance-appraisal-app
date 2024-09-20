@@ -428,9 +428,10 @@
                 year: res.data[i].superior.year,
                 month: res.data[i].superior.month,
                 numberVotes: res.data[i].superior.numberVotes,
-                goodCommentNumber: res.data[i].superior.praiseNumber,
+                veryGoodCommentNumber: res.data[i].superior.praiseNumber - (res.data[i].superior.numberVotes - res.data[i].superior.badNumber),
+                goodCommentNumber: res.data[i].superior.numberVotes - res.data[i].superior.badNumber,
                 badCommentText: res.data[i].superior.badReview,
-                badCommentNumber: res.data[i].superior.numberVotes - res.data[i].superior.praiseNumber,
+                badCommentNumber: res.data[i].superior.badNumber,
                 AppraisedUserId: res.data[i].includes.main_job_service_evaluation.userId
               })
             }
