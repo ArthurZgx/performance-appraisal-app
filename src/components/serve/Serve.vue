@@ -20,7 +20,7 @@
     </search>
     </div>
     <!-- v-if="list.status === '2'"-->
-     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;" v-if="praiseSetting.praiseNumber">剩余好评票 {{praiseSetting.residualPraiseNumber}}</div>
+     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;">剩余好评票 {{praiseSetting.residualPraiseNumber}}</div>
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
@@ -39,14 +39,16 @@
             <div class="listInfo">
               <div>
                 <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
-                <div style="color: rgb(41 155 232);margin-top: 5px;">选票数：{{ list.veryGoodCommentNumber + list.goodCommentNumber }}</div>
+                <div style="color: rgb(41 155 232);margin-top: 5px;">推送票数：{{ list.numberVotes }}</div>
               </div>
                 <div>
-                  <div class="good-comment-number">好评数
-                    <inline-x-number v-model="list.veryGoodCommentNumber" @on-change="handleChangePraiseSetting"  style="display:block;" :min="0" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
+                  <div style="position: absolute;right: 0;color: #666;">
+                    <span style="margin-left: 9px; margin-right: 9px;">差</span>
+                    <span style="margin-left: 9px; margin-right: 9px;">中</span>
+                    <span style="margin-left: 9px; margin-right: 9px;">好</span>
                   </div>
-                  <div class="middle-comment-number">中评数
-                    <inline-x-number v-model="list.goodCommentNumber" style="display:block;" :min="0" :max="list.numberVotes" width="50px" button-style="round"></inline-x-number>
+                  <div class="good-comment-number">
+                    <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="0" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
                   </div>
                 </div>
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
@@ -369,6 +371,7 @@ export default {
             numberVotes: res.data[i].superior.numberVotes,
             badNumber: res.data[i].superior.badNumber,
             badCommentText: res.data[i].superior.badReview,
+            praiseNumber: res.data[i].superior.praiseNumber,
             checked: false
           }
           voteInfo.goodCommentNumber = voteInfo.numberVotes - voteInfo.badNumber
@@ -378,6 +381,7 @@ export default {
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
       }
+      console.log(tempArray)
       if (res.data.length === 0) {
         this.showScrollerLoading = false
         this.noData = true
@@ -579,7 +583,21 @@ export default {
     getUserScore(voteInfo) {
       return voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber
     },
-    handleChangePraiseSetting() {
+    handleChangePraiseSetting(voteInfo, totalNumber) {
+      if (voteInfo) {
+        if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber > totalNumber) {
+          voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.goodCommentNumber
+        }
+        if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber < totalNumber) {
+          if (voteInfo.badNumber > 0) {
+            voteInfo.badNumber -= 1
+            voteInfo.goodCommentNumber += 1
+          } else {
+            voteInfo.veryGoodCommentNumber += 1
+          }
+        }
+      }
+      console.log('voteInfo', voteInfo)
       // 计算剩余的好评票数
       let totalPraiseVoteNumber = 0
       this.serveList.forEach(item => {
@@ -590,8 +608,8 @@ export default {
       this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
     },
     getMaxVeryGood(list) {
-      if (this.praiseSetting.residualPraiseNumber < 0) return list.veryGoodCommentNumber
-      return this.praiseSetting.residualPraiseNumber + list.veryGoodCommentNumber
+      if (this.praiseSetting.residualPraiseNumber < 0) return this.praiseSetting.praiseNumber + list.numberVotes
+      return this.praiseSetting.residualPraiseNumber + list.numberVotes + list.veryGoodCommentNumber
     }
   },
   mounted() {
@@ -673,7 +691,7 @@ export default {
   margin-left: 0px;
   position: absolute;
   right: 0;
-  top: 5px;
+  top: 45px;
 }
 .serve .middle-comment-number {
   margin-left: 0px;

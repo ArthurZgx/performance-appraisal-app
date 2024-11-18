@@ -51,7 +51,8 @@
             @click.native="numberChange(index, 'bad', $event)"
           ></x-number>
           <div style="color: rgb(41 155 232); margin: 10px 5px">
-            选票分值：{{ getUserScore(list) }}
+            <!-- 选票分值：{{ getUserScore(list) }} -->
+            推送票数：{{ list.numberVotes }}
           </div>
         </group>
         <!-- 差评说明 -->
