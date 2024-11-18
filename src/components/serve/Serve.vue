@@ -584,18 +584,29 @@ export default {
       return voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber
     },
     handleChangePraiseSetting(voteInfo, totalNumber) {
+      console.log(voteInfo, totalNumber)
       if (voteInfo) {
-        if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber > totalNumber) {
-          voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.goodCommentNumber
+        if (totalNumber < voteInfo.numberVotes) {
+          voteInfo.badNumber = voteInfo.numberVotes - totalNumber
+          voteInfo.goodCommentNumber  = voteInfo.numberVotes - voteInfo.badNumber
+          voteInfo.veryGoodCommentNumber = 0
         }
-        if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber < totalNumber) {
-          if (voteInfo.badNumber > 0) {
-            voteInfo.badNumber -= 1
-            voteInfo.goodCommentNumber += 1
-          } else {
-            voteInfo.veryGoodCommentNumber += 1
-          }
+        if (totalNumber >= voteInfo.numberVotes) {
+          voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.numberVotes
+          voteInfo.goodCommentNumber = voteInfo.numberVotes
+          voteInfo.badNumber = 0
         }
+        // if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber > totalNumber) {
+        //   voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.goodCommentNumber
+        // }
+        // if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber < totalNumber) {
+        //   if (voteInfo.badNumber > 0) {
+        //     voteInfo.badNumber -= 1
+        //     voteInfo.goodCommentNumber += 1
+        //   } else {
+        //     voteInfo.veryGoodCommentNumber += 1
+        //   }
+        // }
       }
       console.log('voteInfo', voteInfo)
       // 计算剩余的好评票数
@@ -605,6 +616,7 @@ export default {
           totalPraiseVoteNumber += (child.veryGoodCommentNumber || 0)
         })
       })
+      console.log('setting', this.praiseSetting)
       this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
     },
     getMaxVeryGood(list) {
