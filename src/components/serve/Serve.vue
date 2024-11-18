@@ -588,7 +588,7 @@ export default {
       if (voteInfo) {
         if (totalNumber < voteInfo.numberVotes) {
           voteInfo.badNumber = voteInfo.numberVotes - totalNumber
-          voteInfo.goodCommentNumber  = voteInfo.numberVotes - voteInfo.badNumber
+          voteInfo.goodCommentNumber = voteInfo.numberVotes - voteInfo.badNumber
           voteInfo.veryGoodCommentNumber = 0
         }
         if (totalNumber >= voteInfo.numberVotes) {
