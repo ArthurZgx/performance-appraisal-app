@@ -20,7 +20,7 @@
     </search>
     </div>
     <!-- v-if="list.status === '2'"-->
-     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;">剩余好评票 {{praiseSetting.residualPraiseNumber}}</div>
+     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;">剩余好评票 {{praiseSetting.residualPraiseNumber}}&nbsp;&nbsp;|&nbsp;&nbsp;剩余差评票 {{praiseSetting.residualBadNumber}}</div>
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
@@ -48,7 +48,7 @@
                     <span style="margin-left: 9px; margin-right: 9px;">好</span>
                   </div>
                   <div class="good-comment-number">
-                    <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="0" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
+                    <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="getMinVoteNumber({...list})" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
                   </div>
                 </div>
                 <!-- <div class="listInfoTime">{{list.time}}</div> -->
@@ -148,7 +148,9 @@ export default {
       scrollHeight: '0',
       praiseSetting: {
         praiseNumber: 0,
-        residualPraiseNumber: 0
+        badNumber: 0,
+        residualPraiseNumber: 0,
+        residualBadNumber: 0
       }
     }
   },
@@ -174,14 +176,16 @@ export default {
   methods: {
     getSysConfig() {
       var userId = localStorage.getItem('userId')
-      return request('getMyEvaluatePraiseNumber', {
+      return request('getMyEvaluateNumber', {
         method: 'POST',
         params: {
           userId: userId
         }
       }).then(res => {
         this.praiseSetting.praiseNumber = res.data.praiseNumber || 0
-        this.praiseSetting.residualPraiseNumber = res.data.residualPraiseNumber || res.data.praiseNumber || 0
+        this.praiseSetting.residualPraiseNumber = res.data.residualPraiseNumber || 0
+        this.praiseSetting.badNumber = res.data.badNumber || 0
+        this.praiseSetting.residualBadNumber = res.data.residualBadNumber || 0
       }).catch(err => {
         console.log('请求出错', err)
       })
@@ -611,26 +615,34 @@ export default {
       console.log('voteInfo', voteInfo)
       // 计算剩余的好评票数
       let totalPraiseVoteNumber = 0
+      let totalBadVoteNumber = 0
       this.serveList.forEach(item => {
         item.list.forEach(child => {
           totalPraiseVoteNumber += (child.veryGoodCommentNumber || 0)
+          totalBadVoteNumber += (child.badNumber || 0)
         })
       })
       console.log('setting', this.praiseSetting)
       this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
+      this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber
     },
     getMaxVeryGood(list) {
       if (this.praiseSetting.residualPraiseNumber < 0) return this.praiseSetting.praiseNumber + list.numberVotes
       return this.praiseSetting.residualPraiseNumber + list.numberVotes + list.veryGoodCommentNumber
+    },
+    getMinVoteNumber(list) {
+      if (this.praiseSetting.residualPraiseNumber <= 0) return list.numberVotes - list.badNumber
+      const min = list.numberVotes - list.badNumber - this.praiseSetting.residualBadNumber
+      return min < 0 ? 0 : min
     }
   },
   mounted() {
-    this.scrollHeight = document.documentElement.clientHeight - 135
+    this.scrollHeight = document.documentElement.clientHeight - 165
     const self = this
     // console.log('设置滚动区域高度为' + this.scrollHeight)
     setTimeout(function() {
       // console.log(document.documentElement.clientHeight)
-      self.scrollHeight = document.documentElement.clientHeight - 135
+      self.scrollHeight = document.documentElement.clientHeight - 165
     }, 500)
     // if (localStorage.getItem('serve') === 'true') {
     //   console.log('刷新一次')
@@ -657,7 +669,7 @@ export default {
   bottom: 0;
 }
 .serve .groupList {
-  padding-bottom: 50px;
+  padding-bottom: 70px;
   position: fixed;
   top: 120px;
   left: 0;

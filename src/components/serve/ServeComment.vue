@@ -8,9 +8,9 @@
     </x-header>
     <div
       style="padding-left: 15px; color: #666; font-size: 16px; margin: 10px 0"
-      v-if="praiseSetting.praiseNumber"
+      v-if="praiseSetting.praiseNumber || praiseSetting.badNumber"
     >
-      剩余好评票 {{ praiseSetting.residualPraiseNumber }}
+      剩余好评票 {{ praiseSetting.residualPraiseNumber }} &nbsp;&nbsp;|&nbsp;&nbsp;剩余差评票 {{ praiseSetting.residualBadNumber }}
     </div>
     <div class="serveComment_div">
       <!-- 展示数据 -->
@@ -37,9 +37,10 @@
             align="left"
             v-model="list.goodCommentNumber"
             button-style="round"
-            :min="0"
+            :min="getMinVoteNumber({...list})"
             :max="list.numberVotes"
             @click.native="numberChange(index, 'good', $event)"
+            @on-change="handleChangePraiseSetting"
           ></x-number>
           <x-number
             title="差评数："
@@ -47,8 +48,9 @@
             v-model="list.badCommentNumber"
             button-style="round"
             :min="0"
-            :max="list.numberVotes"
+            :max="getMaxBadVoteNumber({...list})"
             @click.native="numberChange(index, 'bad', $event)"
+            @on-change="handleChangePraiseSetting"
           ></x-number>
           <div style="color: rgb(41 155 232); margin: 10px 5px">
             <!-- 选票分值：{{ getUserScore(list) }} -->
@@ -184,7 +186,9 @@ export default {
       showSubmitToast: false,
       praiseSetting: {
         praiseNumber: 0,
+        badNumber: 0,
         residualPraiseNumber: 0,
+        residualBadNumber: 0,
       },
     };
   },
@@ -202,21 +206,18 @@ export default {
   },
   methods: {
     getSysConfig() {
-      let totalPraiseVoteNumber = 0
-      this.serveList.forEach((item) => {
-        totalPraiseVoteNumber += item.veryGoodCommentNumber || 0;
-      });
       var userId = localStorage.getItem("userId");
-      return request("getMyEvaluatePraiseNumber", {
+      return request("getMyEvaluateNumber", {
         method: "POST",
         params: {
           userId: userId,
         },
       })
         .then((res) => {
-          this.praiseSetting.residualPraiseNumber =
-            res.data.residualPraiseNumber || (res.data.praiseNumber - totalPraiseVoteNumber) || 0;
-          this.praiseSetting.praiseNumber =  (this.praiseSetting.residualPraiseNumber + totalPraiseVoteNumber) || 0;
+          this.praiseSetting.praiseNumber = res.data.praiseNumber || 0
+          this.praiseSetting.residualPraiseNumber = res.data.residualPraiseNumber || 0
+          this.praiseSetting.badNumber = res.data.badNumber || 0
+          this.praiseSetting.residualBadNumber = res.data.residualBadNumber || 0
         })
         .catch((err) => {
           console.log("请求出错", err);
@@ -319,12 +320,26 @@ export default {
     handleChangePraiseSetting() {
       // 计算剩余的好评票数
       let totalPraiseVoteNumber = 0
+      let totalBadVoteNumber = 0
       this.serveList.forEach((item) => {
         totalPraiseVoteNumber += item.veryGoodCommentNumber || 0;
+        totalBadVoteNumber += item.badCommentNumber || 0;
       });
+      console.log('totalBadVoteNumber', totalBadVoteNumber)
       this.praiseSetting.residualPraiseNumber =
         this.praiseSetting.praiseNumber - (totalPraiseVoteNumber);
+      this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber;
     },
+    getMinVoteNumber(list) {
+      if (this.praiseSetting.residualBadNumber <= 0) return list.numberVotes - list.badCommentNumber;
+      const min = list.numberVotes - list.badCommentNumber - this.praiseSetting.residualBadNumber;
+      return min < 0 ? 0 : min;
+    },
+    getMaxBadVoteNumber(list) {
+      if (this.praiseSetting.residualBadNumber <= 0) return list.badCommentNumber;
+      const max = list.badCommentNumber + this.praiseSetting.residualBadNumber;
+      return max > list.numberVotes ? list.numberVotes : max;
+    }
   },
 };
 </script>
