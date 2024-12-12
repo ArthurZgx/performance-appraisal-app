@@ -24,41 +24,49 @@
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
-      <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
-        <div class="serveClassifyTitleBg">
-        <div class="serveClassifyTitle">{{item.title}}</div>
-        </div>
-        <div>
-           <div v-for="(list,index) in item.list" :key="index" class="aListData">
-            <div>
-              <!-- <check-icon :value.sync="list.checked"></check-icon> -->
-              <!-- 勾选按钮 -->
-              <span @click="listCheckClick(list)" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
-            </div>
-            <!-- 列表信息 -->
-            <div class="listInfo">
+        <div class="aGroupList" v-for="(item,index) in serveList" :key="index">
+          <div class="serveClassifyTitleBg">
+          <div class="serveClassifyTitle">{{item.title}}</div>
+          </div>
+          <div>
+            <div v-for="(list,index) in item.list" :key="index" class="aListData">
               <div>
-                <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
-                <div style="color: rgb(41 155 232);margin-top: 5px;">推送票数：{{ list.numberVotes }}</div>
+                <!-- <check-icon :value.sync="list.checked"></check-icon> -->
+                <!-- 勾选按钮 -->
+                <span @click="listCheckClick(list)" :class="list.checked?'my-check-icon-clicked':'my-check-icon'"></span>
               </div>
+              <!-- 列表信息 -->
+              <div class="listInfo">
                 <div>
-                  <div style="position: absolute;right: 0;color: #666;">
-                    <span style="margin-left: 9px; margin-right: 9px;">差</span>
-                    <span style="margin-left: 9px; margin-right: 9px;">中</span>
-                    <span style="margin-left: 9px; margin-right: 9px;">好</span>
-                  </div>
-                  <div class="good-comment-number">
-                    <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="getMinVoteNumber({...list})" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
-                  </div>
+                  <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
+                  <div style="color: rgb(41 155 232);margin-top: 5px;">推送票数：{{ list.numberVotes }}</div>
                 </div>
-                <!-- <div class="listInfoTime">{{list.time}}</div> -->
+                  <div>
+                    <div style="position: absolute;right: 0;color: #666;">
+                      <span style="margin-left: 9px; margin-right: 9px;">差</span>
+                      <span style="margin-left: 9px; margin-right: 9px;">中</span>
+                      <span style="margin-left: 9px; margin-right: 9px;">好</span>
+                    </div>
+                    <div class="good-comment-number">
+                      <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="getMinVoteNumber({...list})" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
+                    </div>
+                  </div>
+                  <!-- <div class="listInfoTime">{{list.time}}</div> -->
+              </div>
             </div>
-           </div>
+          </div>
+        </div>
+        <div style="padding: 20px 10px;" v-show="serveList.length">
+          <span style="font-weight: bold;color: #ee4455;">注意</span>
+          <div style="color: #333;">1. 系统默认中评</div>
+          <div style="color: #333;">2. 差评属于推送票数内的选票，消减中评票数</div>
+          <div style="color: #333;">3. 好评属于推送票数额外选票，消减剩余好评票数，计入中评票数</div>
         </div>
       </div>
-      </div>
+      
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
       <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
+      
     </scroller>
     </group>
     <!-- 一键提交 -->
