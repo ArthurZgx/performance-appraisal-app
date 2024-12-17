@@ -42,25 +42,33 @@
                   <div style="color: rgb(41 155 232);margin-top: 5px;">推送票数：{{ list.numberVotes }}</div>
                 </div>
                   <div>
-                    <div style="position: absolute;right: 0;color: #666;">
-                      <span style="margin-left: 9px; margin-right: 9px;">差</span>
-                      <span style="margin-left: 9px; margin-right: 9px;">中</span>
-                      <span style="margin-left: 9px; margin-right: 9px;">好</span>
-                    </div>
-                    <div class="good-comment-number">
-                      <inline-x-number v-model="list.praiseNumber" @on-change="handleChangePraiseSetting(list, $event)"  style="display:block;" :min="getMinVoteNumber({...list})" :max="getMaxVeryGood({...list})" width="50px" button-style="round"></inline-x-number>
-                    </div>
+                    <table>
+                      <tr>
+                        <td class="kh-table-text"></td>
+                        <td class="kh-table-text">差</td>
+                        <td class="kh-table-text">中</td>
+                        <td class="kh-table-text">好</td>
+                        <td class="kh-table-text"></td>
+                      </tr>
+                      <tr>
+                        <td class="kh-table-text">
+                          <a @click="handleChangePraiseNumber(list, -1)" class="kh-number-selector kh-number-selector-sub":class="{'kh-number-disabled': getMinDisabled(list)}">
+                            <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18"><defs></defs><path d="M863.74455 544.00086 163.424056 544.00086c-17.664722 0-32.00086-14.336138-32.00086-32.00086s14.336138-32.00086 32.00086-32.00086l700.320495 0c17.695686 0 31.99914 14.336138 31.99914 32.00086S881.440237 544.00086 863.74455 544.00086z"></path></svg>
+                          </a>
+                        </td>
+                        <td class="kh-table-text">{{list.badNumber}}</td>
+                        <td class="kh-table-text">{{list.middleNumber}}</td>
+                        <td class="kh-table-text">{{list.praiseNumber}}</td>
+                        <td class="kh-table-text">
+                          <a @click="handleChangePraiseNumber(list, 1)" class="kh-number-selector kh-number-selector-plus" :class="{'kh-number-disabled': getMaxDisabled(list)}">
+                            <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><defs></defs><path d="M863.328262 481.340895l-317.344013 0.099772L545.984249 162.816826c0-17.664722-14.336138-32.00086-32.00086-32.00086s-31.99914 14.336138-31.99914 32.00086l0 318.400215-322.368714-0.17718c-0.032684 0-0.063647 0-0.096331 0-17.632039 0-31.935493 14.239806-32.00086 31.904529-0.096331 17.664722 14.208843 32.031824 31.871845 32.095471l322.59234 0.17718 0 319.167424c0 17.695686 14.336138 32.00086 31.99914 32.00086s32.00086-14.303454 32.00086-32.00086L545.982529 545.440667l317.087703-0.099772c0.063647 0 0.096331 0 0.127295 0 17.632039 0 31.935493-14.239806 32.00086-31.904529S880.960301 481.404542 863.328262 481.340895z"></path></svg>
+                          </a></td>
+                      </tr>
+                    </table>
                   </div>
-                  <!-- <div class="listInfoTime">{{list.time}}</div> -->
               </div>
             </div>
           </div>
-        </div>
-        <div style="padding: 20px 10px;" v-show="serveList.length">
-          <span style="font-weight: bold;color: #ee4455;">注意</span>
-          <div style="color: #333;">1. 系统默认中评</div>
-          <div style="color: #333;">2. 差评属于推送票数内的选票，消减中评票数</div>
-          <div style="color: #333;">3. 好评属于推送票数额外选票，消减剩余好评票数，计入中评票数</div>
         </div>
       </div>
       
@@ -364,8 +372,8 @@ export default {
         // if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
         //   res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
         // }
-        if (res.data[i].superior.praiseNumber === null) {
-          res.data[i].superior.praiseNumber = res.data[i].superior.numberVotes
+        if (res.data[i].superior.middleNumber === null || res.data[i].superior.middleNumber === undefined) {
+          res.data[i].superior.middleNumber = res.data[i].superior.numberVotes
         }
         if (res.data[i].superior.badNumber === null) {
           res.data[i].superior.badNumber = 0
@@ -381,14 +389,12 @@ export default {
             id: res.data[i].superior.id,
             userId: res.data[i].includes.main_job_service_evaluation.userId,
             numberVotes: res.data[i].superior.numberVotes,
-            badNumber: res.data[i].superior.badNumber,
+            badNumber: res.data[i].superior.badNumber || 0,
             badCommentText: res.data[i].superior.badReview,
-            praiseNumber: res.data[i].superior.praiseNumber,
+            praiseNumber: res.data[i].superior.praiseNumber || 0,
+            middleNumber: res.data[i].superior.middleNumber || 0,
             checked: false
           }
-          voteInfo.goodCommentNumber = voteInfo.numberVotes - voteInfo.badNumber
-          voteInfo.veryGoodCommentNumber = res.data[i].superior.praiseNumber - voteInfo.goodCommentNumber
-          // console.log('info', voteInfo.veryGoodCommentNumber, res.data[i].superior.praiseNumber, voteInfo.goodCommentNumber)
           tempArray.push(voteInfo)
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
@@ -502,10 +508,10 @@ export default {
       var tempArray = [] // 有差评的数据
       var tempArray2 = [] // 全部好评的数据
       for (var i = 0, len = this.checklist1.length; i < len; i++) {
-        if (this.checklist1[i].goodCommentNumber !== this.checklist1[i].numberVotes && this.checklist1[i].status === 0) {
+        if (this.checklist1[i].badNumber > 0 && this.checklist1[i].status === 0) {
           tempArray.push(this.checklist1[i])
         }
-        if (this.checklist1[i].goodCommentNumber === this.checklist1[i].numberVotes || this.checklist1[i].status === 1) {
+        if (this.checklist1[i].badNumber === 0 || this.checklist1[i].status === 1) {
           tempArray2.push(this.checklist1[i])
         }
       }
@@ -521,8 +527,9 @@ export default {
         const temp = {}
         temp.id = item.id
         temp.status = 2
-        temp.praiseNumber = item.veryGoodCommentNumber + item.goodCommentNumber
-        temp.badNumber = item.numberVotes - item.goodCommentNumber
+        temp.praiseNumber = item.praiseNumber
+        temp.middleNumber = item.middleNumber
+        temp.badNumber = item.badNumber
         // temp.badNumber = 0
         temp.badReview = item.badCommentText || '无评价'
         temp.evaluationTime = date
@@ -592,56 +599,53 @@ export default {
         }
       }
     },
-    getUserScore(voteInfo) {
-      return voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber
-    },
-    handleChangePraiseSetting(voteInfo, totalNumber) {
-      console.log(voteInfo, totalNumber)
-      if (voteInfo) {
-        if (totalNumber < voteInfo.numberVotes) {
-          voteInfo.badNumber = voteInfo.numberVotes - totalNumber
-          voteInfo.goodCommentNumber = voteInfo.numberVotes - voteInfo.badNumber
-          voteInfo.veryGoodCommentNumber = 0
-        }
-        if (totalNumber >= voteInfo.numberVotes) {
-          voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.numberVotes
-          voteInfo.goodCommentNumber = voteInfo.numberVotes
-          voteInfo.badNumber = 0
-        }
-        // if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber > totalNumber) {
-        //   voteInfo.veryGoodCommentNumber = totalNumber - voteInfo.goodCommentNumber
-        // }
-        // if (voteInfo.veryGoodCommentNumber + voteInfo.goodCommentNumber < totalNumber) {
-        //   if (voteInfo.badNumber > 0) {
-        //     voteInfo.badNumber -= 1
-        //     voteInfo.goodCommentNumber += 1
-        //   } else {
-        //     voteInfo.veryGoodCommentNumber += 1
-        //   }
-        // }
-      }
-      console.log('voteInfo', voteInfo)
+    handleChangePraiseSetting() {
       // 计算剩余的好评票数
       let totalPraiseVoteNumber = 0
       let totalBadVoteNumber = 0
       this.serveList.forEach(item => {
         item.list.forEach(child => {
-          totalPraiseVoteNumber += (child.veryGoodCommentNumber || 0)
+          totalPraiseVoteNumber += (child.praiseNumber || 0)
           totalBadVoteNumber += (child.badNumber || 0)
         })
       })
-      console.log('setting', this.praiseSetting)
       this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
       this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber
     },
-    getMaxVeryGood(list) {
-      if (this.praiseSetting.residualPraiseNumber < 0) return this.praiseSetting.praiseNumber + list.numberVotes
-      return this.praiseSetting.residualPraiseNumber + list.numberVotes + list.veryGoodCommentNumber
+    getMinDisabled(list) {
+      if (list.badNumber === list.numberVotes) return true;
+      if (this.praiseSetting.residualBadNumber === 0) return true;
     },
-    getMinVoteNumber(list) {
-      if (this.praiseSetting.residualPraiseNumber <= 0) return list.numberVotes - list.badNumber
-      const min = list.numberVotes - list.badNumber - this.praiseSetting.residualBadNumber
-      return min < 0 ? 0 : min
+    getMaxDisabled(list) {
+      if (list.praiseNumber === list.numberVotes) return true;
+      if (this.praiseSetting.residualPraiseNumber === 0) return true;
+    },
+    handleChangePraiseNumber(list, count) {
+      if (count < 0 && this.getMinDisabled(list)) {
+        return
+      }
+      if (count > 0 && this.getMaxDisabled(list)) {
+        return
+      }
+      if (count < 0) {
+        if (list.praiseNumber > 0) {
+          list.praiseNumber--
+          list.middleNumber++
+        } else {
+          list.middleNumber--
+          list.badNumber++
+        }
+      }
+      if (count > 0) {
+        if (list.badNumber > 0) {
+          list.badNumber--
+          list.middleNumber++
+        } else {
+          list.middleNumber--
+          list.praiseNumber++
+        }
+      }
+      this.handleChangePraiseSetting()
     }
   },
   mounted() {
@@ -919,4 +923,30 @@ export default {
 .groupList{
   padding: 0 12px;
 }
+.kh-number-selector {
+  color: #5177aa;
+  border-radius: 50%;
+  border: 1px solid #5177aa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+}
+.kh-number-selector svg {
+    fill: #5177aa;
+}
+.kh-number-disabled {
+  color: #ccc;
+  border: 1px solid #ccc; 
+}
+.kh-number-disabled svg {
+    fill: #ccc;
+}
+.kh-table-text {
+  color: #666;
+  font-size: 20px;
+  padding: 0px 6px;
+  text-align: center;
+}
+
 </style>

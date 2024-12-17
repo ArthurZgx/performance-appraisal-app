@@ -21,37 +21,29 @@
           </flexbox-item>
         </flexbox>
         <group title-color="#666" class="commentNumber">
-          <x-number
-            title="好评数："
-            align="left"
-            v-model="list.veryGoodCommentNumber"
-            button-style="round"
-            :min="0"
-            :max="
-              list.veryGoodCommentNumber + praiseSetting.residualPraiseNumber
-            "
-            @on-change="handleChangePraiseSetting"
-          ></x-number>
-          <x-number
-            title="中评数："
-            align="left"
-            v-model="list.goodCommentNumber"
-            button-style="round"
-            :min="getMinVoteNumber({...list})"
-            :max="list.numberVotes"
-            @click.native="numberChange(index, 'good', $event)"
-            @on-change="handleChangePraiseSetting"
-          ></x-number>
-          <x-number
-            title="差评数："
-            align="left"
-            v-model="list.badCommentNumber"
-            button-style="round"
-            :min="0"
-            :max="getMaxBadVoteNumber({...list})"
-            @click.native="numberChange(index, 'bad', $event)"
-            @on-change="handleChangePraiseSetting"
-          ></x-number>
+          <table style="width: 100%;padding: 20px 0;">
+            <tr>
+              <td class="kh-table-text" style="font-weight: bold;"></td>
+              <td class="kh-table-text" style="font-weight: bold;">差</td>
+              <td class="kh-table-text" style="font-weight: bold;">中</td>
+              <td class="kh-table-text" style="font-weight: bold;">好</td>
+              <td class="kh-table-text" style="font-weight: bold;"></td>
+            </tr>
+            <tr>
+              <td class="kh-table-text" style="display: flex;justify-content: end;">
+                <a @click="handleChangePraiseNumber(list, -1)" class="kh-number-selector kh-number-selector-sub":class="{'kh-number-disabled': getMinDisabled(list)}">
+                  <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18"><defs></defs><path d="M863.74455 544.00086 163.424056 544.00086c-17.664722 0-32.00086-14.336138-32.00086-32.00086s14.336138-32.00086 32.00086-32.00086l700.320495 0c17.695686 0 31.99914 14.336138 31.99914 32.00086S881.440237 544.00086 863.74455 544.00086z"></path></svg>
+                </a>
+              </td>
+              <td class="kh-table-text">{{list.badNumber}}</td>
+              <td class="kh-table-text">{{list.middleNumber}}</td>
+              <td class="kh-table-text">{{list.praiseNumber}}</td>
+              <td class="kh-table-text">
+                <a @click="handleChangePraiseNumber(list, 1)" class="kh-number-selector kh-number-selector-plus" :class="{'kh-number-disabled': getMaxDisabled(list)}">
+                  <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><defs></defs><path d="M863.328262 481.340895l-317.344013 0.099772L545.984249 162.816826c0-17.664722-14.336138-32.00086-32.00086-32.00086s-31.99914 14.336138-31.99914 32.00086l0 318.400215-322.368714-0.17718c-0.032684 0-0.063647 0-0.096331 0-17.632039 0-31.935493 14.239806-32.00086 31.904529-0.096331 17.664722 14.208843 32.031824 31.871845 32.095471l322.59234 0.17718 0 319.167424c0 17.695686 14.336138 32.00086 31.99914 32.00086s32.00086-14.303454 32.00086-32.00086L545.982529 545.440667l317.087703-0.099772c0.063647 0 0.096331 0 0.127295 0 17.632039 0 31.935493-14.239806 32.00086-31.904529S880.960301 481.404542 863.328262 481.340895z"></path></svg>
+                </a></td>
+            </tr>
+          </table>
           <div style="color: rgb(41 155 232); margin: 10px 5px">
             <!-- 选票分值：{{ getUserScore(list) }} -->
             推送票数：{{ list.numberVotes }}
@@ -197,10 +189,6 @@ export default {
     this.serveList = JSON.parse(
       localStorage.getItem("needBadCommentPeopleList")
     );
-    for (var i = 0, len = this.serveList.length; i < len; i++) {
-      this.serveList[i].badCommentNumber =
-        this.serveList[i].numberVotes - this.serveList[i].goodCommentNumber;
-    }
     await this.getSysConfig();
     this.handleChangePraiseSetting()  
   },
@@ -240,8 +228,9 @@ export default {
         const temp = {};
         temp.id = item.id;
         temp.status = 1;
-        temp.praiseNumber = item.goodCommentNumber + item.veryGoodCommentNumber;
-        temp.badNumber = item.badCommentNumber;
+        temp.praiseNumber = item.praiseNumber;
+        temp.middleNumber = item.middleNumber;
+        temp.badNumber = item.badNumber;
         temp.badReview = item.badCommentText;
         params.push(temp);
       });
@@ -261,18 +250,6 @@ export default {
         that.$router.go(-1);
       }, 500);
     },
-    numberChange(index, type, e) {
-      var that = this;
-      var list = this.serveList[index];
-      setTimeout(function () {
-        if (type === "good") {
-          list.badCommentNumber = list.numberVotes - list.goodCommentNumber;
-        } else if (type === "bad") {
-          list.goodCommentNumber = list.numberVotes - list.badCommentNumber;
-        }
-        that.serveList.splice(index, list);
-      }, 100);
-    },
     // 提交评价
     submitEvent() {
       this.showSubmitToast = true;
@@ -289,8 +266,9 @@ export default {
         const temp = {};
         temp.id = item.id;
         temp.status = 2;
-        temp.praiseNumber = item.goodCommentNumber + item.veryGoodCommentNumber;
-        temp.badNumber = item.badCommentNumber;
+        temp.praiseNumber = item.praiseNumber;
+        temp.middleNumber = item.middleNumber;
+        temp.badNumber = item.badNumber;
         temp.badReview = item.badCommentText;
         temp.evaluationTime = date;
         params.push(temp);
@@ -311,35 +289,52 @@ export default {
         that.$router.go(-1);
       }, 500);
     },
-    getUserScore(voteInfo) {
-      return (
-        voteInfo.veryGoodCommentNumber +
-        voteInfo.goodCommentNumber
-      );
+    getMinDisabled(list) {
+      if (list.badNumber === list.numberVotes) return true;
+      if (this.praiseSetting.residualBadNumber === 0) return true;
+    },
+    getMaxDisabled(list) {
+      if (list.praiseNumber === list.numberVotes) return true;
+      if (this.praiseSetting.residualPraiseNumber === 0) return true;
+    },
+    handleChangePraiseNumber(list, count) {
+      if (count < 0 && this.getMinDisabled(list)) {
+        return
+      }
+      if (count > 0 && this.getMaxDisabled(list)) {
+        return
+      }
+      if (count < 0) {
+        if (list.praiseNumber > 0) {
+          list.praiseNumber--
+          list.middleNumber++
+        } else {
+          list.middleNumber--
+          list.badNumber++
+        }
+      }
+      if (count > 0) {
+        if (list.badNumber > 0) {
+          list.badNumber--
+          list.middleNumber++
+        } else {
+          list.middleNumber--
+          list.praiseNumber++
+        }
+      }
+      this.handleChangePraiseSetting()
     },
     handleChangePraiseSetting() {
       // 计算剩余的好评票数
       let totalPraiseVoteNumber = 0
       let totalBadVoteNumber = 0
-      this.serveList.forEach((item) => {
-        totalPraiseVoteNumber += item.veryGoodCommentNumber || 0;
-        totalBadVoteNumber += item.badCommentNumber || 0;
-      });
-      console.log('totalBadVoteNumber', totalBadVoteNumber)
-      this.praiseSetting.residualPraiseNumber =
-        this.praiseSetting.praiseNumber - (totalPraiseVoteNumber);
-      this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber;
+      this.serveList.forEach(item => {
+          totalPraiseVoteNumber += (item.praiseNumber || 0)
+          totalBadVoteNumber += (item.badNumber || 0)
+      })
+      this.praiseSetting.residualPraiseNumber = this.praiseSetting.praiseNumber - totalPraiseVoteNumber
+      this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber
     },
-    getMinVoteNumber(list) {
-      if (this.praiseSetting.residualBadNumber <= 0) return list.numberVotes - list.badCommentNumber;
-      const min = list.numberVotes - list.badCommentNumber - this.praiseSetting.residualBadNumber;
-      return min < 0 ? 0 : min;
-    },
-    getMaxBadVoteNumber(list) {
-      if (this.praiseSetting.residualBadNumber <= 0) return list.badCommentNumber;
-      const max = list.badCommentNumber + this.praiseSetting.residualBadNumber;
-      return max > list.numberVotes ? list.numberVotes : max;
-    }
   },
 };
 </script>
@@ -456,5 +451,32 @@ export default {
   background: #3891f0;
   color: white;
   margin-left: 30px;
+}
+.kh-number-selector {
+  color: #5177aa;
+  border-radius: 50%;
+  border: 1px solid #5177aa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  width: 20px;
+  height: 20px;
+}
+.kh-number-selector svg {
+    fill: #5177aa;
+}
+.kh-number-disabled {
+  color: #ccc;
+  border: 1px solid #ccc; 
+}
+.kh-number-disabled svg {
+    fill: #ccc;
+}
+.kh-table-text {
+  color: #666;
+  font-size: 20px;
+  padding: 0px 6px;
+  text-align: center;
 }
 </style>
