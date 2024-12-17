@@ -471,6 +471,8 @@ export default {
         if (this.serveList.length < 10) {
           this.showScrollerLoading = false
         }
+        this.praiseSetting.praiseNumber = this.getMaxNumberVotes('residualPraiseNumber')
+        this.praiseSetting.badNumber = this.getMaxNumberVotes('residualBadNumber')
         this.handleChangePraiseSetting()
         // console.log(210, this.serveList)
       })
@@ -613,12 +615,12 @@ export default {
       this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber
     },
     getMinDisabled(list) {
-      if (list.badNumber === list.numberVotes) return true;
-      if (this.praiseSetting.residualBadNumber === 0) return true;
+      if (list.badNumber === list.numberVotes) return true
+      if (this.praiseSetting.residualBadNumber === 0) return true
     },
     getMaxDisabled(list) {
-      if (list.praiseNumber === list.numberVotes) return true;
-      if (this.praiseSetting.residualPraiseNumber === 0) return true;
+      if (list.praiseNumber === list.numberVotes) return true
+      if (this.praiseSetting.residualPraiseNumber === 0) return true
     },
     handleChangePraiseNumber(list, count) {
       if (count < 0 && this.getMinDisabled(list)) {
@@ -646,6 +648,18 @@ export default {
         }
       }
       this.handleChangePraiseSetting()
+    },
+    getMaxNumberVotes(field) {
+      let max = 0
+      this.serveList.forEach(item => {
+        item.list.forEach(child => {
+          max += child.numberVotes
+        })
+      })
+      if (max > this.praiseSetting[field]) {
+        return this.praiseSetting[field]
+      }
+      return max
     }
   },
   mounted() {

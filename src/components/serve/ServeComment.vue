@@ -206,6 +206,16 @@ export default {
           this.praiseSetting.residualPraiseNumber = res.data.residualPraiseNumber || 0
           this.praiseSetting.badNumber = res.data.badNumber || 0
           this.praiseSetting.residualBadNumber = res.data.residualBadNumber || 0
+          let maxVoteNumber = 0
+          this.serveList.forEach(item => {
+            maxVoteNumber += item.numberVotes
+          })
+          if (this.praiseSetting.praiseNumber > maxVoteNumber) {
+            this.praiseSetting.praiseNumber = maxVoteNumber
+          }
+          if (this.praiseSetting.badNumber > maxVoteNumber) {
+            this.praiseSetting.badNumber = maxVoteNumber
+          }
         })
         .catch((err) => {
           console.log("请求出错", err);
