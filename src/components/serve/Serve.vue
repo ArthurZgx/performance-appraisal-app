@@ -735,7 +735,7 @@ export default {
   font-size: 18px;
   color: #333;
   display: inline-block;
-  width: 130px;
+  width: 115px;
 }
 .serve .good-comment-number {
   margin-left: 0px;
@@ -956,10 +956,10 @@ export default {
 .kh-number-disabled svg {
     fill: #ccc;
 }
-.kh-table-text {
+.serve .kh-table-text {
   color: #666;
-  font-size: 20px;
-  padding: 0px 6px;
+  font-size: 18px;
+  padding: 0px 2px;
   text-align: center;
 }
 
