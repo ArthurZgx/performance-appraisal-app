@@ -116,18 +116,11 @@
           request('main_service_details', {
             params: { filters: filter, includes }
           }).then(res => {
-            if (res.data[0].superior.badNumber + res.data[0].superior.praiseNumber > res.data[0].superior.numberVotes) {
-              this.list[0].value = res.data[0].superior.numberVotes
-              this.list[1].value = res.data[0].superior.praiseNumber - (res.data[0].superior.numberVotes - res.data[0].superior.badNumber)
-              this.list[2].value = res.data[0].superior.numberVotes - res.data[0].superior.badNumber
-              this.list[3].value = res.data[0].superior.badNumber
-              this.list[4].value = res.data[0].superior.badReview
-            } else {
-              this.list[0].value = res.data[0].superior.numberVotes
-              this.list[2].value = res.data[0].superior.praiseNumber
-              this.list[3].value = res.data[0].superior.badNumber
-              this.list[4].value = res.data[0].superior.badReview
-            }
+            this.list[0].value = res.data[0].superior.numberVotes
+            this.list[1].value = res.data[0].superior.praiseNumber
+            this.list[2].value = res.data[0].superior.middleNumber
+            this.list[3].value = res.data[0].superior.badNumber
+            this.list[4].value = res.data[0].superior.badReview
             this.name = res.data[0].includes.main_job_service_evaluation.title
           })
         }
