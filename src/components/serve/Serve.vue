@@ -395,6 +395,9 @@ export default {
             middleNumber: res.data[i].superior.middleNumber || 0,
             checked: false
           }
+          if (voteInfo.middleNumber === 0 && voteInfo.badNumber === 0 && voteInfo.praiseNumber === 0) {
+            voteInfo.middleNumber = voteInfo.numberVotes
+          }
           tempArray.push(voteInfo)
           userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
         }
