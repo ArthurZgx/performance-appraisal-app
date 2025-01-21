@@ -618,10 +618,12 @@ export default {
       this.praiseSetting.residualBadNumber = this.praiseSetting.badNumber - totalBadVoteNumber
     },
     getMinDisabled(list) {
+      if (list.praiseNumber > 0) return false
       if (list.badNumber === list.numberVotes) return true
       if (this.praiseSetting.residualBadNumber === 0) return true
     },
     getMaxDisabled(list) {
+      if (list.badNumber > 0) return false
       if (list.praiseNumber === list.numberVotes) return true
       if (this.praiseSetting.residualPraiseNumber === 0) return true
     },
