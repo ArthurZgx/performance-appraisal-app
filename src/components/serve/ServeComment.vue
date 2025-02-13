@@ -238,6 +238,9 @@ export default {
         const temp = {};
         temp.id = item.id;
         temp.status = 1;
+        if (item.praiseNumber === 0 && item.middleNumber === 0 && item.badNumber === 0) {
+          item.middleNumber = item.numberVotes
+        }
         temp.praiseNumber = item.praiseNumber;
         temp.middleNumber = item.middleNumber;
         temp.badNumber = item.badNumber;
@@ -276,10 +279,13 @@ export default {
         const temp = {};
         temp.id = item.id;
         temp.status = 2;
+        if (item.praiseNumber === 0 && item.middleNumber === 0 && item.badNumber === 0) {
+          item.middleNumber = item.numberVotes
+        }
         temp.praiseNumber = item.praiseNumber;
         temp.middleNumber = item.middleNumber;
         temp.badNumber = item.badNumber;
-        temp.badReview = item.badCommentText;
+        temp.badReview = item.badCommentText || "无评价";
         temp.evaluationTime = date;
         params.push(temp);
       });
@@ -300,10 +306,12 @@ export default {
       }, 500);
     },
     getMinDisabled(list) {
+      if (list.praiseNumber > 0) return false
       if (list.badNumber === list.numberVotes) return true;
       if (this.praiseSetting.residualBadNumber === 0) return true;
     },
     getMaxDisabled(list) {
+      if (list.badNumber > 0) return false
       if (list.praiseNumber === list.numberVotes) return true;
       if (this.praiseSetting.residualPraiseNumber === 0) return true;
     },
