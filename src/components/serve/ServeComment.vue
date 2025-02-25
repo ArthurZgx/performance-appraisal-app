@@ -10,7 +10,7 @@
       style="padding-left: 15px; color: #666; font-size: 16px; margin: 10px 0"
       v-if="praiseSetting.praiseNumber || praiseSetting.badNumber"
     >
-      剩余好评票 {{ praiseSetting.residualPraiseNumber }} &nbsp;&nbsp;|&nbsp;&nbsp;剩余差评票 {{ praiseSetting.residualBadNumber }}
+      最高可投好评票 {{ praiseSetting.residualPraiseNumber }} &nbsp;&nbsp;|&nbsp;&nbsp;最高可投差评票 {{ praiseSetting.residualBadNumber }}
     </div>
     <div class="serveComment_div">
       <!-- 展示数据 -->

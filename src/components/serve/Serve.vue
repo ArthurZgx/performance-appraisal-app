@@ -20,7 +20,7 @@
     </search>
     </div>
     <!-- v-if="list.status === '2'"-->
-     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;">剩余好评票 {{praiseSetting.residualPraiseNumber}}&nbsp;&nbsp;|&nbsp;&nbsp;剩余差评票 {{praiseSetting.residualBadNumber}}</div>
+     <div style="padding-left: 15px;color: #666;font-size: 14px;margin-top: 5px;">最高可投好评票 {{praiseSetting.residualPraiseNumber}}&nbsp;&nbsp;|&nbsp;&nbsp;最高可投差评票 {{praiseSetting.residualBadNumber}}</div>
     <group class="home_group groupList">
       <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offset="40" :style="{height: scrollHeight+'px'}">
       <div>
