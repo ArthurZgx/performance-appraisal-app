@@ -6,17 +6,12 @@
       绩效考评
     </x-header>
     <group class="home_group">
-      <cell title="同事服务质量评价"
+      <cell title="服务质量评价通知"
             is-link link="serve">
         <!-- <icon slot="icon" type="info"></icon> -->
         <img src="@/assets/svg/serviceEvaluation.svg" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
       </cell>
-      <cell title="下属服务质量评价"
-            is-link link="underlingEvaluate">
-        <!-- <icon slot="icon" type="info"></icon> -->
-        <img src="@/assets/svg/serviceEvaluation.svg" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">
-      </cell>
-      <cell title="工作完成度评价通"
+      <cell title="工作完成度评价通知"
             is-link link="complete">
         <!-- <icon slot="icon" type="info"></icon> -->
         <img src="@/assets/svg/jobEvaluation.svg" slot="icon" style="height:30px;padding-right:10px;margin-top:5px;">

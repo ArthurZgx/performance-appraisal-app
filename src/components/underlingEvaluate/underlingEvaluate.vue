@@ -38,7 +38,7 @@
               <!-- 列表信息 -->
               <div class="listInfo">
                 <div>
-                  <div class="listInfoName"  @click="goToServeComment(list)">{{list.mainUserName}}</div>
+                  <div class="listInfoName"  @click="goToServeComment(list)">{{list.name}}</div>
                   <div style="color: rgb(41 155 232);margin-top: 5px;">推送票数：{{ list.numberVotes }}</div>
                 </div>
                   <div>
@@ -243,6 +243,7 @@ export default {
       }
       // console.log(sub)
       this.tempSearchValue = this.searchValue
+      this.searching = true
       this.showScrollerLoading = true
       if (this.searchValue === '') {
         this.serveList = []
@@ -306,6 +307,23 @@ export default {
       })
     },
     onScrollBottom() {
+      // 滑动触底
+      if (this.serveList.length >= 1) {
+        if (!this.onFacting) {
+          // console.log('运行了')
+          this.onFacting = true
+          setTimeout(() => {
+            if (this.searching) {
+              this.searchPageNo = this.searchPageNo + 1
+              this.getSearchData(false)
+            } else {
+              this.pageNo = this.pageNo + 1
+              this.getDataList()
+            }
+            this.onFacting = false
+          }, 1000)
+        }
+      }
     },
     // 获取服务质量明细表数据
     getDataList() {
@@ -321,10 +339,20 @@ export default {
         this.noData = true
         return false
       }
-
+      // 设置过滤器
+      var filter = {
+        'main_service_detail': {
+          'status': { lessThan: '2' }, 'user_id': { equalTo: userId }
+        }
+      }
+      var includes = {
+        'main_job_service_evaluation': {
+          includes: ['main_job_service_evaluation_id']
+        }
+      }
       // 请求数据
       request('serviceEvaluate/underling/getMy', {
-        params: { userId: userId.toString() }
+        params: { }
       }).then(res => {
         this.formatData(res)
       }).catch(err => {
@@ -335,25 +363,117 @@ export default {
     },
     // 格式化获取的数据
     formatData(res) {
+      var tempArray = []
+      var userIdTempArray = []
       var tempArray2 = []
+      var filter = ''
       // console.log(res)
       for (var i = 0, len = res.data.length; i < len; i++) {
-        for (var j = 0, len1 = res.data[i].list.length; j < len1; j++) {
-          res.data[i].list[j].checked = false
-          res.data[i].list[j].type = 1
+        // if (res.data[i].includes.main_job_service_evaluation.evaluationTime === null) {
+        //   res.data[i].includes.main_job_service_evaluation.evaluationTime = '2018-08-02 12:02:38'
+        // }
+        if (res.data[i].middleNumber === null || res.data[i].middleNumber === undefined) {
+          res.data[i].middleNumber = res.data[i].numberVotes
         }
-        tempArray2.push(res.data[i])
-      }
-      console.log(tempArray2)
+        if (res.data[i].badNumber === null) {
+          res.data[i].badNumber = 0
+        }
+        const voteInfo = {
+          name: res.data[i].mainUserName,
+          status: res.data[i].status,
+          id: res.data[i].id,
+          userId: res.data[i].userId,
+          numberVotes: res.data[i].numberVotes,
+          badNumber: res.data[i].superior.badNumber || 0,
+          badCommentText: res.data[i].superior.badReview,
+          praiseNumber: res.data[i].superior.praiseNumber || 0,
+          middleNumber: res.data[i].superior.middleNumber || 0,
+          checked: false
+        }
+        if (voteInfo.middleNumber === 0 && voteInfo.badNumber === 0 && voteInfo.praiseNumber === 0) {
+          voteInfo.middleNumber = voteInfo.numberVotes
+        }
+        tempArray.push(voteInfo)
+        userIdTempArray.push(res.data[i].includes.main_job_service_evaluation.userId)
 
-      this.serveList = this.serveList.concat(tempArray2)
-      if (this.serveList.length < 10) {
-        this.showScrollerLoading = false
       }
-      this.praiseSetting.praiseNumber = this.getMaxNumberVotes('residualPraiseNumber')
-      this.praiseSetting.badNumber = this.getMaxNumberVotes('residualBadNumber')
-      this.handleChangePraiseSetting()
-      // console.log(210, this.serveList)
+      console.log(tempArray)
+      if (res.data.length === 0) {
+        this.showScrollerLoading = false
+        this.noData = true
+        return false
+      }
+      filter = {
+        'hm_personnel': {
+          'id': { in: userIdTempArray }
+        }
+      }
+      request('hm_personnels', {
+        params: {
+          pageNo: 1,
+          pageSize: 1000000,
+          filters: filter
+        }
+      }).then(res => {
+        for (var i = 0; i < res.data.length; i++) {
+          tempArray2[i] = {}
+          tempArray2[i].title = res.data[i].departmentName
+          if (tempArray2[i].userId === undefined) {
+            tempArray2[i].userId = []
+          }
+          tempArray2[i].userId.push(res.data[i].id)
+        }
+                // 分配部门
+        for (i = 0; i < tempArray.length; i++) {
+          for (var j = 0; j < tempArray2.length; j++) {
+            for (var k = 0; k < tempArray2[j].userId.length; k++) {
+              if (tempArray[i].userId === tempArray2[j].userId[k]) {
+                if (tempArray2[j].list === undefined) {
+                  tempArray2[j].list = []
+                }
+                tempArray2[j].list.push(tempArray[i])
+              }
+            }
+          }
+        }
+        // 合并重复部门
+        for (i = 0; i < tempArray2.length; i++) {
+          for (j = 0; j < tempArray2.length; j++) {
+            if (tempArray2[i].title === tempArray2[j].title && i !== j && i < j) {
+              tempArray2[i].list = tempArray2[i].list.concat(tempArray2[j].list)
+              tempArray2.splice(j, 1)
+              i = 0
+              j = 0
+            }
+          }
+        }
+        // 根据部门首字母进行排序
+        try {
+          for (i = 0; i < tempArray2.length; i++) {
+            tempArray2[i].list.sort(function(param1, param2) {
+              // console.log(name)
+              return param1.name.localeCompare(param2.name)
+            })
+            tempArray2.sort(function(param1, param2) {
+              return param1.title.localeCompare(param2.title)
+            })
+          }
+        } catch (e) {
+          // console.log('排序出错')
+        }
+        // console.log(tempArray2)
+        if (tempArray2.length < this.pageSize) {
+          this.pageSize = 0
+        }
+        this.serveList = this.serveList.concat(tempArray2)
+        if (this.serveList.length < 10) {
+          this.showScrollerLoading = false
+        }
+        this.praiseSetting.praiseNumber = this.getMaxNumberVotes('residualPraiseNumber')
+        this.praiseSetting.badNumber = this.getMaxNumberVotes('residualBadNumber')
+        this.handleChangePraiseSetting()
+        // console.log(210, this.serveList)
+      })
     },
     // 跳转评价详情
     goToServeComment(list) {
@@ -416,7 +536,7 @@ export default {
         params.push(temp)
       })
       params = JSON.stringify(params)
-      request('serviceEvaluate/underling/commit/', {
+      request('main_service_details/edit/batch/', {
         data: params,
         method: 'POST',
         headers: {
