@@ -3,7 +3,7 @@ import Router from 'vue-router'
 const _import = require('./_import_' + process.env.NODE_ENV)
 
 // import Home from '@/components/home/Home.vue'
-// import Serve from '@/components/serve/Serve.vue'
+// import Serve from '@/components/serve/underlingEvaluate.vue'
 // import ServeComment from '@/components/serve/ServeComment.vue'
 // import ServeCommentSuccess from '@/components/serve/ServeCommentSuccess.vue'
 // import ServeCommentResult from '@/components/serve/ServeCommentResult.vue'
@@ -35,6 +35,11 @@ export default new Router({
       path: '/serve',
       name: 'serve',
       component: _import('serve/Serve')
+    },
+    {
+      path: '/underlingEvaluate',
+      name: 'underlingEvaluate',
+      component: _import('serve/underlingEvaluate')
     },
     {
       path: '/serveComment',

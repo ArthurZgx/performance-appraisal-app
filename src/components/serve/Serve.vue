@@ -71,10 +71,10 @@
           </div>
         </div>
       </div>
-      
+
       <load-more tip="loading" v-show="showScrollerLoading"></load-more>
       <div v-if="noData&&!showScrollerLoading" style="margin:80px auto;width:200px;text-align:center;color:#666;">没有数据</div>
-      
+
     </scroller>
     </group>
     <!-- 一键提交 -->
@@ -477,7 +477,7 @@ export default {
         this.praiseSetting.praiseNumber = this.getMaxNumberVotes('residualPraiseNumber')
         this.praiseSetting.badNumber = this.getMaxNumberVotes('residualBadNumber')
         this.handleChangePraiseSetting()
-        // console.log(210, this.serveList)
+        console.log(210, this.serveList)
       })
     },
     // 跳转评价详情
@@ -956,7 +956,7 @@ export default {
 }
 .kh-number-disabled {
   color: #ccc;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
 }
 .kh-number-disabled svg {
     fill: #ccc;
