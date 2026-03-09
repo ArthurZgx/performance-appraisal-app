@@ -110,6 +110,15 @@
     </div>
     <toast v-model="showSubmitErrorToast" type="text" :time="800" is-show-mask text="没有选中数据" position="bottom">没有选中数据</toast>
     <toast v-model="showSubmitToast" type="text" :time="800" is-show-mask text="提交成功" position="bottom">提交成功</toast>
+    <toast
+      v-model="showSubmitFailToast"
+      type="text"
+      :time="3000"
+      is-show-mask
+      :text="submitFailText"
+      position="bottom"
+      class="fail-toast"
+    ></toast>
   </div>
 </template>
 
@@ -144,6 +153,8 @@ export default {
   },
   data() {
     return {
+      showSubmitFailToast: false,
+      submitFailText: '',
       noData: false,
       results: [], // 搜索结果列表
       searchValue: '', // 搜索绑定的数据
@@ -429,24 +440,36 @@ export default {
         }
         // transformRequest: paramEncode
       }).then(res => {
-        this.showSubmitToast = true
-        // 如果有差评的  跳转至差评列表页
-        localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
-        if (tempArray.length) {
-          this.$router.push({ name: 'serveComment' })
-        } else {
-          // 如果全部好评 刷新当前列表
-          if (this.searching) {
-            this.serveList = []
-            this.searchPageNo = 1
-            this.getSearchData(false)
+        console.log('接口完整响应：', res)
+        console.log('接口data层：', res.data)
+        const response = res.data
+        if (response.code === 200) {
+          // 原有成功逻辑完全保留
+          this.showSubmitToast = true
+          localStorage.setItem('needBadCommentPeopleList', JSON.stringify(tempArray))
+          if (tempArray.length) {
+            this.$router.push({ name: 'serveComment' })
           } else {
-            this.serveList = []
-            this.pageNo = 1
-            this.pageSize = 100000
-            this.getDataList()
+            if (this.searching) {
+              this.serveList = []
+              this.searchPageNo = 1
+              this.getSearchData(false)
+            } else {
+              this.serveList = []
+              this.pageNo = 1
+              this.pageSize = 100000
+              this.getDataList()
+            }
           }
+        } else {
+          // 非200：设置失败提示文本+显示Toast
+          this.submitFailText = `提交失败：${response.message || '未知错误'}`
+          this.showSubmitFailToast = true
         }
+        // 新增：捕获请求异常（网络错误/接口500等）
+      }).catch(err => {
+        this.submitFailText = `提交失败：${err.message || '网络异常，请重试'}`
+        this.showSubmitFailToast = true
       })
     },
     // 全选
@@ -565,6 +588,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+
 .underlingServe .weui-toast {
   border-radius: 25px;
 }
@@ -845,5 +869,6 @@ export default {
   padding: 0px 2px;
   text-align: center;
 }
+
 
 </style>
