@@ -243,6 +243,7 @@ export default {
       }
       // console.log(sub)
       this.tempSearchValue = this.searchValue
+      this.searching = true
       this.showScrollerLoading = true
       if (this.searchValue === '') {
         this.serveList = []
@@ -410,6 +411,8 @@ export default {
         temp.praiseNumber = item.praiseNumber
         temp.middleNumber = item.middleNumber
         temp.badNumber = item.badNumber
+        temp.planAssessmentPlanId = item.planAssessmentPlanId
+        temp.userId = item.userId
         // temp.badNumber = 0
         temp.badReview = item.badCommentText || '无评价'
         temp.evaluationTime = date
@@ -562,19 +565,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.serve .weui-toast {
+.underlingServe .weui-toast {
   border-radius: 25px;
 }
-.serve .weui-search-bar__cancel-btn {
+.underlingServe .weui-search-bar__cancel-btn {
   display: none;
   color: #666;
 }
-.serve .vux-sticky-box {
+.underlingServe .vux-sticky-box {
   position: fixed;
   width: 100%;
   bottom: 0;
 }
-.serve .groupList {
+.underlingServe .groupList {
   padding-bottom: 70px;
   position: fixed;
   top: 120px;
@@ -582,83 +585,83 @@ export default {
   height: 100%;
   width: 96%;
 }
-.serve .weui-cells{
+.underlingServe .weui-cells{
   margin-top: 0px;
 }
-.serve .aListData {
+.underlingServe .aListData {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
 }
-.serve .serveClassifyTitle {
+.underlingServe .serveClassifyTitle {
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
   color: #666;
   font-size: 14px;
 }
-.serve .listCheck {
+.underlingServe .listCheck {
   height: 30px;
   line-height: 30px;
 }
-.serve .aListData {
+.underlingServe .aListData {
   height: 60px;
   position: relative;
 }
-.serve .listInfo {
+.underlingServe .listInfo {
   height: 60px;
   margin-left: 10px;
   line-height: 30px;
   display: flex;
   flex-direction: row;
 }
-.serve .listInfoName {
+.underlingServe .listInfoName {
   font-size: 18px;
   color: #333;
   display: inline-block;
   width: 115px;
 }
-.serve .good-comment-number {
+.underlingServe .good-comment-number {
   margin-left: 0px;
   position: absolute;
   right: 0;
   top: 45px;
 }
-.serve .middle-comment-number {
+.underlingServe .middle-comment-number {
   margin-left: 0px;
   position: absolute;
   right: 0;
   bottom: 5px;
 }
-.serve .listInfo .vux-inline-x-number {
+.underlingServe .listInfo .vux-inline-x-number {
   float: right;
   margin-top: 0px;
   margin-left: 20px;
 }
-.serve.listInfoTime {
+.underlingServe.listInfoTime {
   font-size: 13px;
   color: #888;
 }
-.serve .aListData {
+.underlingServe .aListData {
   border-bottom: 1px solid #eee;
 }
 
-.serve .weui-dialog {
+.underlingServe .weui-dialog {
   border-radius: 8px;
   padding-bottom: 8px;
   height: 150px;
   max-width: 400px;
 }
-.serve .dialog-title {
+.underlingServe .dialog-title {
   color: #666;
 }
-.serve .img-box {
+.underlingServe .img-box {
   overflow: hidden;
 }
-.serve .vux-close {
+.underlingServe .vux-close {
   margin-top: 8px;
   margin-bottom: 8px;
 }
-.serve .img-box {
+.underlingServe .img-box {
   float: left;
   background: #e11c1c;
   display: block;
@@ -668,11 +671,11 @@ export default {
   margin-left: 20px;
   margin-top: 20px;
 }
-.serve .img-box img {
+.underlingServe .img-box img {
   height: 50%;
   margin-top: 11px;
 }
-.serve .box-title {
+.underlingServe .box-title {
   line-height: 20px;
   margin-top: 20px;
   text-align: left;
@@ -681,16 +684,16 @@ export default {
   width: 200px;
   height: 100px;
 }
-.serve .vux-sure {
+.underlingServe .vux-sure {
   color: #e11c1c;
   margin-left: 20px;
 }
-.serve .bottomBtn {
+.underlingServe .bottomBtn {
   position: absolute;
   bottom: 7px;
   right: 10px;
 }
-.serve .my-check-icon {
+.underlingServe .my-check-icon {
   display: inline-block;
   width: 15px;
   height: 15px;
@@ -701,7 +704,7 @@ export default {
   margin-right: 10px;
   margin-top: 5px;
 }
-.serve .my-check-icon-clicked {
+.underlingServe .my-check-icon-clicked {
   display: inline-block;
   width: 15px;
   height: 15px;
@@ -712,7 +715,7 @@ export default {
   margin-left: 20px;
   margin-right: 10px;
 }
-.serve .my-check-icon-clicked::after {
+.underlingServe .my-check-icon-clicked::after {
   content: '\00a0';
   display: inline-block;
   border: 2px solid #fff;
